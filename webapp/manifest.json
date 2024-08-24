@@ -1,0 +1,131 @@
+{
+  "_version": "1.59.0",
+  "sap.app": {
+    "id": "ns.asa.zappuploadinvoices",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.14.4",
+      "toolsId": "ba92e127-ca08-4079-9a90-568fe09d075c"
+    },
+    "dataSources": {
+      "DetailReport": 
+      {
+				"uri": "model/json/templateReportList.json",
+				"type": "JSON"
+			}
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "Invoices-Upload": {
+          "semanticObject": "Invoices",
+          "action": "Upload",
+          "title": "{{flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": false,
+    "dependencies": {
+      "minUI5Version": "1.127.1",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.f": {},
+        "sap.suite.ui.generic.template": {},
+        "sap.ui.comp": {},
+        "sap.ui.generic.app": {},
+        "sap.ui.table": {},
+        "sap.ushell": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "ns.asa.zappuploadinvoices.i18n.i18n"
+        }
+      },
+      "ModelDetailReport": 
+      {
+				"type": "sap.ui.model.json.JSONModel",
+				"dataSource": "DetailReport"
+			}
+
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "async": true,
+        "viewPath": "ns.asa.zappuploadinvoices.view",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "clearControlAggregation": false
+      },
+      "routes": [
+        {
+          "name": "RouteApp",
+          "pattern": "",
+          "target": [
+            "TargetApp"
+          ]
+        }
+      ],
+      "targets": {
+        "TargetApp": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "MainList",
+          "viewName": "MainList"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "ns.asa.zappuploadinvoices.view.App",
+      "type": "XML",
+      "async": true,
+      "id": "App"
+    }
+  }
+}

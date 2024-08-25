@@ -28,17 +28,17 @@
          <FlexBox visible="true" height="2rem" justifyContent="Start" class="sapUiSmallMarginTop">
          <Text text="{i18n>origen}" visible="true" class="sapUiTinyMarginEnd sapUiTinyMarginTop sapUiMediumMarginBegin"/>
 	      <unified:FileUploader name="postingExcelUpload" width="500px" tooltip="{i18n>SelectFile}"
-							          change="onFileChange" icon="sap-icon://open-folder"  
-                               uploadComplete="handleUploadCompleted" 
-                               uploadAborted="handleUploadAborted"
-							          fileAllowed="onFileAllowed" 
-                               fileType="xlsx" 
-                               sendXHR="true" 
-                               style="Emphasized"
-                               sameFilenameAllowed="true" 
-                               uploadOnChange="false" 
-                               useMultipart="false"
-							          placeholder="{i18n>UploadHint}" maximumFileSize="100" fileSizeExceed="onFileSizeExceed"/>
+							    change="onFileChange" icon="sap-icon://open-folder"  
+                                uploadComplete="handleUploadCompleted" 
+                                uploadAborted="handleUploadAborted"
+							    fileAllowed="onFileAllowed" 
+                                fileType="xlsx" 
+                                sendXHR="true" 
+                                style="Emphasized"
+                                sameFilenameAllowed="true" 
+                                uploadOnChange="false" 
+                                useMultipart="false"
+							    placeholder="{i18n>UploadHint}" maximumFileSize="100" fileSizeExceed="onFileSizeExceed"/>
          </FlexBox>
          </Panel>
          
@@ -49,7 +49,7 @@
 						enableAutoColumnWidth="true" showDetailsButton="true" beforeExport="onBeforeExport"
 					    enableAutoBinding="true" class="sapFioriListReportTable" beforeRebindTable="onBeforeRebindViewTable"
 				        initialise="onSmartTableInitialise" useVariantManagement="false" height="100%"
-                        header="{i18n>Table_Header}" demandPopin="true">
+                        header="{i18n>Table_Header}" demandPopin="true" entitySet="InvoiceList">
          
          <smarttable:customData>
 			<core:CustomData key="dateFormatSettings" value='\{"UTC":true,"style":"short"\}'/>

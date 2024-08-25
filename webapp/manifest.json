@@ -16,6 +16,12 @@
       "toolsId": "ba92e127-ca08-4079-9a90-568fe09d075c"
     },
     "dataSources": {
+
+      "mainService": {
+        "uri": "/sap/opu/odata/sap/ZUI_RAP_INVOICELIST_SB_OD2/",
+        "type": "OData"
+      },
+
       "DetailReport": 
       {
 				"uri": "model/json/templateReportList.json",
@@ -76,6 +82,18 @@
         "type": "sap.ui.model.resource.ResourceModel",
         "settings": {
           "bundleName": "ns.asa.zappuploadinvoices.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "defaultBindingMode": "TwoWay",
+          "defaultCountMode": "Inline",
+          "refreshAfterChange": false,
+          "metadataUrlParams": {
+            "sap-value-list": "none"
+          }
         }
       },
       "ModelDetailReport": 

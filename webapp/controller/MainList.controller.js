@@ -1,11 +1,12 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    'sap/m/MessageBox'
+    'sap/m/MessageBox',
+    "ns/asa/zappuploadinvoices/controller/BaseController",
 ],
-function (Controller,MessageBox) {
+function (Controller,MessageBox,BaseController) {
     "use strict";
-
-    return Controller.extend("ns.asa.zappuploadinvoices.controller.MainList", {
+    
+    return BaseController.extend("ns.asa.zappuploadinvoices.controller.MainList", {
         onInit: function () {
         
           //Inicializar el Modelo

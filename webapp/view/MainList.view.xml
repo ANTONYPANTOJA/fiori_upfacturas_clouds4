@@ -11,7 +11,8 @@
     xmlns:smarttable="sap.ui.comp.smarttable" 
     xmlns:smartfield="sap.ui.comp.smartfield"
     xmlns:smartlink="sap.ui.comp.navpopover"
-    xmlns:table="sap.ui.table">
+    xmlns:table="sap.ui.table"
+	core:require="{formatter: 'ns/asa/zappuploadinvoices/model/formatter'}">
 
     <Page id="PageMain">
         <content>
@@ -69,80 +70,82 @@
 							<Button id="btnEdit" tooltip="{i18n>Edit}" type="Transparent" text="{i18n>Edit}" press="onEditPress" enabled="{ui>/postBtnEnabled}" visible="true" />
 							<Button id="btnShowLog" tooltip="{i18n>ShowLog}" type="Transparent" text="{i18n>ShowLog}" press="onShowLogButtonPressed" visible="true"/>
 						</Toolbar>
-				</smarttable:customToolbar>
+		</smarttable:customToolbar>
 
             <Table id="tablefact" growing="true" growingScrollToLoad="true" growingThreshold="100" mode="MultiSelect"
-						 fixedLayout="true" selectionChange="onRowSelectionChange" itemPress="handleItemPressed" items="{ path: 'detailReport>/Detail' }">
-               <!--Columnas-->
-               <columns>
-               		<Column hAlign="Begin" tooltip="{i18n>Referencia}" visible="true">
-								<Label text="{i18n>Referencia}"/>
+						 fixedLayout="true" selectionChange="onRowSelectionChange" itemPress="handleItemPressed">
+
+				<columns>
+					<Column hAlign="Begin" tooltip="{/#InvoiceList/Reference/@sap:label}" visible="true">
+							<Label text="{/#InvoiceList/Reference/@sap:label}"/>
 								<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "Reference", "leadingProperty": "Reference", "sortProperty": "Reference", "filterProperty": "Reference",  "columnIndex": "1"\}'/>
 								</customData>
-							</Column>
-
-                     <Column hAlign="Begin"  tooltip="{i18n>InvoiceStatus}" visible="true">
-								<Label text="{i18n>InvoiceStatus}"/>
+					</Column>
+					<Column hAlign="Begin" tooltip="{/#InvoiceList/Status/@sap:label}" visible="true">
+								<Label  text="{/#InvoiceList/InvoiceStatus/@sap:label}"/>
 								<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "InvoiceStatus", "leadingProperty": "InvoiceStatus", "sortProperty": "InvoiceStatus", "filterProperty": "InvoiceStatus", "columnIndex": "2"\}'/>
 								</customData>
-							</Column>
-
-                     <Column hAlign="Begin" tooltip="{i18n>CompanyCode}"
-								visible="true">
-								<Label text="{i18n>CompanyCode}"/>
+					</Column>
+					<Column hAlign="Begin" tooltip="{/#InvoiceList/CompanyCode/@sap:label}" visible="true">
+								<Label text="{/#InvoiceList/CompanyCode/@sap:label}"/>
 								<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "CompanyCode", "leadingProperty": "CompanyCode", "sortProperty": "CompanyCode", "filterProperty": "CompanyCode", "columnIndex": "3"\}'/>
 								</customData>
-							</Column>
-
-                     <Column hAlign="Begin" tooltip="{i18n>InvoicingParty}"
+					</Column>
+						<Column hAlign="Begin" tooltip="{/#InvoiceList/InvoicingParty/@sap:label}"
 								visible="true">
-								<Label text="{i18n>InvoicingParty}"/>
+								<Label text="{/#InvoiceList/InvoicingParty/@sap:label}"/>
 								<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "InvoicingParty", "leadingProperty": "InvoicingParty", "sortProperty": "InvoicingParty", "filterProperty": "InvoicingParty", "columnIndex": "4"\}'/>
 								</customData>
 							</Column>
-
-                     <Column hAlign="End" tooltip="{i18n>PostingDate}"
+							<Column hAlign="End"  tooltip="{/#InvoiceList/PostingDate/@sap:label}"
 								visible="true">
-								<Label text="{i18n>PostingDate}"/>
+								<Label text="{/#InvoiceList/PostingDate/@sap:label}"/>
 								<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "PostingDate", "leadingProperty": "PostingDate", "sortProperty": "PostingDate", "filterProperty": "PostingDate", "columnIndex": "5", "type": "date"\}'/>
 								</customData>
 							</Column>
-
-                     	<Column hAlign="End" tooltip="{i18n>DocumentDate}"
+							<Column hAlign="End"  tooltip="{/#InvoiceList/DocumentDate/@sap:label}"
 								visible="true">
-								<Label text="{i18n>DocumentDate}"/>
+								<Label text="{/#InvoiceList/DocumentDate/@sap:label}"/>
 								<customData>
 									<core:CustomData key="p13nData"
 										value='\{"columnKey": "DocumentDate", "leadingProperty": "DocumentDate", "sortProperty": "DocumentDate", "filterProperty": "DocumentDate", "columnIndex": "6", "type": "date"\}'/>
 								</customData>
 							</Column>
-
-                     <Column hAlign="Begin" tooltip="{i18n>SupplierInvoice}"
+							<Column hAlign="Begin" tooltip="{/#InvoiceList/SupplierInvoice/@sap:label}"
 								visible="true">
-								<Label text="{i18n>SupplierInvoice}"/>
+								<Label text="{/#InvoiceList/SupplierInvoice/@sap:label}"/>
 								<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "SupplierInvoice", "leadingProperty": "SupplierInvoice", "sortProperty": "SupplierInvoice", "filterProperty": "SupplierInvoice", "columnIndex": "7"\}'/>
 								</customData>
 							</Column>
-
-               </columns>
+							<Column hAlign="End" tooltip="{/#InvoiceList/Amount/@sap:label}" visible="true">
+								<Label text="{/#InvoiceList/Amount/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "Amount", "leadingProperty": "Amount", "sortProperty": "Amount", "filterProperty": "Amount", "columnIndex": "8"\}'/>
+							 	</customData>
+							</Column>												
+				</columns>
                <items>
-               	<ColumnListItem type="Navigation" highlight="{path:'CheckStatus', formatter:'.formatter.DraftStatusStateFormat'}">
+               	<ColumnListItem type="Navigation" highlight="{path:'CheckStatus', formatter:'formatter.DraftStatusStateFormat'}">
 								<cells>
 									<Text wrapping="false" text="{Reference}"/>
 									<Text wrapping="false" text="{parts: [{path:'InvoiceStatus'},{ path:'DraftStatus'},{ path:'InvoiceStatusDesc'}], formatter: '.formatter.InvoiceStatusFormat' }"/>
 									<Text wrapping="false" text="{parts: [{path:'CompanyCode'},{ path:'CompanyCodeName'}], formatter: '.formatter.KeyTextFormat' }"/>
 									<Text wrapping="false" text="{parts: [{path:'InvoicingParty'},{ path:'InvoicingPartyName'}], formatter: '.formatter.KeyTextFormat' }"/>
-									<Text text="{path:'PostingDate', type:'sap.ui.model.type.Date', formatOptions:{style:'medium', UTC:'true'} }"/>
-									<Text text="{path:'DocumentDate', type:'sap.ui.model.type.Date', formatOptions:{style:'medium', UTC:'true'} }"/>
+									<Text text="{path:'PostingDate', type:'sap.ui.model.type.Date', formatOptions:{pattern: 'dd/MM/yyyy', strictParsing: true , UTC:'true'} }"/>
+									<Text text="{path:'DocumentDate', type:'sap.ui.model.type.Date', formatOptions:{pattern: 'dd/MM/yyyy', strictParsing: true , UTC:'true'} }"/>
 									<Text wrapping="false" text="{parts: [{path:'SupplierInvoice'},{ path:'FiscalYear'}], formatter: '.formatter.InvoiceWithYear'}"/>
+									<!-- 
+									<unified:Currency value="{path:'Amount', type:'sap.ui.model.type.String'}" currency="{Currency}" useSymbol="false"/>
+									<unified:Currency stringValue="{Amount}" currency="{Currency}" useSymbol="false"/> -->
+
 								</cells>
-						</ColumnListItem>
+				</ColumnListItem>
                </items>
 				</Table>
          </smarttable:SmartTable>		 

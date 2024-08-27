@@ -50,7 +50,8 @@
 						enableAutoColumnWidth="true" showDetailsButton="true" beforeExport="onBeforeExport"
 					    enableAutoBinding="true" class="sapFioriListReportTable" beforeRebindTable="onBeforeRebindViewTable"
 				        initialise="onSmartTableInitialise" useVariantManagement="false" height="100%"
-                        header="{i18n>Table_Header}" demandPopin="true" entitySet="InvoiceList">
+                        header="{i18n>Table_Header}" demandPopin="true" entitySet="InvoiceList"
+						ignoreFromPersonalisation="Supplierinvoiceuploaduuid,Id">
          
          <smarttable:customData>
 			<core:CustomData key="dateFormatSettings" value='\{"UTC":true,"style":"short"\}'/>

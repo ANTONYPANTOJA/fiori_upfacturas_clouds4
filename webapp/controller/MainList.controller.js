@@ -104,7 +104,7 @@ sap.ui.define([
 
                         switch (lv_column_main) {
                             case "*ID" || 'ID'://Columna A1                         
-                                oDataModelAdd.Id = value;
+                                oDataModelAdd.Id = parseInt(value);
                                 break;
                             case "*SOCIEDAD" || 'SOCIEDAD'://Columna B1
                                 oDataModelAdd.CompanyCode = value;
@@ -114,7 +114,7 @@ sap.ui.define([
                                 oDataModelAdd.InvoicingParty = value;
                                 break;
                             case "REFERENCIA"   ://Columna D1
-                                oDataModelAdd.Referencia = value;
+                                oDataModelAdd.Reference = value;
                                 break;
                             case "*FEC.DOC." || 'FEC.DOC.'://Columna E1
                                 // oDataModel.DetailList.PostingDate = value;
@@ -163,9 +163,12 @@ sap.ui.define([
             onUploadPostList: async function () {
 
                 let odataModel = this.getModel("detailReport").getData();
-                let body = odataModel.DetailList;
+
+                let bodySend =   { Id: 1,CompanyCode: "1100" , _ItemsList: [ { Id: 1, CompanyCode: "1100"},{ Id: 2, CompanyCode: "1100"}, ] };
+
+                //bodySend.data = odataModel.DetailList;
                 
-                this.getView().getModel().create("/InvoiceList", body, {
+                this.getView().getModel().create("/InvoiceList", bodySend, {
 
                     success: function () {
                         MessageBox.success("ok");

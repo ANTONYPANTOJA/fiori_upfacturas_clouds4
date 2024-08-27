@@ -1,19 +1,12 @@
 {
-    "Detail":[
+ "DetailList": 
+ [  
     {
-        "Referencia":"111",
-        "InvoiceStatus":"111",
-        "CompanyCode":"1100",
+        "Id":"",
+        "CompanyCode":"",
         "InvoicingParty":"",
-        "PostingDate":"",
-        "DocumentDate":"",
-        "SupplierInvoice":""
-    },
-    {
-        "Referencia":"211",
-        "InvoiceStatus":"211",
-        "CompanyCode":"1100",
-        "InvoicingParty":"",
+        "Referencia":"",
+        "InvoiceStatus":"",
         "PostingDate":"",
         "DocumentDate":"",
         "SupplierInvoice":""

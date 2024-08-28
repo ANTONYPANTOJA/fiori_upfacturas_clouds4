@@ -201,11 +201,13 @@ sap.ui.define([
 //                    let uuid_aux = instance.parseValue(key,"sap.ui.model.odata.type.String.Guid"); 
 
                     let body = [{ id:1,CompanyCode: '1100' },{ id:2,CompanyCode: '1100' }];
-                    let body2 = [{ Supplierinvoiceuploaduuid:key,Item: 0,Id:1,CompanyCode:'1100',InvoicingParty:'',Reference:'',InvoiceStatus:''}];
+                    let body2 = [{ Supplierinvoiceuploaduuid:key,Item: 1,Id:1,CompanyCode:'1100',InvoicingParty:'',Reference:'',InvoiceStatus:''},
+                                 { Supplierinvoiceuploaduuid:key,Item: 2,Id:1,CompanyCode:'1200',InvoicingParty:'',Reference:'',InvoiceStatus:''}];
+
                     //ZUI_RAP_INVOICELIST_SB_OD2/InvoiceList(guid'00000000-0000-0000-0000-000000000000')/to_ItemsList"
                     try {
                        // this.getView().getModel().create(path, body2,{
-                        this.getView().getModel().update(path1, body2,{
+                        this.getView().getModel().create(path, body2,{
                             success: function (result) {
                                 MessageBox.success("callOdataUploadItems");
                                 resolve(result);

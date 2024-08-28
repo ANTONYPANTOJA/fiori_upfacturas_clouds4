@@ -18,7 +18,7 @@
     "dataSources": {
 
       "mainService": {
-        "uri": "/sap/opu/odata/sap/ZUI_RAP_INVOICELIST_SB_OD2/",
+        "uri": "/sap/opu/odata/sap/ZUI_RAP_INVOICELIST_SBOD2/",
         "type": "OData"
       },
 

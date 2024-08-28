@@ -2,8 +2,10 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     'sap/m/MessageBox',
     "ns/asa/zappuploadinvoices/controller/BaseController",
+    "sap/ui/model/odata/type/Guid"
+
 ],
-    function (Controller, MessageBox, BaseController) {
+    function (Controller, MessageBox, BaseController,Guid) {
         "use strict";
 
         return BaseController.extend("ns.asa.zappuploadinvoices.controller.MainList", {
@@ -162,20 +164,60 @@ sap.ui.define([
 
             onUploadPostList: async function () {
 
-                let odataModel = this.getModel("detailReport").getData();
+                return await this.callOdataUpload();
+            },
+            callOdataUpload: async function()
+            {
+                return new Promise(async (resolve, reject) => {
 
-                let bodySend =   { Id: 1,CompanyCode: "1100" , _ItemsList: [ { Id: 1, CompanyCode: "1100"},{ Id: 2, CompanyCode: "1100"}, ] };
+                    let body = {};
 
-                //bodySend.data = odataModel.DetailList;
-                
-                this.getView().getModel().create("/InvoiceList", bodySend, {
+                    try {
+                        this.getView().getModel().create("/InvoiceList", body,{
+                            success: function (result) {
+                                //MessageBox.success(result);
+                                let response = this.callOdataUploadItems(result.Supplierinvoiceuploaduuid);
+                                resolve(response);
+                            }.bind(this),
+                            error: function (e) {
+                                MessageBox.error("Error" + e);
+                                reject(false);
+                            }.bind(this)
+                        });
+                    } catch (error) {    
+                        reject(false);
+                    }
+                });
 
-                    success: function () {
-                        MessageBox.success("ok");
-                    }.bind(this),
-                    error: function (e) {
-                        MessageBox.error("Error" + e);
-                    }.bind(this)
+            },
+            callOdataUploadItems: async function(key)
+            {
+                return new Promise(async (resolve, reject) => {
+
+                    let path1 = "/ItemsList(Supplierinvoiceuploaduuid='" + key + "',Item=0)";
+                    let path ="/InvoiceList('" + key + "')/to_ItemsList";
+
+//                    let instance = new sap.ui.model.odata.type.Guid();
+//                    let uuid_aux = instance.parseValue(key,"sap.ui.model.odata.type.String.Guid"); 
+
+                    let body = [{ id:1,CompanyCode: '1100' },{ id:2,CompanyCode: '1100' }];
+                    let body2 = [{ Supplierinvoiceuploaduuid:key,Item: 0,Id:1,CompanyCode:'1100',InvoicingParty:'',Reference:'',InvoiceStatus:''}];
+                    //ZUI_RAP_INVOICELIST_SB_OD2/InvoiceList(guid'00000000-0000-0000-0000-000000000000')/to_ItemsList"
+                    try {
+                       // this.getView().getModel().create(path, body2,{
+                        this.getView().getModel().update(path1, body2,{
+                            success: function (result) {
+                                MessageBox.success("callOdataUploadItems");
+                                resolve(result);
+                            }.bind(this),
+                            error: function (e) {
+                                MessageBox.error("Error" + e);
+                                reject(false);
+                            }.bind(this)
+                        });
+                    } catch (error) {    
+                        reject(false);
+                    }
                 });
             }
 

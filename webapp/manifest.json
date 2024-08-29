@@ -19,7 +19,10 @@
 
       "mainService": {
         "uri": "/sap/opu/odata/sap/ZUI_RAP_INVOICELIST_SBOD2/",
-        "type": "OData"
+        "type": "OData",
+        "settings": {
+          "odataVersion": "2.0"
+        }
       },
 
       "DetailReport": 
@@ -88,12 +91,9 @@
         "dataSource": "mainService",
         "preload": true,
         "settings": {
-          "defaultBindingMode": "TwoWay",
-          "defaultCountMode": "Inline",
-          "refreshAfterChange": false,
-          "metadataUrlParams": {
-            "sap-value-list": "none"
-          }
+          "defaultOperationMode": "Server",
+					"defaultBindingMode": "TwoWay",
+					"defaultCountMode": "Request"
         }
       },
       "ModelDetailReport": 

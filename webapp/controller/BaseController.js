@@ -18,5 +18,8 @@ function (Controller,NavigationHandler) {
         getResourceBundle: function() {
             return this.getOwnerComponent().getModel("i18n").getResourceBundle();
         },
+        onRefresh: function () {
+			this.getView().getModel().refresh(true);
+		},
     });
 });

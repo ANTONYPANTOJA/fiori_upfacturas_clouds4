@@ -23,13 +23,9 @@ sap.ui.define([
                 sap.ui.core.BusyIndicator.show(0);
                 const data = await this._readFile(file);
                 if (data && data.length > 0) {
-                    await this.setDataTable(data);              //Armar la Estructura del Excel
-                    let result = await this.onUploadPostList(); //Almacenar los registros POST - UPLOAD
-                    if (result) {
-                        
-                    }else{
-
-                    }
+                    await this.setDataTable(data);  //Armar la Estructura del Excel
+                    await this.onUploadPostList();  //Almacenar los registros POST - UPLOAD
+                    this.onRefresh();
                 } else {
                     MessageBox.information(this.getResourceBundle("msg2"));
                     sap.ui.core.BusyIndicator.hide();
@@ -168,28 +164,34 @@ sap.ui.define([
             },
             callOdataUpload: async function()
             {
-                return new Promise(async (resolve, reject) => {
-
-                    let body = {};
-
-                    try {
-                        this.getView().getModel().create("/InvoiceList", body,{
-                            success: function (result) {
-                                //MessageBox.success(result);
-                                let response = this.callOdataUploadItems(result.Supplierinvoiceuploaduuid);
-                                resolve(response);
-                            }.bind(this),
-                            error: function (e) {
-                                MessageBox.error("Error" + e);
-                                reject(false);
-                            }.bind(this)
-                        });
-                    } catch (error) {    
-                        reject(false);
+                    let oDataItems = this.getModel("detailReport").getData();
+                    for (let index = 0; index < oDataItems.DetailList.length; index++) 
+                    {
+                        try {
+                           await this.createPost(oDataItems.DetailList[index]); 
+                        } catch (error) {
+                            console.error("Error Items - callOdataUpload",error);
+                        }
                     }
-                });
+            },
+            createPost: async function(body){
+                return new Promise(async (resolve, reject) => {
+                try {
+                    this.getView().getModel().create("/InvoiceList", body,{
+                        success: function (result) {
+                            resolve(true);
+                        }.bind(this),
+                        error: function (e) {
+                            reject(false);
+                        }.bind(this)
+                    });
+                } catch (error) {    
+                    reject(false);
+                }
+              });
 
             },
+
             callOdataUploadItems: async function(key)
             {
                 return new Promise(async (resolve, reject) => {
@@ -197,14 +199,21 @@ sap.ui.define([
                     let path1 = "/ItemsList(Supplierinvoiceuploaduuid='" + key + "',Item=0)";
                     let path ="/InvoiceList('" + key + "')/to_ItemsList";
 
+                    let pathAction ="/InvoiceList.CreateInvoiceUpload";
 //                    let instance = new sap.ui.model.odata.type.Guid();
 //                    let uuid_aux = instance.parseValue(key,"sap.ui.model.odata.type.String.Guid"); 
 
                     let body = [{ id:1,CompanyCode: '1100' },{ id:2,CompanyCode: '1100' }];
-                    let body2 = [{ Supplierinvoiceuploaduuid:key,Item: 1,Id:1,CompanyCode:'1100',InvoicingParty:'',Reference:'',InvoiceStatus:''},
-                                 { Supplierinvoiceuploaduuid:key,Item: 2,Id:1,CompanyCode:'1200',InvoicingParty:'',Reference:'',InvoiceStatus:''}];
-
+                    let body2 = {d: [{ Supplierinvoiceuploaduuid:key,Item: 1,Id:1,CompanyCode:'1100',InvoicingParty:'',Reference:'',InvoiceStatus:''},
+                                 { Supplierinvoiceuploaduuid:key,Item: 2,Id:1,CompanyCode:'1200',InvoicingParty:'',Reference:'',InvoiceStatus:''}]};
+                    
+                    let datafunction = { id : 2,reference:'145',companycode:'1100',invoicingparty:'aa', _Position: [{ id: 1,reference:'147'},{ id: 2,reference:'147'}]};
                     //ZUI_RAP_INVOICELIST_SB_OD2/InvoiceList(guid'00000000-0000-0000-0000-000000000000')/to_ItemsList"
+                     
+                    let results = { results : body2 };
+
+                    let original = [{ results }];
+
                     try {
                        // this.getView().getModel().create(path, body2,{
                         this.getView().getModel().create(path, body2,{

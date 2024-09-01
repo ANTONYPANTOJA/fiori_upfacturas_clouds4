@@ -51,7 +51,7 @@
 					    enableAutoBinding="true" class="sapFioriListReportTable" beforeRebindTable="onBeforeRebindViewTable"
 				        initialise="onSmartTableInitialise" useVariantManagement="false" height="100%"
                         header="{i18n>Table_Header}" demandPopin="true" entitySet="InvoiceList"
-						ignoreFromPersonalisation="Supplierinvoiceuploaduuid,Id">
+						ignoreFromPersonalisation="Supplierinvoiceuploaduuid,Id,Delete_mc,Update_mc,to_ItemsList_oc,LastChangedAt">
          
          <smarttable:customData>
 			<core:CustomData key="dateFormatSettings" value='\{"UTC":true,"style":"short"\}'/>

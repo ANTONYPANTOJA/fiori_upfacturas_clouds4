@@ -60,7 +60,7 @@ sap.ui.define([
                     });
                     workbook.SheetNames.forEach(function (sheetName) {
                         if (sheetName === "Template") {
-                            excelData = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+                            excelData = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);                    
                         }
                     });
 
@@ -132,10 +132,16 @@ sap.ui.define([
                                 oDataModelAdd.Reference = value;
                                 break;
                             case "*FEC.DOC." || 'FEC.DOC.'://Columna E1
-                                // oDataModel.DetailList.PostingDate = value;
+                                let valueFdoc = this.getJsDateFromExcel(value);
+                                if (value) {
+                                    oDataModelAdd.DocumentDate = value;  
+                                }
                                 break;
                             case "*FEC.CONTAB." || 'FEC.CONTAB.'://Columna F1
-                                // oDataModel.DetailList.DocumentDate = value;
+                                let valueFcont = this.getJsDateFromExcel(value);
+                                if (value) {
+                                    oDataModelAdd.PostingDate = valueFcont;  
+                                }
                                 break;
 
                             case "*CL.DOC." || 'CL.DOC.'://Columna G1

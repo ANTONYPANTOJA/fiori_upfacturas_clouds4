@@ -65,11 +65,11 @@
          <smarttable:customToolbar>
 						<Toolbar design="Transparent">
 							<ToolbarSpacer></ToolbarSpacer>
-							<Button id="btnCheck" tooltip="{i18n>Check}" text="{i18n>Check}" press="onCheckPressed" type="Ghost" visible="true"/>
-							<Button id="btnPost" tooltip="{i18n>Post}" text="{i18n>Post}" press="onPostPressed" enabled="{ui>/postBtnEnabled}" type="Transparent" visible="true" />
-							<Button id="btnDelete" tooltip="{i18n>Delete}" type="Transparent" text="{i18n>Delete}" press="onDeletePress" visible="true"/>
-							<Button id="btnEdit" tooltip="{i18n>Edit}" type="Transparent" text="{i18n>Edit}" press="onEditPress" enabled="{ui>/postBtnEnabled}" visible="true" />
-							<Button id="btnShowLog" tooltip="{i18n>ShowLog}" type="Transparent" text="{i18n>ShowLog}" press="onShowLogButtonPressed" visible="true"/>
+							<Button id="btnCheck" tooltip="{i18n>Check}" text="{i18n>Check}" press="onCheckPressed" type="Ghost" enabled="{aStatus>/btnCheck}"/>
+							<Button id="btnPost" tooltip="{i18n>Post}" text="{i18n>Post}" press="onPostPressed" type="Transparent" enabled="{aStatus>/btnContab}" />
+							<Button id="btnDelete" tooltip="{i18n>Delete}" type="Transparent" text="{i18n>Delete}" press="onDeletePress" enabled="{aStatus>/btnEliminar}" />
+							<Button id="btnEdit" tooltip="{i18n>Edit}" type="Transparent" text="{i18n>Edit}" press="onEditPress" visible="false" enabled="{aStatus>/btnFijar}"/>
+							<Button id="btnShowLog" tooltip="{i18n>ShowLog}" type="Transparent" text="{i18n>ShowLog}" press="onShowLogButtonPressed" enabled="{aStatus>/btnLog}"/>
 						</Toolbar>
 		</smarttable:customToolbar>
 

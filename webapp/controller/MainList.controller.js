@@ -2,20 +2,36 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     'sap/m/MessageBox',
     "ns/asa/zappuploadinvoices/controller/BaseController",
-    "sap/ui/model/odata/type/Guid"
+    "sap/ui/model/odata/type/Guid",
+    "sap/ui/model/json/JSONModel",
 
 ],
-    function (Controller, MessageBox, BaseController,Guid) {
+    function (Controller, MessageBox, BaseController,Guid,JSONModel) {
         "use strict";
+
+        let that;
 
         return BaseController.extend("ns.asa.zappuploadinvoices.controller.MainList", {
             onInit: function () {
 
-                //Inicializar el Modelo
+                //Inicializar Variables.
+                that = this;
+                
+                //Inicializar Modelos
+                this.initModels();
 
+            },
+            initModels: function()
+            {
+                //Model Tabla Detalle List
                 let dataModelTableList = this.getOwnerComponent().getModel("ModelDetailReport");
                 this.getView().setModel(dataModelTableList, "detailReport");
+
+                //Modelo Button Status
+                let buttonsStatus = { btnCheck: false , btnContab: false, btnEliminar: false, btnLog: false, btnFijar: false };
+                this.getView().setModel(new JSONModel(buttonsStatus), "aStatus");
             },
+
             onFileChange: async function (event) {
                 const file = event.getParameter("files") && event.getParameter("files")[0];
                 const fileUploader = event.getSource();
@@ -25,6 +41,7 @@ sap.ui.define([
                 if (data && data.length > 0) {
                     await this.setDataTable(data);  //Armar la Estructura del Excel
                     await this.onUploadPostList();  //Almacenar los registros POST - UPLOAD
+                    this.updateModelButtons(true);  //Actualizar Buttons
                     this.onRefresh();
                 } else {
                     MessageBox.information(this.getResourceBundle("msg2"));
@@ -230,6 +247,21 @@ sap.ui.define([
                         reject(false);
                     }
                 });
+            },
+
+            updateModelButtons: function(action1,action2)
+            {
+                let oViewModel = that.getView().getModel("aStatus");
+                //oViewModel.setProperty("/Source", this.sUrlCosapi); -@DELETE
+                if (action1) {
+                    oViewModel.setProperty("/btnCheck",true);
+                    oViewModel.setProperty("/btnEliminar",true);
+                }
+                if (action2) {
+                    oViewModel.setProperty("/btnContab",true);
+                    oViewModel.setProperty("/btnLog",true);
+                }
+
             }
 
 

@@ -4,11 +4,10 @@ sap.ui.define([
     "ns/asa/zappuploadinvoices/controller/BaseController",
     "sap/ui/model/odata/type/Guid",
     "sap/ui/model/json/JSONModel",
-
 ],
     function (Controller, MessageBox, BaseController,Guid,JSONModel) {
         "use strict";
-
+        
         let that;
 
         return BaseController.extend("ns.asa.zappuploadinvoices.controller.MainList", {
@@ -134,7 +133,7 @@ sap.ui.define([
                             case "*FEC.DOC." || 'FEC.DOC.'://Columna E1
                                 let valueFdoc = this.getJsDateFromExcel(value);
                                 if (value) {
-                                    oDataModelAdd.DocumentDate = value;  
+                                    oDataModelAdd.DocumentDate = valueFdoc;  
                                 }
                                 break;
                             case "*FEC.CONTAB." || 'FEC.CONTAB.'://Columna F1
@@ -187,22 +186,23 @@ sap.ui.define([
             },
             callOdataUpload: async function()
             {
-                    let oDataItems = this.getModel("detailReport").getData();
-                    for (let index = 0; index < oDataItems.DetailList.length; index++) 
-                    {
-                        try {
-                           await this.createPost(oDataItems.DetailList[index]); 
-                        } catch (error) {
-                            console.error("Error Items - callOdataUpload",error);
-                        }
-                    }
+                let bodyInit = {};
+                return new Promise(async (resolve, reject) => {
+                    let idPostUpload = await this.createPost(bodyInit);
+                    if (idPostUpload) {
+                        await this.processDetailUpload(idPostUpload);
+                        resolve(true) 
+                    }else{
+                        resolve(false)
+                    } 
+                });
             },
             createPost: async function(body){
                 return new Promise(async (resolve, reject) => {
                 try {
                     this.getView().getModel().create("/InvoiceList", body,{
                         success: function (result) {
-                            resolve(true);
+                            resolve(result.Supplierinvoiceuploaduuid);
                         }.bind(this),
                         error: function (e) {
                             reject(false);
@@ -215,44 +215,55 @@ sap.ui.define([
 
             },
 
-            callOdataUploadItems: async function(key)
+            callOdataUploadItems: async function(key,body)
             {
                 return new Promise(async (resolve, reject) => {
 
-                    let path1 = "/ItemsList(Supplierinvoiceuploaduuid='" + key + "',Item=0)";
                     let path ="/InvoiceList('" + key + "')/to_ItemsList";
-
                     let pathAction ="/InvoiceList.CreateInvoiceUpload";
-//                    let instance = new sap.ui.model.odata.type.Guid();
-//                    let uuid_aux = instance.parseValue(key,"sap.ui.model.odata.type.String.Guid"); 
 
-                    let body = [{ id:1,CompanyCode: '1100' },{ id:2,CompanyCode: '1100' }];
-                    let body2 = {d: [{ Supplierinvoiceuploaduuid:key,Item: 1,Id:1,CompanyCode:'1100',InvoicingParty:'',Reference:'',InvoiceStatus:''},
-                                 { Supplierinvoiceuploaduuid:key,Item: 2,Id:1,CompanyCode:'1200',InvoicingParty:'',Reference:'',InvoiceStatus:''}]};
-                    
-                    let datafunction = { id : 2,reference:'145',companycode:'1100',invoicingparty:'aa', _Position: [{ id: 1,reference:'147'},{ id: 2,reference:'147'}]};
+                    //let instance = new sap.ui.model.odata.type.Guid();
+                    //let uuid_aux = instance.parseValue(key,"sap.ui.model.odata.type.String.Guid"); 
                     //ZUI_RAP_INVOICELIST_SB_OD2/InvoiceList(guid'00000000-0000-0000-0000-000000000000')/to_ItemsList"
-                     
-                    let results = { results : body2 };
-
-                    let original = [{ results }];
 
                     try {
-                       // this.getView().getModel().create(path, body2,{
-                        this.getView().getModel().create(path, body2,{
+                        this.getView().getModel().create(path, body,{
                             success: function (result) {
-                                MessageBox.success("callOdataUploadItems");
-                                resolve(result);
+                                resolve(true);
                             }.bind(this),
                             error: function (e) {
-                                MessageBox.error("Error" + e);
+                                console.log("Error Function callOdataUploadItems",e)
                                 reject(false);
                             }.bind(this)
                         });
                     } catch (error) {    
                         reject(false);
                     }
+
                 });
+            },
+
+            processDetailUpload: async function(idPostUpload)
+            {
+                let oDataItems = this.getModel("detailReport").getData();
+                let lengthTable = oDataItems.DetailList.length
+                let items = 0;
+                for (let index = 0; index < oDataItems.DetailList.length; index++) 
+                {
+                    items ++;
+                    try {
+                        oDataItems.DetailList[index].Item = index;
+                        oDataItems.DetailList[index].Supplierinvoiceuploaduuid = idPostUpload;
+                        oDataItems.DetailList[index].uuidAuxUpload = idPostUpload;  
+                        if (lengthTable === items) 
+                        {
+                            oDataItems.DetailList[index].FlagFin = "X";    
+                        }
+                       await this.callOdataUploadItems(idPostUpload,oDataItems.DetailList[index]); 
+                    } catch (error) {
+                        console.error("Error Items - callOdataUpload",error);
+                    }
+                }
             },
 
             updateModelButtons: function(action1,action2)

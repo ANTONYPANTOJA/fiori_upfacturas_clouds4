@@ -36,6 +36,18 @@ sap.ui.define([
                 const date = new Date(parsed)
 
                 return date
+            },
+            InvoiceStatusFormat: function(key,text)
+            {
+                const oModel = this.getResourceBundle();
+                if (!key && !text){
+                    return "";
+                } else if (key === "0") {
+                    return "0 "+"("+ oModel.getText("statusCero") +")";
+                }else{
+                    return key + "("+ text +")";
+                }
+                
             }
         });
     });

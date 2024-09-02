@@ -2,6 +2,8 @@
  "DetailList": 
  [  
     {
+        "Supplierinvoiceuploaduuid":"",
+        "Item":"",
         "Id":"",
         "CompanyCode":"",
         "InvoicingParty":"",
@@ -9,7 +11,9 @@
         "InvoiceStatus":"",
         "PostingDate":"",
         "DocumentDate":"",
-        "SupplierInvoice":""
+        "SupplierInvoice":"",
+        "FlagFin":"",
+        "uuidAuxUpload":""
     }
 ]
 }

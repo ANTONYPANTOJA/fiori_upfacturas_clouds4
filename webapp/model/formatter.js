@@ -10,7 +10,11 @@ function (DateFormat) {
          */
         DraftStatusStateFormat: function(valor) {
             if (valor) {
-                if (valor === "") {
+
+                if(valor == "0"){
+                  return sap.ui.core.MessageType.None;
+                }
+                else if (valor === "A") {
                     return sap.ui.core.MessageType.Success;
                 } else if (valor === "2") {
                     return sap.ui.core.MessageType.Error;
@@ -18,13 +22,10 @@ function (DateFormat) {
                     return sap.ui.core.MessageType.None;
                 }
             } else {
-                return sap.ui.core.MessageType.Success;
+                return sap.ui.core.MessageType.None;
             }
         },
-        InvoiceStatusFormat: function()
-        {
-            
-        }
+
 
     };
 

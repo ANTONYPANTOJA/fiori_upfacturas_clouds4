@@ -1,0 +1,7 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core">
+	<Dialog titleAlignment="Center" title="{path:'model>/load/message'}">
+		<HBox alignItems="Center" justifyContent="Center" height="100px">
+			<BusyIndicator text="{i18n>waitmsg}" class="sapUiTinyMarginBottom"/>
+		</HBox>
+	</Dialog>
+</core:FragmentDefinition>

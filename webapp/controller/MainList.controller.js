@@ -29,6 +29,19 @@ sap.ui.define([
                 //Modelo Button Status
                 let buttonsStatus = { btnCheck: true , btnContab: false, btnEliminar: false, btnLog: false, btnFijar: false };
                 this.getView().setModel(new JSONModel(buttonsStatus), "aStatus");
+                
+                //Model Global
+                const bundle = this.getResourceBundle();
+                const model = new JSONModel({
+                    messages: [],
+                    load: {
+                        message: bundle.getText("loadmsg")
+                    },
+                    table: {
+                        data: []
+                    }
+                });
+                this.setModel(model, "model");
             },
 
             onFileChange: async function (event) {
@@ -284,8 +297,22 @@ sap.ui.define([
             onCheckPressed: async function()
             {
                 const itemsSelected = this.getItemsTableSelected();
+                if(!this.validCheck(itemsSelected)) return;
+
+                this.showBusyText("loadmsgCk");
+
                 const results = await this.checkItemsOdataRap(itemsSelected,'CK');
-                console.log({ itemsSelected });
+                console.log({ results });
+
+                this.hideBusyText();
+            },
+            validCheck: function(itemsSelected){
+            if (itemsSelected.length === 0) {
+                this.onDisplayMessageBoxPress('E','msg3');
+                return false;
+            }else{
+                return true;
+            }
             },
 
             getItemsTableSelected: function()

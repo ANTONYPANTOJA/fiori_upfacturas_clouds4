@@ -1,0 +1,22 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m">				
+                <Table id="DetailTableUpload" mode="MultiSelect" items="{ path: 'detailProducts>/Detail' }" contextualWidth="Auto">
+					<headerToolbar>
+						<OverflowToolbar id="otbSubheader">
+							<Title text="{i18n>Products}" level="H2"/>
+							<ToolbarSpacer/>
+							<Button id="btnTCheck" tooltip="{i18n>Check}" text="{i18n>Check}" press="onCheckPressed" type="Ghost" enabled="{aStatus>/btnCheck}"/>
+							<Button id="btnTPost" tooltip="{i18n>Post}" text="{i18n>Post}" press="onPostPressed" type="Transparent" enabled="{aStatus>/btnContab}" />
+							<Button id="btnTDelete" tooltip="{i18n>Delete}" type="Transparent" text="{i18n>Delete}" press="onDeletePress" enabled="{aStatus>/btnEliminar}" />
+							<Button id="btnTEdit" tooltip="{i18n>Edit}" type="Transparent" text="{i18n>Edit}" press="onEditPress" visible="false" enabled="{aStatus>/btnFijar}"/>
+							<Button id="btnTShowLog" tooltip="{i18n>ShowLog}" type="Transparent" text="{i18n>ShowLog}" press="onShowLogButtonPressed" enabled="{aStatus>/btnLog}"/>
+						</OverflowToolbar>
+					</headerToolbar>
+					<!-- Agregar Items -->
+					<items>
+						<ColumnListItem vAlign="Middle">
+							<cells>
+							</cells>
+						</ColumnListItem>
+					</items>
+				</Table>
+</core:FragmentDefinition>                

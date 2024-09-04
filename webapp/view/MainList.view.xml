@@ -46,7 +46,7 @@
          <VBox class="sapUiMediumMarginBeginEnd sapUiTinyMarginTopBottom" visible="false"/>
 
          <!--REPORTE DETALLE-->
-<smarttable:SmartTable id="detail" tableType="ResponsiveTable" showRowCount="true" enableExport="true"
+<smarttable:SmartTable id="detailList" tableType="ResponsiveTable" showRowCount="true" enableExport="true"
 						enableAutoColumnWidth="true" showDetailsButton="true" beforeExport="onBeforeExport"
 					    enableAutoBinding="true" class="sapFioriListReportTable" beforeRebindTable="onBeforeRebindViewTable"
 				        initialise="onSmartTableInitialise" useVariantManagement="false" height="100%"

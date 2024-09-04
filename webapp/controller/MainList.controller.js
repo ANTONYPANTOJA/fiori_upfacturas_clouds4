@@ -27,7 +27,7 @@ sap.ui.define([
                 this.getView().setModel(dataModelTableList, "detailReport");
 
                 //Modelo Button Status
-                let buttonsStatus = { btnCheck: false , btnContab: false, btnEliminar: false, btnLog: false, btnFijar: false };
+                let buttonsStatus = { btnCheck: true , btnContab: false, btnEliminar: false, btnLog: false, btnFijar: false };
                 this.getView().setModel(new JSONModel(buttonsStatus), "aStatus");
             },
 
@@ -279,8 +279,58 @@ sap.ui.define([
                     oViewModel.setProperty("/btnLog",true);
                 }
 
+            },
+
+            onCheckPressed: async function()
+            {
+                const itemsSelected = this.getItemsTableSelected();
+                const results = await this.checkItemsOdataRap(itemsSelected,'CK');
+                console.log({ itemsSelected });
+            },
+
+            getItemsTableSelected: function()
+            {
+                return this.getView().byId("detailList").getTable().getSelectedItems();
+            },
+            checkItemsOdataRap: async function (itemsSelects,action)
+            {
+                if (itemsSelects.length > 0 ) {
+                    for (let index = 0; index < itemsSelects.length; index++) {
+                        const contextObject = itemsSelects[index].getBindingContext();
+                        const path = contextObject.getPath();
+                        const odataBody = contextObject.getObject();
+                        let result = await this.callOdataActionRows(odataBody,action);
+                    }
+                }
+            },
+            callOdataActionRows: async function(odataBody,action)
+            {   
+                let parameters = { Idsuplier: '14',
+                                   Id: 1,
+                                   Action: action
+                }
+                return await this.callFunctionOdata('/actionUploadInvoice',parameters)
+            },
+
+            callFunctionOdata: async function(path,parameters)
+            {
+                return new Promise(async (resolve, reject) => {
+                    try {
+                           // this.getView().getModel().update(path,{
+                           this.getView().getModel().callFunction(path, {
+                            method: "GET",
+                            urlParameters:parameters,
+                            success: function (result) {
+                                resolve(result);
+                            }.bind(this),
+                            error: function (e){
+                                reject(false);
+                            }.bind(this)
+                        });
+                    } catch (error) {    
+                        reject(false);
+                    }
+                });                  
             }
-
-
         });
     });

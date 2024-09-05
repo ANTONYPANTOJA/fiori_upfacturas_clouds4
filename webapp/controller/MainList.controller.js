@@ -324,15 +324,25 @@ sap.ui.define([
                 if (itemsSelects.length > 0 ) {
                     for (let index = 0; index < itemsSelects.length; index++) {
                         const contextObject = itemsSelects[index].getBindingContext();
-                        const path = contextObject.getPath();
+                        const keyPath = this.getIdPath(contextObject.getPath());
                         const odataBody = contextObject.getObject();
-                        let result = await this.callOdataActionRows(odataBody,action);
+                        let result = await this.callOdataActionRows(odataBody,action,keyPath);
+                        console.log("checkItemsOdataRap",{ result });
                     }
                 }
             },
-            callOdataActionRows: async function(odataBody,action)
+            getIdPath: function(cadena){
+                //InvoiceList(""1-20240902023534-942"
+                let values = cadena.split("'");
+                if (values.length > 0) {
+                    return values[1];
+                }else{
+                    return null;    
+                }
+            },
+            callOdataActionRows: async function(odataBody,action,key)
             {   
-                let parameters = { Idsuplier: '14',
+                let parameters = { Idsuplier: key,
                                    Id: 1,
                                    Action: action
                 }

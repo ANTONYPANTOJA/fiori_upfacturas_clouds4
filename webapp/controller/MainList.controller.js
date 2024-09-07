@@ -27,7 +27,7 @@ sap.ui.define([
                 this.getView().setModel(dataModelTableList, "detailReport");
 
                 //Modelo Button Status
-                let buttonsStatus = { btnCheck: true , btnContab: false, btnEliminar: false, btnLog: false, btnFijar: false };
+                let buttonsStatus = { btnCheck: true , btnContab: true, btnEliminar: true, btnLog: true, btnFijar: false };
                 this.getView().setModel(new JSONModel(buttonsStatus), "aStatus");
                 
                 //Model Global
@@ -42,24 +42,25 @@ sap.ui.define([
                     }
                 });
                 this.setModel(model, "model");
+                //Link de Plantilla
+                //this.sUrlPlantilla = sap.ui.require.toUrl("ns/asa/zappuploadinvoices/model/Formato_Carga_Facturas.xlsx");
             },
 
             onFileChange: async function (event) {
                 const file = event.getParameter("files") && event.getParameter("files")[0];
                 const fileUploader = event.getSource();
 
-                sap.ui.core.BusyIndicator.show(0);
                 const data = await this._readFile(file);
                 if (data && data.length > 0) {
+                    this.showBusyText("loadmsgUp");
                     await this.setDataTable(data);  //Armar la Estructura del Excel
                     await this.onUploadPostList();  //Almacenar los registros POST - UPLOAD
                     this.updateModelButtons(true);  //Actualizar Buttons
                     this.onRefresh();
+                    this.hideBusyText();
                 } else {
                     MessageBox.information(this.getResourceBundle("msg2"));
-                    sap.ui.core.BusyIndicator.hide();
                 }
-                sap.ui.core.BusyIndicator.hide();
             },
 
             _readFile: async function (file) {
@@ -344,18 +345,19 @@ sap.ui.define([
             {   
                 let parameters = { Idsuplier: key,
                                    Id: 1,
-                                   Action: action
+                                   Action: action,
+                                   Supplierinvoiceuploaduuid: key
                 }
-                return await this.callFunctionOdata('/actionUploadInvoice',parameters)
+                let path = "/postActionUpload";
+                return await this.callFunctionOdata(path,parameters);
             },
 
             callFunctionOdata: async function(path,parameters)
             {
                 return new Promise(async (resolve, reject) => {
                     try {
-                           // this.getView().getModel().update(path,{
                            this.getView().getModel().callFunction(path, {
-                            method: "GET",
+                            method: "POST",
                             urlParameters:parameters,
                             success: function (result) {
                                 resolve(result);
@@ -368,6 +370,10 @@ sap.ui.define([
                         reject(false);
                     }
                 });                  
+            },
+            onDownloadPress: function()
+            {
+               // this.downloadFile("Formato Carga Masiva de Facturas.xlsx",this.sUrlPlantilla);
             }
         });
     });

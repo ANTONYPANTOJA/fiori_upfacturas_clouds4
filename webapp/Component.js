@@ -10,8 +10,8 @@ sap.ui.define([
     function (UIComponent, Device, models) {
         "use strict";
 
-        jQuery.sap.includeScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/jszip.js");
-        jQuery.sap.includeScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js");
+         //jQuery.sap.includeScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/jszip.js");
+         //jQuery.sap.includeScript("https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js");
         
         return UIComponent.extend("ns.asa.zappuploadinvoices.Component", {
             metadata: {

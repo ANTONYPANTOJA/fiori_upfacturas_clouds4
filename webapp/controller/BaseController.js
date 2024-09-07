@@ -2,9 +2,11 @@ sap.ui.define([
     "sap/ui/core/mvc/Controller",
     "sap/ui/generic/app/navigation/service/NavigationHandler",
     "sap/m/MessageBox",
-    "sap/m/MessageToast"
+    "sap/m/MessageToast",
+    "ns/asa/zappuploadinvoices/libs/xlsxfullmin",
+    "ns/asa/zappuploadinvoices/libs/JSZIP",
 ],
-    function (Controller, NavigationHandler, MessageBox, MessageToast) {
+    function (Controller, NavigationHandler, MessageBox, MessageToast,XLSX,JSZIP) {
         "use strict";
 
         return Controller.extend("ns.asa.zappuploadinvoices.controller.BaseController", {
@@ -105,6 +107,19 @@ sap.ui.define([
             hideBusyText: function () {
                 if (this._BusyFragment)
                     this._BusyFragment.close();
+            },
+            /**
+            * Dowloand Template Excel
+            * @public
+            */
+            downloadFile: function (sTitle, oFile) {
+                var linkPN = document.createElement('a');
+                linkPN.href = oFile;
+                linkPN.download = sTitle;
+                linkPN.style.display = 'none';
+                document.body.appendChild(linkPN);
+                linkPN.click();
+                document.body.removeChild(linkPN);
             },
 
         });

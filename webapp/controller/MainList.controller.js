@@ -228,6 +228,23 @@ sap.ui.define([
               });
 
             },
+            createPostAction: async function(model,path,body){
+                return new Promise(async (resolve, reject) => {
+                try {
+                    this.getView().getModel().create(path, body,{
+                        success: function (result) {
+                            resolve(result);
+                        }.bind(this),
+                        error: function (e) {
+                            reject(false);
+                        }.bind(this)
+                    });
+                } catch (error) {    
+                    reject(false);
+                }
+              });
+
+            },
 
             callOdataUploadItems: async function(key,body)
             {
@@ -348,8 +365,18 @@ sap.ui.define([
                                    Action: action,
                                    Supplierinvoiceuploaduuid: key
                 }
-                let path = "/postActionUpload";
-                return await this.callFunctionOdata(path,parameters);
+                //let path = "/postActionUpload";
+                  
+                //return await this.callFunctionOdata(path,parameters);
+                
+                /** POST - CREATE ACTION */
+                let path = "/ActionInvoice";
+                let body = { supplierinvoiceuploaduuid: key,
+                             idsuplier: key,
+                             action: action,
+                             id: 1 };
+
+                return await this.createPostAction("ModelActionService",path,body);
             },
 
             callFunctionOdata: async function(path,parameters)

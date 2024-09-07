@@ -23,6 +23,13 @@
                     "odataVersion": "2.0"
                 }
             },
+            "ActionService": {
+                "uri": "/sap/opu/odata/sap/ZUI_RAP_ACTIOINVOICE_SBOD2/",
+                "type": "OData",
+                "settings": {
+                    "odataVersion": "2.0"
+                }
+            },
             "DetailReport": {
                 "uri": "model/json/templateReportList.json",
                 "type": "JSON"
@@ -86,6 +93,15 @@
             },
             "": {
                 "dataSource": "mainService",
+                "preload": true,
+                "settings": {
+                    "defaultOperationMode": "Server",
+                    "defaultBindingMode": "TwoWay",
+                    "defaultCountMode": "Request"
+                }
+            },
+            "ModelActionService": {
+                "dataSource": "ActionService",
                 "preload": true,
                 "settings": {
                     "defaultOperationMode": "Server",

@@ -285,12 +285,13 @@ sap.ui.define([
                     try {
                         oDataItems.DetailList[index].Item = index;
                         oDataItems.DetailList[index].Supplierinvoiceuploaduuid = idPostUpload;
-                        oDataItems.DetailList[index].uuidAuxUpload = idPostUpload;  
+                        oDataItems.DetailList[index].uuidAuxUpload = idPostUpload;
+                        oDataItems.DetailList[index].Random = this.getRandom(1,999999);  
                         if (lengthTable === items) 
                         {
-                            oDataItems.DetailList[index].FlagFin = "X";    
+                            oDataItems.DetailList[index].FlagFin = "X";
                         }
-                       await this.callOdataUploadItems(idPostUpload,oDataItems.DetailList[index]); 
+                       await this.callOdataUploadItems(idPostUpload,oDataItems.DetailList[index]);
                     } catch (error) {
                         console.error("Error Items - callOdataUpload",error);
                     }
@@ -319,7 +320,7 @@ sap.ui.define([
 
                 this.showBusyText("loadmsgCk");
 
-                const results = await this.checkItemsOdataRap(itemsSelected,'CK');
+                const results = await this.checkItemsOdataRap(itemsSelected,'CK','2');
                 console.log({ results });
 
                 this.hideBusyText();
@@ -337,14 +338,14 @@ sap.ui.define([
             {
                 return this.getView().byId("detailList").getTable().getSelectedItems();
             },
-            checkItemsOdataRap: async function (itemsSelects,action)
+            checkItemsOdataRap: async function (itemsSelects,action,option)
             {
                 if (itemsSelects.length > 0 ) {
                     for (let index = 0; index < itemsSelects.length; index++) {
                         const contextObject = itemsSelects[index].getBindingContext();
                         const keyPath = this.getIdPath(contextObject.getPath());
                         const odataBody = contextObject.getObject();
-                        let result = await this.callOdataActionRows(odataBody,action,keyPath);
+                        let result = await this.callOdataActionRows(odataBody,action,keyPath,option);
                         console.log("checkItemsOdataRap",{ result });
                     }
                 }
@@ -358,25 +359,36 @@ sap.ui.define([
                     return null;    
                 }
             },
-            callOdataActionRows: async function(odataBody,action,key)
-            {   
+            callOdataActionRows: async function(odataBody,action,key,option)
+            {
+                let path = "";
+                async function delay(ms) {
+                    return new Promise(resolve => setTimeout(resolve, ms));
+                  }
+
                 let parameters = { Idsuplier: key,
                                    Id: 1,
                                    Action: action,
                                    Supplierinvoiceuploaduuid: key
                 }
-                //let path = "/postActionUpload";
-                  
-                //return await this.callFunctionOdata(path,parameters);
-                
+                if (option == "1") {
+                /**POST - CALL FUNCTION */
+                  path = "/postActionUpload";
+                  await delay(500);
+                  return await this.callFunctionOdata(path,parameters);  
+
+                } else if(option == "2"){
                 /** POST - CREATE ACTION */
-                let path = "/ActionInvoice";
-                let body = { supplierinvoiceuploaduuid: key,
+                path = "/ActionInvoice";
+                const body = { supplierinvoiceuploaduuid: key,
                              idsuplier: key,
                              action: action,
                              id: 1 };
 
+                await delay(500);
                 return await this.createPostAction("ModelActionService",path,body);
+                }
+
             },
 
             callFunctionOdata: async function(path,parameters)
@@ -401,6 +413,21 @@ sap.ui.define([
             onDownloadPress: function()
             {
                // this.downloadFile("Formato Carga Masiva de Facturas.xlsx",this.sUrlPlantilla);
-            }
+            },
+            onRefresh: function () {
+                this.getView().getModel().refresh(true);
+            },
+            onDeletePress: async function () {
+                const itemsSelected = this.getItemsTableSelected();
+                if(!this.validCheck(itemsSelected)) return;
+                
+                this.showBusyText("loadmsgCk");
+
+                const results = await this.checkItemsOdataRap(itemsSelected,'DL','1');
+                console.log({ results });
+
+                this.hideBusyText();
+
+            },    
         });
     });

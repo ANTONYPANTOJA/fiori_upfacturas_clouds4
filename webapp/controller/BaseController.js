@@ -121,6 +121,9 @@ sap.ui.define([
                 linkPN.click();
                 document.body.removeChild(linkPN);
             },
+            getRandom: function (min, max) {
+                return Math.floor((Math.random() * (max - min + 1)) + min);
+            }
 
         });
     });

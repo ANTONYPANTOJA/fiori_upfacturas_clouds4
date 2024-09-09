@@ -3,48 +3,158 @@
     xmlns="sap.m"
     xmlns:core="sap.ui.core"
     xmlns:mvc="sap.ui.core.mvc"
+    xmlns:f="sap.f"
     xmlns:semantic="sap.m.semantic"
     displayBlock="true"
     xmlns:footerbar="sap.ushell.ui.footerbar"
     xmlns:unified="sap.ui.unified"
-    xmlns:f="sap.ui.layout.form"
-    xmlns:smarttable="sap.ui.comp.smarttable" 
+    xmlns:smarttable="sap.ui.comp.smarttable"
     xmlns:smartfield="sap.ui.comp.smartfield"
     xmlns:smartlink="sap.ui.comp.navpopover"
-    xmlns:table="sap.ui.table">
-
+    xmlns:table="sap.ui.table"
+>
     <Page id="PageMain">
         <content>
-        <VBox fitContainer="true" id="VboxMain">
-         <Panel>
-         <!--CABECERA-->
-         <FlexBox visible="true" height="2rem" justifyContent="Start" class="sapUiSmallMarginTop" >
-            <Text text="{i18n>plantilla}" visible="true" class="sapUiTinyMarginEnd sapUiTinyMarginTop sapUiMediumMarginBegin"/>
-            <Button class="sapUiTinyMarginBegin" type="Ghost" tooltip="{i18n>DownloadTemplate}" text="{i18n>DownloadTemplateText}" 
-                    icon="sap-icon://document"
-                    press="onDownloadPress"/>
-         </FlexBox>
-         
-         <FlexBox visible="true" height="2rem" justifyContent="Start" class="sapUiSmallMarginTop">
-         <Text text="{i18n>origen}" visible="true" class="sapUiTinyMarginEnd sapUiTinyMarginTop sapUiMediumMarginBegin"/>
-	      <unified:FileUploader name="postingExcelUpload" width="500px" tooltip="{i18n>SelectFile}"
-							    change="onFileChange" icon="sap-icon://open-folder"  
-                                uploadComplete="handleUploadCompleted" 
-                                uploadAborted="handleUploadAborted"
-							    fileAllowed="onFileAllowed" 
-                                fileType="xlsx" 
-                                sendXHR="true" 
-                                style="Emphasized"
-                                sameFilenameAllowed="true" 
-                                uploadOnChange="false" 
-                                useMultipart="false"
-							    placeholder="{i18n>UploadHint}" maximumFileSize="100" fileSizeExceed="onFileSizeExceed"/>
-         </FlexBox>
-         </Panel>
-         
-    <VBox class="sapUiMediumMarginBeginEnd sapUiTinyMarginTopBottom" visible="false"/> 
-		 <core:Fragment fragmentName="ns.asa.zappuploadinvoices.view.fragments.smarttable" type = "XML" />   	 
-    </VBox>
-   </content>
+            <VBox
+                fitContainer="true"
+                id="VboxMain"
+            >
+                <Panel>
+                    <FlexBox
+                        visible="true"
+                        height="2rem"
+                        justifyContent="Start"
+                        class="sapUiSmallMarginTop"
+                    >
+                        <Text
+                            text="{i18n>plantilla}"
+                            visible="true"
+                            class="sapUiTinyMarginEnd sapUiTinyMarginTop sapUiMediumMarginBegin"
+                        />
+                        <Button
+                            class="sapUiTinyMarginBegin"
+                            type="Ghost"
+                            tooltip="{i18n>DownloadTemplate}"
+                            text="{i18n>DownloadTemplateText}"
+                            icon="sap-icon://document"
+                            press="onDownloadPress"
+                        />
+                    </FlexBox>
+
+                    <FlexBox
+                        visible="true"
+                        height="2rem"
+                        justifyContent="Start"
+                        class="sapUiSmallMarginTop"
+                    >
+                        <Text
+                            text="{i18n>origen}"
+                            visible="true"
+                            class="sapUiTinyMarginEnd sapUiTinyMarginTop sapUiMediumMarginBegin"
+                        />
+                        <unified:FileUploader
+                            name="postingExcelUpload"
+                            width="500px"
+                            tooltip="{i18n>SelectFile}"
+                            change="onFileChange"
+                            icon="sap-icon://open-folder"
+                            uploadComplete="handleUploadCompleted"
+                            uploadAborted="handleUploadAborted"
+                            fileAllowed="onFileAllowed"
+                            fileType="xlsx"
+                            sendXHR="true"
+                            style="Emphasized"
+                            sameFilenameAllowed="true"
+                            uploadOnChange="false"
+                            useMultipart="false"
+                            placeholder="{i18n>UploadHint}"
+                            maximumFileSize="100"
+                            fileSizeExceed="onFileSizeExceed"
+                        />
+                    </FlexBox>
+                </Panel>
+
+                <VBox
+                    class="sapUiMediumMarginBeginEnd sapUiTinyMarginTopBottom"
+                    visible="false"
+                />
+                <core:Fragment
+                    fragmentName="ns.asa.zappuploadinvoices.view.fragments.smarttable"
+                    type="XML"
+                />
+            </VBox>
+        </content>
     </Page>
+
+    <!--
+    <f:DynamicPage
+        id="dynamicPage"
+        fitContent="true"
+    >
+        <f:header>
+            <f:DynamicPageHeader>
+                <Panel>
+                    <FlexBox
+                        visible="true"
+                        height="2rem"
+                        justifyContent="Start"
+                        class="sapUiSmallMarginTop"
+                    >
+                        <Text
+                            text="{i18n>plantilla}"
+                            visible="true"
+                            class="sapUiTinyMarginEnd sapUiTinyMarginTop sapUiMediumMarginBegin"
+                        />
+                        <Button
+                            class="sapUiTinyMarginBegin"
+                            type="Ghost"
+                            tooltip="{i18n>DownloadTemplate}"
+                            text="{i18n>DownloadTemplateText}"
+                            icon="sap-icon://document"
+                            press="onDownloadPress"
+                        />
+                    </FlexBox>
+
+                    <FlexBox
+                        visible="true"
+                        height="2rem"
+                        justifyContent="Start"
+                        class="sapUiSmallMarginTop"
+                    >
+                        <Text
+                            text="{i18n>origen}"
+                            visible="true"
+                            class="sapUiTinyMarginEnd sapUiTinyMarginTop sapUiMediumMarginBegin"
+                        />
+                        <unified:FileUploader
+                            name="postingExcelUpload"
+                            width="500px"
+                            tooltip="{i18n>SelectFile}"
+                            change="onFileChange"
+                            icon="sap-icon://open-folder"
+                            uploadComplete="handleUploadCompleted"
+                            uploadAborted="handleUploadAborted"
+                            fileAllowed="onFileAllowed"
+                            fileType="xlsx"
+                            sendXHR="true"
+                            style="Emphasized"
+                            sameFilenameAllowed="true"
+                            uploadOnChange="false"
+                            useMultipart="false"
+                            placeholder="{i18n>UploadHint}"
+                            maximumFileSize="100"
+                            fileSizeExceed="onFileSizeExceed"
+                        />
+                    </FlexBox>
+                </Panel>
+            </f:DynamicPageHeader>
+        </f:header>
+        <f:content>
+            <core:Fragment
+                fragmentName="ns.asa.zappuploadinvoices.view.fragments.smarttable"
+                type="XML"
+            />
+        </f:content>
+    </f:DynamicPage>
+    -->
 </mvc:View>

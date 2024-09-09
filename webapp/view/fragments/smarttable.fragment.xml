@@ -11,14 +11,16 @@
 					    enableAutoBinding="true" class="sapFioriListReportTable" beforeRebindTable="onBeforeRebindViewTable"
 				        initialise="onSmartTableInitialise" useVariantManagement="false" height="100%"
                         header="{i18n>Table_Header}" demandPopin="true" entitySet="InvoiceList"
-						ignoreFromPersonalisation="Supplierinvoiceuploaduuid,Id,Delete_mc,Update_mc,to_ItemsList_oc,LastChangedAt">
+						enableCopy="false"
+						ignoreFromPersonalisation="Supplierinvoiceuploaduuid,Id,Delete_mc,Update_mc,to_ItemsList_oc,LastChangedAt,postActionUpload_ac"
+						useTablePersonalisation="true">
          
          <smarttable:customData>
 			<core:CustomData key="dateFormatSettings" value='\{"UTC":true,"style":"short"\}'/>
 			</smarttable:customData>
 
-         <smarttable:layoutData>
-			<FlexItemData growFactor="1"/>
+           <smarttable:layoutData>
+			<FlexItemData growFactor="1" baseSize="0%"/>
 			</smarttable:layoutData>
 
          <!-- Botones Tabla-->
@@ -93,7 +95,8 @@
 							</Column>												
 				</columns>
                <items>
-               	<ColumnListItem type="Navigation" highlight="{path:'InvoiceStatus', formatter:'formatter.DraftStatusStateFormat'}">
+               	<ColumnListItem type="Navigation" highlight="{parts: [{path:'InvoiceStatus'},{ path:'ActionCheckProcess'},{ path:'ActionContaProcess'},{ path:'CodeSend'}],
+												  formatter:'formatter.DraftStatusStateFormat'}">
 								<cells>
 									<Text wrapping="false" text="{Reference}"/>
 									<Text wrapping="false" text="{parts: [{path:'InvoiceStatus'},{ path:'InvoiceStatusText'}], formatter: '.InvoiceStatusFormat' }"/>

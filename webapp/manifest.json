@@ -56,7 +56,8 @@
             "desktop": true,
             "tablet": true,
             "phone": true
-        }
+        },
+        "fullWidth": true
     },
     "sap.ui5": {
         "flexEnabled": false,
@@ -118,7 +119,8 @@
                 "viewPath": "ns.asa.zappuploadinvoices.view",
                 "controlAggregation": "pages",
                 "controlId": "app",
-                "clearControlAggregation": false
+                "clearControlAggregation": false,
+                "transition": "slide"
             },
             "routes": [
                 {

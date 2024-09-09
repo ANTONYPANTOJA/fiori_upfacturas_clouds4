@@ -5,6 +5,7 @@ sap.ui.define([
     "sap/m/MessageToast",
     "ns/asa/zappuploadinvoices/libs/xlsxfullmin",
     "ns/asa/zappuploadinvoices/libs/JSZIP",
+    "ns/asa/zappuploadinvoices/libs/moment",
 ],
     function (Controller, NavigationHandler, MessageBox, MessageToast,XLSX,JSZIP) {
         "use strict";
@@ -123,6 +124,17 @@ sap.ui.define([
             },
             getRandom: function (min, max) {
                 return Math.floor((Math.random() * (max - min + 1)) + min);
+            },
+            getDateNow: function(){
+                const date = moment();
+                return date.format();
+            },
+            showMessageToast: function(idMsg){
+                let oboundle = this.getResourceBundle();
+                MessageToast.show(oboundle.getText(idMsg));
+            },
+            onExit: function () {
+                console.log("salir--------------onExit")
             }
 
         });

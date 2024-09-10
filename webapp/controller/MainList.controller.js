@@ -305,6 +305,26 @@ sap.ui.define([
                 }
 
             },
+            onPostPressed: async function () {
+            
+                const itemsSelected = this.getItemsTableSelected();
+                if (!this.validCheck(itemsSelected)) return;
+
+                try {
+                    const rptaConfirm  = await this.confirmPopup("TitDialog3","msg2");
+                    if (rptaConfirm) {
+                        this.showBusyText("loadmsgPo");
+                        const results = await this.checkItemsOdataRap(itemsSelected, 'PO', '2');
+                        console.log({ results });
+                        this.onRefreshSingle();
+                        this.hideBusyText();
+                        this.showMessageToast("msg5");                    
+                    }
+                } catch (error) {
+                  console.log("Error Funcion .- onPostPressed " , error);
+                  this.hideBusyText(); 
+                }
+            },
 
             onCheckPressed: async function () {
                 const itemsSelected = this.getItemsTableSelected();
@@ -315,8 +335,9 @@ sap.ui.define([
                     this.showBusyText("loadmsgCk");
                     const results = await this.checkItemsOdataRap(itemsSelected, 'CK', '2');
                     console.log({ results });
+                    this.onRefreshSingle();
                     this.hideBusyText();
-                    this.showMessageToast("msg4");                    
+                    this.showMessageToast("msg5");                    
                 }
             },
             validCheck: function (itemsSelected) {
@@ -356,6 +377,7 @@ sap.ui.define([
             callOdataActionRows: async function (odataBody, action, key, option) {
                 let path = "";
                 let dateWeb = this.getDateNow();
+                
                 async function delay(ms) {
                     return new Promise(resolve => setTimeout(resolve, ms));
                 }
@@ -384,11 +406,9 @@ sap.ui.define([
                         id: 1,
                         dateweb:this.getDateNow()
                     };
-
                     await delay(500);
                     return await this.createPostAction("ModelActionService", path, body);
                 }
-
             },
 
             callFunctionOdata: async function (path, parameters) {
@@ -425,11 +445,11 @@ sap.ui.define([
                 try {
                     const rptaConfirm = await this.confirmPopup("TitDialog1","msg1");
                     if (rptaConfirm) {
-                        this.showBusyText("loadmsgCk");
+                        this.showBusyText("loadmsgDl");
                         await this.checkItemsOdataRap(itemsSelected, 'DL', '1');
                         this.onRefreshSingle();
                         this.hideBusyText(); 
-                        this.showMessageToast("msg4") 
+                        this.showMessageToast("msg5") 
                     }
                 } catch (error) {
                   console.log("Error Funcion .- onDeletePress " , error);

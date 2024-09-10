@@ -13,7 +13,7 @@
     xmlns:smartlink="sap.ui.comp.navpopover"
     xmlns:table="sap.ui.table"
 >
-    <Page id="PageMain">
+    <Page id="PageMain" class="pageMain">
         <content>
             <VBox
                 fitContainer="true"

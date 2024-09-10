@@ -7,7 +7,7 @@ sap.ui.define([
     "ns/asa/zappuploadinvoices/libs/JSZIP",
     "ns/asa/zappuploadinvoices/libs/moment",
 ],
-    function (Controller, NavigationHandler, MessageBox, MessageToast,XLSX,JSZIP) {
+    function (Controller, NavigationHandler, MessageBox, MessageToast, XLSX, JSZIP) {
         "use strict";
 
         return Controller.extend("ns.asa.zappuploadinvoices.controller.BaseController", {
@@ -54,12 +54,50 @@ sap.ui.define([
             },
             InvoiceStatusFormat: function (key, text) {
                 const oModel = this.getResourceBundle();
+                
                 if (!key && !text) {
                     return "";
-                } else if (key === "0") {
-                    return "0 " + "(" + oModel.getText("statusCero") + ")";
-                } else {
-                    return key + "(" + text + ")";
+                }
+
+                switch (key) {
+                    case "0":
+                        if (text) {
+                            return key + " (" + text + ")";
+                        }else {
+                            return key + " (" + oModel.getText("statusCero") + ")";
+                        }
+                    case "1":
+                        if (text) {
+                            return key + " (" + text + ")";
+                        }else {
+                            return key + " (" + oModel.getText("statusUno") + ")";
+                        }
+                    case "2":
+                        if (text) {
+                            return key + " (" + text + ")";
+                        }else {
+                            return key + " (" + oModel.getText("statusDos") + ")";
+                        }
+                    case "3":
+                        if (text) {
+                            return key + " (" + text + ")";
+                        }else {
+                            return key + " (" + oModel.getText("statusTres") + ")";
+                        }
+                    case "4":
+                        if (text) {
+                            return key + " (" + text + ")";
+                        }else {
+                            return key + " (" + oModel.getText("statusCuatro") + ")";
+                        }
+                    case "5":
+                        if (text) {
+                            return key + " (" + text + ")";
+                        }else {
+                            return key + " (" + oModel.getText("statusQuinto") + ")";
+                        }
+                    default:
+                        break;
                 }
 
             },
@@ -125,11 +163,11 @@ sap.ui.define([
             getRandom: function (min, max) {
                 return Math.floor((Math.random() * (max - min + 1)) + min);
             },
-            getDateNow: function(){
+            getDateNow: function () {
                 const date = moment();
                 return date.format();
             },
-            showMessageToast: function(idMsg){
+            showMessageToast: function (idMsg) {
                 let oboundle = this.getResourceBundle();
                 MessageToast.show(oboundle.getText(idMsg));
             },

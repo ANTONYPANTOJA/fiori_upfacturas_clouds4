@@ -71,9 +71,9 @@
                             maximumFileSize="100"
                             fileSizeExceed="onFileSizeExceed"
                         />
+                        <CheckBox id="chkSendAsync" text="{i18n>chkSendAsync}" valueState="None" />
                     </FlexBox>
                 </Panel>
-
                 <VBox
                     class="sapUiMediumMarginBeginEnd sapUiTinyMarginTopBottom"
                     visible="false"

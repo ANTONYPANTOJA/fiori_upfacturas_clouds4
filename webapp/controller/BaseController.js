@@ -172,7 +172,8 @@ sap.ui.define([
                 MessageToast.show(oboundle.getText(idMsg));
             },
             onExit: function () {
-                console.log("salir--------------onExit")
+                this.deleteDataSession();
+                this.clearModel();
             }
 
         });

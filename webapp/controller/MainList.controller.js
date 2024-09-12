@@ -39,6 +39,9 @@ sap.ui.define([
                     },
                     table: {
                         data: []
+                    },
+                    ckProcess: {
+                        data: []
                     }
                 });
                 this.setModel(model, "model");
@@ -489,8 +492,9 @@ sap.ui.define([
 
                     const results = await this.checkItemsOdataRap(itemsSelected, 'CK', '2');
                     console.log({ results });
+                    this.setDataChecked(results,'CK');
                     this.onRefreshSingle();
-                    this.updateModelButtons(true);  //Actualizar Buttons
+                    this.updateModelButtons(false,true);  //Actualizar Buttons
                     this.hideBusyText();
                     this.showMessageToast("msg5");
                 }
@@ -637,6 +641,89 @@ sap.ui.define([
             },
             enableCheck: function (action) {
                 this.getView().byId("chkSendAsync").setEnabled(action);
+            },
+            setDataChecked: function(results,action){
+
+                const oModelData = this.getModel("model");
+                let dataModel = oModelData.getData();
+
+                try {
+                    if (dataModel.ckProcess && action == "CK") {
+                    if (dataModel.ckProcess.data) {
+                        oModelData.setProperty("/ckProcess/data", results);     
+                    }
+                }   
+                } catch (error) {
+                    console.log("Error FUNCTION.- setDataChecked" , error)
+                }
+            },
+            deleteDataSession: async function(){
+                let idSuplier = [];
+                let lv_id;
+                const oDataModel = this.getModel("model").getData();
+                if (oDataModel.ckProcess) {
+                    if (oDataModel.ckProcess.data.length > 0) {
+                        for (let index = 0; index < oDataModel.ckProcess.data.length; index++) {
+                            const element = oDataModel.ckProcess.data[index];
+                            idSuplier.push(element.idsuplier);
+                            if (lv_id == "" || lv_id == undefined) {
+                                lv_id = element.idsuplier;
+                            }
+                        }
+
+                        let message = idSuplier.join('|')
+                        let parameters = {
+                            Supplierinvoiceuploaduuid:lv_id,
+                            Action: "DL",
+                            Message: message
+                        }
+                        let result = await this.callActionOther("/postActionOthers",parameters)
+                        console.log("Result- postActionOthers ",result)
+                    }
+                }
+            },
+            callActionOther:async function(path,parameters){
+                return new Promise(async (resolve, reject) => {
+                try {
+                    this.getView().getModel().callFunction(path, {
+                        method: "POST",
+                        urlParameters: parameters,
+                        success: function () {
+                            resolve(true)
+                        }.bind(this),
+                        error: function (e) {
+                            resolve(false)
+                        }.bind(this)
+                    });
+                } catch (error) {
+                   console.log("Error Function: callActionOther",error)
+                   resolve(false)
+                }
+                 });
+            },
+            clearModel: function(){
+                const oDataModel = this.getModel("model");
+                oDataModel.setProperty("/ckProcess/data",[]);
+                oDataModel.setProperty("/table/data",[]);  
+                oDataModel.setProperty("/load/message",""); 
+            },
+            onClearAll: async function(){
+                const rptaConfirm = await this.confirmPopup("TitDialog4", "msg3");
+                if (rptaConfirm) {
+                    this.showBusyText("loadmsgNt");
+
+                    const parameters = {
+                        action: "DA",
+                        id: 1,
+                        dateweb: this.getDateNow()
+                    };
+
+                    let result = await this.createPostAction("ModelActionService","/ActionInvoice",parameters)
+                    this.onRefreshSingle();
+                    this.hideBusyText();
+                    this.showMessageToast("msg5")
+                }
             }
+
         });
     });

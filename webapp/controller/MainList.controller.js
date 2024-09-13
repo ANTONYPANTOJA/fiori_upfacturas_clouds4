@@ -7,9 +7,10 @@ sap.ui.define([
     "ns/asa/zappuploadinvoices/model/formatter",
     "sap/ui/model/Filter",
     "sap/ushell/ui5service/ShellUIService",
+    "ns/asa/zappuploadinvoices/model/formatter",
     "ns/asa/zappuploadinvoices/libs/moment",
 ],
-    function (Controller, MessageBox, BaseController, Guid, JSONModel, Formatter,Filter,ShellUIService) {
+    function (Controller, MessageBox, BaseController, Guid, JSONModel, Formatter,Filter,ShellUIService,formatter,moment) {
         "use strict";
 
         let that;
@@ -31,6 +32,8 @@ sap.ui.define([
                 this.oShellUIService.setBackNavigation(this._navBackViewMain.bind(this));
 
             },
+            
+            formatter:formatter,
             moment:moment,
 
             initModels: function () {
@@ -39,7 +42,7 @@ sap.ui.define([
                 this.getView().setModel(dataModelTableList, "detailReport");
 
                 //Modelo Button Status
-                let buttonsStatus = { btnCheck: true, btnContab: false, btnEliminar: false, btnLog: true, btnFijar: false };
+                let buttonsStatus = { btnCheck: false, btnContab: false, btnEliminar: false, btnLog: true, btnFijar: false };
                 this.getView().setModel(new JSONModel(buttonsStatus), "aStatus");
 
                 //Model Global
@@ -177,7 +180,7 @@ sap.ui.define([
                             }
                             switch (lv_column_main) {
                                 case lv_column_1 || 'ID'://Columna A1                         
-                                    oDataModelAdd.Id = parseInt(value);
+                                    oDataModelAdd.IdExcel = parseInt(value);
                                     break;
                                 case "__EMPTY" || 'SOCIEDAD'://Columna B1
                                     oDataModelAdd.CompanyCode = String(value);
@@ -724,7 +727,7 @@ sap.ui.define([
                 oDataModel.setProperty("/load/message", "");
             },
             onClearAll: async function () {
-                const rptaConfirm = await this.confirmPopup("TitDialog4", "msg33");
+                const rptaConfirm = await this.confirmPopup("TitDialog4", "msg22");
                 if (rptaConfirm) {
                     this.showBusyText("loadmsgNt");
 

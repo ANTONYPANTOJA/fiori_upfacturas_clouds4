@@ -4,7 +4,7 @@
     {
         "Supplierinvoiceuploaduuid":"",
         "Item":"",
-        "Id":"",
+        "IdExcel":"",
         "CompanyCode":"",
         "InvoicingParty":"",
         "Reference":"",

@@ -7,6 +7,22 @@ sap.ui.define([
 
         return {
             
+            KeyTextFormat: function(k, t) {
+                if (t) {
+                    return k + " (" + t + ")";
+                } else {
+                    return k;
+                }
+            },
+            InvoiceWithYear: function(n, y) {
+                if (!n) {
+                    return "";
+                } else if (!y) {
+                    return n;
+                } else {
+                    return n + "/" + y;
+                }
+            },
             /**
              * Formato Status
              */

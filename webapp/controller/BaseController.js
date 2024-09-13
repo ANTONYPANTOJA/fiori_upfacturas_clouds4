@@ -7,7 +7,7 @@ sap.ui.define([
     "ns/asa/zappuploadinvoices/libs/JSZIP",
     "ns/asa/zappuploadinvoices/libs/moment",
 ],
-    function (Controller, NavigationHandler, MessageBox, MessageToast, XLSX, JSZIP) {
+    function (Controller, NavigationHandler, MessageBox, MessageToast, XLSX, JSZIP,moment) {
         "use strict";
 
         return Controller.extend("ns.asa.zappuploadinvoices.controller.BaseController", {

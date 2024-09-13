@@ -1,0 +1,19 @@
+<mvc:View
+	controllerName="ns.asa.zappuploadinvoices.controller.NotFound"
+	xmlns="sap.m"
+	xmlns:c="sap.ui.core"
+	xmlns:mvc="sap.ui.core.mvc"
+	displayBlock="true">
+
+    <Page
+        id="pageNotFound"
+        title="{i18n>NotFound}">
+        <content>
+            <IllustratedMessage
+                id="pageLoading"
+                enableVerticalResponsiveness="true"
+                illustrationType="sapIllus-PageNotFound"/>
+        </content>
+    </Page>
+
+</mvc:View>

@@ -5,8 +5,9 @@ sap.ui.define([
     "sap/ui/model/odata/type/Guid",
     "sap/ui/model/json/JSONModel",
     "ns/asa/zappuploadinvoices/model/formatter",
+    "sap/ui/model/Filter",
 ],
-    function (Controller, MessageBox, BaseController, Guid, JSONModel, Formatter) {
+    function (Controller, MessageBox, BaseController, Guid, JSONModel, Formatter,Filter) {
         "use strict";
 
         let that;
@@ -27,7 +28,7 @@ sap.ui.define([
                 this.getView().setModel(dataModelTableList, "detailReport");
 
                 //Modelo Button Status
-                let buttonsStatus = { btnCheck: false, btnContab: false, btnEliminar: false, btnLog: false, btnFijar: false };
+                let buttonsStatus = { btnCheck: false, btnContab: false, btnEliminar: false, btnLog: true, btnFijar: false };
                 this.getView().setModel(new JSONModel(buttonsStatus), "aStatus");
 
                 //Model Global
@@ -42,11 +43,12 @@ sap.ui.define([
                     },
                     ckProcess: {
                         data: []
+                    },
+                    log:{
+                        data: []
                     }
                 });
                 this.setModel(model, "model");
-                //Link de Plantilla
-                //this.sUrlPlantilla = sap.ui.require.toUrl("ns/asa/zappuploadinvoices/model/Formato_Carga_Facturas.xlsx");
             },
 
             onFileChange: async function (event) {
@@ -104,10 +106,10 @@ sap.ui.define([
                 let oModelExcel = this.getModel("detailReport");
                 if (data.length > 0) {
                     let oCamposValidados = await this.validarCamposExcel(data);
-                    if (oCamposValidados.length === 0 || oCamposValidados == undefined ) {
+                    if (oCamposValidados.length === 0 || oCamposValidados == undefined) {
                         MessageBox.error(this.getResourceBundle().getText("msg6"));
-                    }else {
-                       oModelExcel.setData(oCamposValidados);
+                    } else {
+                        oModelExcel.setData(oCamposValidados);
                     }
                 } else {
                     MessageBox.error(this.getResourceBundle().getText("msg1"));
@@ -200,7 +202,7 @@ sap.ui.define([
                                     try {
                                         oDataModelAdd.ImportProv = parseFloat(value).toFixed(2);
                                     } catch (error) {
-                                        oDataModelAdd.ImportProv = parseFloat(0).toFixed(0);;     
+                                        oDataModelAdd.ImportProv = parseFloat(0).toFixed(0);;
                                     }
                                     break;
                                 case "__EMPTY_9": //Columna K1
@@ -219,7 +221,7 @@ sap.ui.define([
                                     oDataModelAdd.ReferPago = String(value);
                                     break;
                                 case "__EMPTY_14":
-                                       dateValue = this.getJsDateFromExcel(value);
+                                    dateValue = this.getJsDateFromExcel(value);
                                     if (dateValue) {
                                         oDataModelAdd.FechaBase = dateValue;
                                     }
@@ -230,7 +232,7 @@ sap.ui.define([
                                     } catch (error) {
                                         oDataModelAdd.Dias = 0;
                                     }
-                                        break;
+                                    break;
                                 case "__EMPTY_16":
                                     oDataModelAdd.Nombre1 = value;
                                     break;
@@ -292,7 +294,7 @@ sap.ui.define([
                                     try {
                                         oDataModelAdd.ImporteCtaMayorPos = parseFloat(value).toFixed(2);
                                     } catch (error) {
-                                        oDataModelAdd.ImporteCtaMayorPos = parseFloat(0).toFixed(2);;     
+                                        oDataModelAdd.ImporteCtaMayorPos = parseFloat(0).toFixed(2);;
                                     }
                                     break;
                                 case "__EMPTY_36":
@@ -466,7 +468,7 @@ sap.ui.define([
                 if (!this.validCheck(itemsSelected)) return;
 
                 try {
-                    const rptaConfirm = await this.confirmPopup("TitDialog3", "msg2");
+                    const rptaConfirm = await this.confirmPopup("TitDialog3", "msg22");
                     if (rptaConfirm) {
                         this.showBusyText("loadmsgPo");
                         const results = await this.checkItemsOdataRap(itemsSelected, 'PO', '2');
@@ -492,9 +494,9 @@ sap.ui.define([
 
                     const results = await this.checkItemsOdataRap(itemsSelected, 'CK', '2');
                     console.log({ results });
-                    this.setDataChecked(results,'CK');
+                    this.setDataChecked(results, 'CK');
                     this.onRefreshSingle();
-                    this.updateModelButtons(false,true);  //Actualizar Buttons
+                    this.updateModelButtons(false, true);  //Actualizar Buttons
                     this.hideBusyText();
                     this.showMessageToast("msg5");
                 }
@@ -606,7 +608,7 @@ sap.ui.define([
                 if (!this.validCheck(itemsSelected)) return;
 
                 try {
-                    const rptaConfirm = await this.confirmPopup("TitDialog1", "msg1");
+                    const rptaConfirm = await this.confirmPopup("TitDialog1", "msg11");
                     if (rptaConfirm) {
                         this.showBusyText("loadmsgDl");
                         await this.checkItemsOdataRap(itemsSelected, 'DL', '1');
@@ -642,22 +644,22 @@ sap.ui.define([
             enableCheck: function (action) {
                 this.getView().byId("chkSendAsync").setEnabled(action);
             },
-            setDataChecked: function(results,action){
+            setDataChecked: function (results, action) {
 
                 const oModelData = this.getModel("model");
                 let dataModel = oModelData.getData();
 
                 try {
                     if (dataModel.ckProcess && action == "CK") {
-                    if (dataModel.ckProcess.data) {
-                        oModelData.setProperty("/ckProcess/data", results);     
+                        if (dataModel.ckProcess.data) {
+                            oModelData.setProperty("/ckProcess/data", results);
+                        }
                     }
-                }   
                 } catch (error) {
-                    console.log("Error FUNCTION.- setDataChecked" , error)
+                    console.log("Error FUNCTION.- setDataChecked", error)
                 }
             },
-            deleteDataSession: async function(){
+            deleteDataSession: async function () {
                 let idSuplier = [];
                 let lv_id;
                 const oDataModel = this.getModel("model").getData();
@@ -673,42 +675,42 @@ sap.ui.define([
 
                         let message = idSuplier.join('|')
                         let parameters = {
-                            Supplierinvoiceuploaduuid:lv_id,
+                            Supplierinvoiceuploaduuid: lv_id,
                             Action: "DL",
                             Message: message
                         }
-                        let result = await this.callActionOther("/postActionOthers",parameters)
-                        console.log("Result- postActionOthers ",result)
+                        let result = await this.callActionOther("/postActionOthers", parameters)
+                        console.log("Result- postActionOthers ", result)
                     }
                 }
             },
-            callActionOther:async function(path,parameters){
+            callActionOther: async function (path, parameters) {
                 return new Promise(async (resolve, reject) => {
-                try {
-                    this.getView().getModel().callFunction(path, {
-                        method: "POST",
-                        urlParameters: parameters,
-                        success: function () {
-                            resolve(true)
-                        }.bind(this),
-                        error: function (e) {
-                            resolve(false)
-                        }.bind(this)
-                    });
-                } catch (error) {
-                   console.log("Error Function: callActionOther",error)
-                   resolve(false)
-                }
-                 });
+                    try {
+                        this.getView().getModel().callFunction(path, {
+                            method: "POST",
+                            urlParameters: parameters,
+                            success: function () {
+                                resolve(true)
+                            }.bind(this),
+                            error: function (e) {
+                                resolve(false)
+                            }.bind(this)
+                        });
+                    } catch (error) {
+                        console.log("Error Function: callActionOther", error)
+                        resolve(false)
+                    }
+                });
             },
-            clearModel: function(){
+            clearModel: function () {
                 const oDataModel = this.getModel("model");
-                oDataModel.setProperty("/ckProcess/data",[]);
-                oDataModel.setProperty("/table/data",[]);  
-                oDataModel.setProperty("/load/message",""); 
+                oDataModel.setProperty("/ckProcess/data", []);
+                oDataModel.setProperty("/table/data", []);
+                oDataModel.setProperty("/load/message", "");
             },
-            onClearAll: async function(){
-                const rptaConfirm = await this.confirmPopup("TitDialog4", "msg3");
+            onClearAll: async function () {
+                const rptaConfirm = await this.confirmPopup("TitDialog4", "msg33");
                 if (rptaConfirm) {
                     this.showBusyText("loadmsgNt");
 
@@ -718,12 +720,69 @@ sap.ui.define([
                         dateweb: this.getDateNow()
                     };
 
-                    let result = await this.createPostAction("ModelActionService","/ActionInvoice",parameters)
+                    let result = await this.createPostAction("ModelActionService", "/ActionInvoice", parameters)
                     this.onRefreshSingle();
                     this.hideBusyText();
                     this.showMessageToast("msg5")
                 }
-            }
+            },
+            onShowLogButtonPressed: async function () {
+                const itemsSelected = this.getItemsTableSelected();
+                if (!this.validCheck(itemsSelected)) return;
 
+                await this.getLogDetail(itemsSelected);
+
+                this.getRouter().navTo("DetailLog");
+            },
+            getLogDetail: async function (itemsSelects) {
+                
+                let idsLogs = [];
+                let parameters = { filters : [] , urlParameters: { "$expand": "to_ItemsList"}};
+
+                //Obtener lso Ids
+                for (let index = 0; index < itemsSelects.length; index++) {
+                    const contextObject = itemsSelects[index].getBindingContext();
+                    const keyPath = this.getIdPath(contextObject.getPath());
+                    idsLogs.push(keyPath);
+                }
+                try 
+                {
+                    if (idsLogs.length > 0) {
+                        for (let index = 0; index < idsLogs.length; index++) {
+                            const element = idsLogs[index];
+                            parameters.filters.push(new Filter("Supplierinvoiceuploaduuid", "EQ", element))
+                        }
+                        const resultOdata = await this.readInvoiceList(parameters);
+                        if (resultOdata.results) {
+                            if (resultOdata.results.length > 0) {
+                                this.setLogData(resultOdata);
+                                this.getOwnerComponent().setModel(new JSONModel(resultOdata.results), "LogDetails");
+                            }
+                        }
+                    }   
+                } catch (error) {
+                    console.log("Error Function: getLogDetail", error)
+                }
+            },
+            readInvoiceList: async function (parameters) {
+                return new Promise(async (resolve, reject) => {
+                    this.getView().getModel().read("/InvoiceList", {
+                        filters: parameters.filters,
+                        urlParameters: parameters.urlParameters,
+                        success: function (result) {
+                            resolve(result)
+                        }.bind(this),
+                        error: function (e) {
+                            resolve([])
+                        }.bind(this)
+                    });
+                });
+            },
+            setLogData: function(resultOdata){
+
+                let oViewModel = that.getView().getModel("model");
+                oViewModel.setProperty("/log/data", resultOdata.results);
+            }
+            
         });
     });

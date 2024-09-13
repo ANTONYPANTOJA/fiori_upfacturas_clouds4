@@ -120,7 +120,10 @@
                 "controlAggregation": "pages",
                 "controlId": "app",
                 "clearControlAggregation": false,
-                "transition": "slide"
+                "transition": "slide",
+                "bypassed": {
+					"target": "notFound"
+				}
             },
             "routes": [
                 {
@@ -129,6 +132,11 @@
                     "target": [
                         "TargetApp"
                     ]
+                },
+                {
+                    "name": "DetailLog",
+                    "pattern": "LogDetails",
+                    "target": "LogDetails"
                 }
             ],
             "targets": {
@@ -138,6 +146,19 @@
                     "clearControlAggregation": false,
                     "viewId": "MainList",
                     "viewName": "MainList"
+                },
+                "LogDetails":{
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "viewName": "DetailsLog",
+                    "viewId": "DetailsLog",
+                    "viewLevel": 2
+                },
+                "notFound":{
+                    "viewType": "XML",
+                    "transition": "show",
+                    "viewName": "NotFound",
+                    "viewId": "NotFound"
                 }
             }
         },

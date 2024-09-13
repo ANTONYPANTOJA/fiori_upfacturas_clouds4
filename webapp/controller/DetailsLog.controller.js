@@ -1,0 +1,141 @@
+sap.ui.define([
+    "sap/ui/core/mvc/Controller",
+    "ns/asa/zappuploadinvoices/controller/BaseController",
+    "sap/ui/core/Messaging",
+    'sap/ui/core/message/Message',
+	'sap/ui/core/message/MessageType',
+],
+function (Controller,BaseController,Messaging,Message,MessageType) {
+    "use strict";
+    let that;
+
+    return BaseController.extend("ns.asa.zappuploadinvoices.controller.DetailsLog", {
+        
+        onInit: function () {
+
+            // Set global fields
+            that = this;
+            this._oView = this.getView();
+            this._oLogTable = this._oView.byId("messageLogTab");
+
+            this._MessageManager = Messaging;
+            this._MessageManager.registerObject(this._oView.byId("messageHandlingPage"), true);
+            this._oView.setModel(this._MessageManager.getMessageModel(), "message");
+            
+			//Inicializar el oRouter
+			let oRouter = this.getOwnerComponent().getRouter();
+			oRouter.getRoute("DetailLog").attachPatternMatched(this._onObjectMatched, this);
+        },
+
+        _onObjectMatched: function (oEvent) {
+            this._addMockMessages();
+        },
+        _addMockMessages: function () {
+            this._bindTable();
+        },
+        _bindTable: function(){
+            this._oLogTable.bindRows({
+				path: "LogDetails>/",
+				events: {
+					change: this.onChangeRow.bind(this)
+				}
+			});
+
+			let oSegmentedButton = this._oView.byId("logMessageSegmentButton");
+			oSegmentedButton.setSelectedKey("All");
+        },
+        onChangeRow: function (oEvent) {
+            var oReason = oEvent.getParameter("reason");
+			if (oReason === "change") {
+
+				var oBinding = this._oLogTable.getBinding("rows");
+				var vCountAll = oBinding.getLength();
+				var vCountError = 0,
+					vCountWarning = 0,
+					vCountSuccess = 0,
+					vCountInformation = 0;
+				
+				for (var i = 0; i < vCountAll; i++) {
+					if (oBinding.oList[i].CodeSend === "E" || oBinding.oList[i].CodeSend === "A") {
+						vCountError = vCountError + 1;
+					}
+					if (oBinding.oList[i].CodeSend === "W") {
+						vCountWarning = vCountWarning + 1;
+					}
+					if (oBinding.oList[i].CodeSend === "S") {
+						vCountSuccess = vCountSuccess + 1;
+					}
+					if (oBinding.oList[i].CodeSend === "I") {
+						vCountInformation = vCountInformation + 1;
+					}
+				}
+				this._oView.byId("sbiError").setText(vCountError.toString());
+				this._oView.byId("sbiWarning").setText(vCountWarning.toString());
+				this._oView.byId("sbiSuccess").setText(vCountSuccess.toString());
+				this._oView.byId("sbiInformation").setText(vCountInformation.toString());
+			}
+        },
+		getStatusIcon: function(s, c) {
+			if (c === "50") {
+				return "sap-icon://edit";
+			} else {
+				switch (s) {
+					case "E":
+						return "sap-icon://message-error";
+					case "A":
+						return "sap-icon://message-error";
+					case "W":
+						return "sap-icon://message-warning";
+					case "S":
+						return "sap-icon://message-success";
+					case "I":
+						return "sap-icon://process";
+					case "C":
+						return "sap-icon://cancel";
+					default:
+						return s;
+				}
+			}
+		},
+		getLogMessageIcon: function(m) {
+            switch (m) {
+                case "E":
+                    return "sap-icon://message-error";
+                case "A":
+                    return "sap-icon://message-error";
+                case "I":
+                    return "sap-icon://message-information";
+                case "S":
+                    return "sap-icon://message-success";
+                case "W":
+                    return "sap-icon://message-warning";
+                default:
+                    return "sap-icon://message-information";
+            }
+		},
+
+		getStatusState: function(s, c) {
+			if (c === "50") {
+				return "Information";
+			} else {
+				switch (s) {
+					case "E":
+						return "Error";
+					case "A":
+						return "Error";
+					case "W":
+						return "Warning";
+					case "S":
+						return "Success";
+					case "I":
+						return "None";
+					case "C":
+						return "None";
+					default:
+						return "None";
+				}
+			}
+		},
+
+    });
+});

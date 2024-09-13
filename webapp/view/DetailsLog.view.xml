@@ -1,0 +1,116 @@
+<mvc:View
+    controllerName="ns.asa.zappuploadinvoices.controller.DetailsLog"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table"
+    xmlns:l="sap.ui.layout"
+    xmlns:f="sap.ui.layout.form"
+>
+    <Page
+        title="{i18n>titleLog}"
+        visible="true"
+        showHeader="true"
+        id="messageHandlingPage"
+        titleAlignment="Center"
+        titleLevel="Auto"
+    >
+        <content>
+            <!--
+    		<MessageView items="{message>/}">
+			<MessageItem
+				type="{message>type}"
+				title="{message>message}"
+				subtitle="{message>additionalText}"
+				description="{message>description}">
+			</MessageItem>
+		</MessageView>
+-->
+            <Panel
+                id="logPanel"
+                height="100%"
+            >
+                <layoutData>
+                    <l:SplitterLayoutData
+                        id="layoutSmall"
+                        size="38.2%"
+                    />
+                </layoutData>
+                <t:Table
+                    id="messageLogTab"
+                    selectionBehavior="RowOnly"
+                    selectionMode="Single"
+                    rowActionCount="1"
+                    rowSelectionChange="onLogRowSelect"
+                >
+                    <t:extension>
+                        <Toolbar id="messageLogTabToolbar">
+                            <Title
+                                id="messageLogTabTitle"
+                                text="{i18n>logMessages}"
+                            />
+                            <!--<m:ToolbarSpacer id="messageLogTabToolbarSpacer"/>-->
+                            <SegmentedButton
+                                id="logMessageSegmentButton"
+                                selectionChange="onSelectionChange">
+                                <items>
+                                    <SegmentedButtonItem
+                                        id="sbiAll"
+                                        text="{i18n>buttonAll}"
+                                        key="All"
+                                    />
+                                    <SegmentedButtonItem
+                                        id="sbiError"
+                                        icon="sap-icon://message-error"
+                                        key="Error"
+                                        class="btnError"
+                                    />
+                                    <SegmentedButtonItem
+                                        id="sbiWarning"
+                                        icon="sap-icon://message-warning"
+                                        key="Warning"
+                                        class="sapMMsgViewBtnWarning"
+                                    />
+                                    <SegmentedButtonItem
+                                        id="sbiSuccess"
+                                        icon="sap-icon://message-success"
+                                        key="Success"
+                                        class="sapMMsgViewBtnSuccess"
+                                    />
+                                    <SegmentedButtonItem
+                                        id="sbiInformation"
+                                        icon="sap-icon://message-information"
+                                        key="Information"
+                                        class="sapMMsgViewBtnInformation"
+                                    />
+                                </items>
+                            </SegmentedButton>
+                        </Toolbar>
+                    </t:extension>
+                    <t:columns>
+                        <t:Column id="columnLogStatus" width="5rem" sortProperty="MsgType">
+                            <Label id="columnLogStatusLabel" text="{i18n>columnLogStatus}" tooltip="{i18n>columnLogStatus}" vAlign="Middle"/>
+                            <t:template>
+									<ObjectStatus id="columnLogStatusObjStatus" icon="{ path: 'LogDetails>CodeSend', formatter: '.getLogMessageIcon'}"
+										          state="{ path: 'LogDetails>CodeSend', formatter: '.getStatusState'}"/>
+							</t:template>
+                        </t:Column>
+                        <t:Column id="columnLogMessage" sortProperty="DisplayText" filterProperty="DisplayText">
+								<Label id="columnLogMessageLabel" text="{i18n>columnLogText}" tooltip="{i18n>columnLogText}"/>
+								<t:template>
+									<Text id="columnLogMessageText" text="{ path: 'LogDetails>Messagesend'}"/>
+								</t:template>
+						</t:Column>
+                        <t:Column id="columnLogDate" width="8rem" sortProperty="Timestamp">
+								<Label id="columnLogDateLabel" text="{i18n>columnLogDate}" tooltip="{i18n>columnLogDate}"/>
+								<t:template>
+									<Text id="columnLogDateText" text="{ path: 'messageLogModel>Timestamp', formatter: '.formatter.parseDateTime'}"/>
+								</t:template>
+						</t:Column>
+                    </t:columns>
+                </t:Table>
+            </Panel>
+        </content>
+    </Page>
+</mvc:View>

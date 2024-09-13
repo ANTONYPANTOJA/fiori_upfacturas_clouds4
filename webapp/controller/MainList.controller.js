@@ -6,8 +6,10 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "ns/asa/zappuploadinvoices/model/formatter",
     "sap/ui/model/Filter",
+    "sap/ushell/ui5service/ShellUIService",
+    "ns/asa/zappuploadinvoices/libs/moment",
 ],
-    function (Controller, MessageBox, BaseController, Guid, JSONModel, Formatter,Filter) {
+    function (Controller, MessageBox, BaseController, Guid, JSONModel, Formatter,Filter,ShellUIService) {
         "use strict";
 
         let that;
@@ -21,14 +23,23 @@ sap.ui.define([
                 //Inicializar Modelos
                 this.initModels();
 
+                //Inicializar BACK del Launchpad
+                this.oShellUIService = new ShellUIService({
+                scopeObject: this.getOwnerComponent(),
+                scopeType: "component"
+                });
+                this.oShellUIService.setBackNavigation(this._navBackViewMain.bind(this));
+
             },
+            moment:moment,
+
             initModels: function () {
                 //Model Tabla Detalle List
                 let dataModelTableList = this.getOwnerComponent().getModel("ModelDetailReport");
                 this.getView().setModel(dataModelTableList, "detailReport");
 
                 //Modelo Button Status
-                let buttonsStatus = { btnCheck: false, btnContab: false, btnEliminar: false, btnLog: true, btnFijar: false };
+                let buttonsStatus = { btnCheck: true, btnContab: false, btnEliminar: false, btnLog: true, btnFijar: false };
                 this.getView().setModel(new JSONModel(buttonsStatus), "aStatus");
 
                 //Model Global
@@ -49,6 +60,9 @@ sap.ui.define([
                     }
                 });
                 this.setModel(model, "model");
+            },
+            _navBackViewMain: function(){
+                this.onPressExit("","RouteApp");
             },
 
             onFileChange: async function (event) {
@@ -487,7 +501,7 @@ sap.ui.define([
                 const itemsSelected = this.getItemsTableSelected();
                 if (!this.validCheck(itemsSelected)) return;
 
-                const rptaConfirm = await this.confirmPopup("TitDialog2", "msg2");
+                const rptaConfirm = await this.confirmPopup("TitDialog2", "msg22");
                 if (rptaConfirm) {
                     this.showBusyText("loadmsgCk");
                     this.enableCheck(false);
@@ -719,9 +733,9 @@ sap.ui.define([
                         id: 1,
                         dateweb: this.getDateNow()
                     };
-
                     let result = await this.createPostAction("ModelActionService", "/ActionInvoice", parameters)
                     this.onRefreshSingle();
+                    this.enableCheck(true);
                     this.hideBusyText();
                     this.showMessageToast("msg5")
                 }
@@ -730,15 +744,23 @@ sap.ui.define([
                 const itemsSelected = this.getItemsTableSelected();
                 if (!this.validCheck(itemsSelected)) return;
 
-                await this.getLogDetail(itemsSelected);
-
-                this.getRouter().navTo("DetailLog");
+                try {
+                    this.showBusyText("mostlog");
+                    await this.getLogDetail(itemsSelected);
+                    this.hideBusyText();
+                    this.getRouter().navTo("DetailLog");                    
+                } catch (error) {
+                    console.error("Error Function: onShowLogButtonPressed",error)
+                    this.onDisplayMessageBoxPress("E","msgc1");
+                    this.hideBusyText();
+                }
             },
             getLogDetail: async function (itemsSelects) {
                 
                 let idsLogs = [];
                 let parameters = { filters : [] , urlParameters: { "$expand": "to_ItemsList"}};
 
+                
                 //Obtener lso Ids
                 for (let index = 0; index < itemsSelects.length; index++) {
                     const contextObject = itemsSelects[index].getBindingContext();
@@ -755,13 +777,12 @@ sap.ui.define([
                         const resultOdata = await this.readInvoiceList(parameters);
                         if (resultOdata.results) {
                             if (resultOdata.results.length > 0) {
-                                this.setLogData(resultOdata);
                                 this.getOwnerComponent().setModel(new JSONModel(resultOdata.results), "LogDetails");
                             }
                         }
                     }   
                 } catch (error) {
-                    console.log("Error Function: getLogDetail", error)
+                    throw new Error(error);
                 }
             },
             readInvoiceList: async function (parameters) {
@@ -777,11 +798,6 @@ sap.ui.define([
                         }.bind(this)
                     });
                 });
-            },
-            setLogData: function(resultOdata){
-
-                let oViewModel = that.getView().getModel("model");
-                oViewModel.setProperty("/log/data", resultOdata.results);
             }
             
         });

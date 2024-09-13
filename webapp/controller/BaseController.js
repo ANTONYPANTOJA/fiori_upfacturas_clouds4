@@ -5,9 +5,10 @@ sap.ui.define([
     "sap/m/MessageToast",
     "ns/asa/zappuploadinvoices/libs/xlsxfullmin",
     "ns/asa/zappuploadinvoices/libs/JSZIP",
-    "ns/asa/zappuploadinvoices/libs/moment",
+    /* "ns/asa/zappuploadinvoices/libs/moment",*/
+    "sap/ui/core/routing/History",
 ],
-    function (Controller, NavigationHandler, MessageBox, MessageToast, XLSX, JSZIP,moment) {
+    function (Controller, NavigationHandler, MessageBox, MessageToast, XLSX, JSZIP,History) {
         "use strict";
 
         return Controller.extend("ns.asa.zappuploadinvoices.controller.BaseController", {
@@ -171,10 +172,67 @@ sap.ui.define([
                 let oboundle = this.getResourceBundle();
                 MessageToast.show(oboundle.getText(idMsg));
             },
-            onExit: function () {
-                this.deleteDataSession();
-                this.clearModel();
-            }
+            setRouterNavTo: function (router) {
+                let oRouter = this.getOwnerComponent().getRouter();
+                oRouter.navTo(router, true);
+            },
+            onPressExit: function (Route,origenRoute) {
+                //Clear Variables
+                this._ClearAllObjects(origenRoute);
 
+                //Back
+                let oHistory = History.getInstance();
+                let sPreviousHash = oHistory.getPreviousHash();
+
+                if (sPreviousHash !== undefined) {
+                    window.history.go(-1);
+                } else {
+                    this.setRouterNavTo(Route);
+                }
+            },
+
+            _ClearAllObjects: function (origenRoute){
+                try {
+
+                    if (origenRoute == "DetailLog") {
+                        this.clearDetailsLog();
+                    }else if(origenRoute == "RouteApp"){
+                        this.clearMainList();
+                    }
+                    
+                } catch (error) {
+                    console.error("Error Function: _ClearAllObjects ",error)
+                }
+            },
+            clearDetailsLog: function(){
+                try {
+                	/*Clear la tabla del Detalle */
+			        const oTable = this.getView().byId("messageLogTab");
+                    if (oTable) {
+                        oTable.removeAllRows();
+                        oTable.unbindRows();
+                        oTable.unbindRows().getModel().refresh(true);
+                    }
+                    /** Limpiar el Modelo */
+
+                const modelDetailLog = this.getOwnerComponent().getModel("LogDetails");
+                    if (modelDetailLog) {
+                        modelDetailLog.setData([]);
+                        modelDetailLog.updateBindings(true);
+                        modelDetailLog.refresh();
+                        modelDetailLog.destroy();
+                    }
+                } catch (error) {
+                    console.error("Error Function: clearDetailsLog ",error) 
+                }
+            },
+            clearMainList: function(){
+                try {
+                    this.deleteDataSession();
+                    this.clearModel();
+                } catch (error) {
+                    console.error("Error Function: clearMainList ",error) 
+                }
+            }
         });
     });

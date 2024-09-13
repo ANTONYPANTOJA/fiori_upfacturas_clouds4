@@ -4,8 +4,11 @@ sap.ui.define([
     "sap/ui/core/Messaging",
     'sap/ui/core/message/Message',
 	'sap/ui/core/message/MessageType',
+	"sap/ui/model/Filter",
+	"sap/ui/model/FilterOperator",
+	"sap/ushell/ui5service/ShellUIService",
 ],
-function (Controller,BaseController,Messaging,Message,MessageType) {
+function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterOperator,ShellUIService) {
     "use strict";
     let that;
 
@@ -15,13 +18,27 @@ function (Controller,BaseController,Messaging,Message,MessageType) {
 
             // Set global fields
             that = this;
+			this._oFilter = [];
             this._oView = this.getView();
             this._oLogTable = this._oView.byId("messageLogTab");
 
             this._MessageManager = Messaging;
             this._MessageManager.registerObject(this._oView.byId("messageHandlingPage"), true);
             this._oView.setModel(this._MessageManager.getMessageModel(), "message");
-            
+            //Estilos
+			this._oView.byId("sbiError-button").addStyleClass("sapMMsgViewBtnError");
+			this._oView.byId("sbiWarning-button").addStyleClass("sapMMsgViewBtnWarning");
+			this._oView.byId("sbiSuccess-button").addStyleClass("sapMMsgViewBtnSuccess");
+			this._oView.byId("sbiInformation-button").addStyleClass("sapMMsgViewBtnInformation");
+
+			
+            //Inicializar BACK del Launchpad
+            this.oShellUIService = new ShellUIService({
+                    scopeObject: this.getOwnerComponent(),
+                    scopeType: "component"
+                });
+            this.oShellUIService.setBackNavigation(this._navBackViewDetailLog.bind(this));
+
 			//Inicializar el oRouter
 			let oRouter = this.getOwnerComponent().getRouter();
 			oRouter.getRoute("DetailLog").attachPatternMatched(this._onObjectMatched, this);
@@ -136,6 +153,46 @@ function (Controller,BaseController,Messaging,Message,MessageType) {
 				}
 			}
 		},
+
+		onSelectionChange: function (oEvent) {
+
+		let oSegmentedButton = this._oView.byId("logMessageSegmentButton"),
+			oKey = oSegmentedButton.getSelectedKey();
+
+		let vMsgType;
+		// var oFilters = new Filter();
+		if (oKey === "Error") {
+			vMsgType = "E";
+		}
+		if (oKey === "Warning") {
+			vMsgType = "W";
+		}
+		if (oKey === "Success") {
+			vMsgType = "S";
+		}
+		if (oKey === "Information") {
+			vMsgType = "I";
+		}
+		if (vMsgType === "W" || vMsgType === "S" || vMsgType === "I") {
+			this._oFilter = new Filter({
+				filters: [new Filter("CodeSend", FilterOperator.EQ, vMsgType)]
+			});
+		} else if (vMsgType === "E") {
+			this._oFilter = new Filter({
+				filters: [
+					new Filter("CodeSend", FilterOperator.EQ, vMsgType),
+					new Filter("CodeSend", FilterOperator.EQ, "A")
+				],
+				or: true
+			});
+		} else {
+			this._oFilter = [];
+		}
+		this._oLogTable.getBinding("rows").filter(this._oFilter);
+		},
+		_navBackViewDetailLog: function(){
+			this.onPressExit("RouteApp","DetailLog");
+		}
 
     });
 });

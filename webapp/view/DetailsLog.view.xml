@@ -89,6 +89,20 @@
                         </Toolbar>
                     </t:extension>
                     <t:columns>
+                         <t:Column id="columnId" sortProperty="Id" filterProperty="Id" width="5rem">
+								<Label id="columnLogIdLabel" text="{i18n>columnIdText}" tooltip="{i18n>columnIdText}" vAlign="Middle"/>
+								<t:template>
+									<Text id="columnLogIdText" text="{ path: 'LogDetails>Id'}"/>
+								</t:template>
+						</t:Column>
+
+                        <t:Column id="columnReference" sortProperty="Reference" filterProperty="Reference" width="8.5rem" >
+								<Label id="columnLogReferenceLabel" text="{i18n>columnReferenceText}" tooltip="{i18n>columnReferenceText}" vAlign="Middle"/>
+								<t:template>
+									<Text id="columnLogReferenceText" text="{ path: 'LogDetails>Reference'}"/>
+								</t:template>
+						</t:Column>
+
                         <t:Column id="columnLogStatus" width="5rem" sortProperty="MsgType">
                             <Label id="columnLogStatusLabel" text="{i18n>columnLogStatus}" tooltip="{i18n>columnLogStatus}" vAlign="Middle"/>
                             <t:template>

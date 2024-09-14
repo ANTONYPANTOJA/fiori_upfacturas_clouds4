@@ -7,11 +7,18 @@ sap.ui.define([
     "ns/asa/zappuploadinvoices/libs/JSZIP",
     /* "ns/asa/zappuploadinvoices/libs/moment",*/
     "sap/ui/core/routing/History",
+    "sap/ui/comp/navpopover/LinkData",
 ],
-    function (Controller, NavigationHandler, MessageBox, MessageToast, XLSX, JSZIP,History) {
+    function (Controller, NavigationHandler, MessageBox, MessageToast, XLSX, JSZIP,History,LinkData) {
         "use strict";
 
         return Controller.extend("ns.asa.zappuploadinvoices.controller.BaseController", {
+
+            constructor: function() {
+                this.sLocalContainerKey = "fin.ap.lineitems";
+				this.sPrefix = "fin.ap.lineitems.display";
+            },
+            
             onInit: function () {
 
             },
@@ -233,6 +240,96 @@ sap.ui.define([
                 } catch (error) {
                     console.error("Error Function: clearMainList ",error) 
                 }
+            },
+            onNavTargetsObtained: function(oEvent) {
+				this.openPopover(oEvent,"");
+			},
+            openPopover: function(oEvent, sSelfNavigationText) {
+				// This event handler is called after oParameters.open(), which was triggered by onBeforePopoverOpens.
+				let oEventParameters = oEvent.getParameters();
+				let oDataForm ;
+
+                try {
+
+				let aActions = this.modifyPopoverActions(oEventParameters, oEventParameters.semanticObject, sSelfNavigationText);
+				oEventParameters.show(undefined, aActions, oDataForm); // opens the popover
+                } catch (error) {
+                   console.error("Error Function: openPopover - SemanticView ",error) 
+                }
+			},
+            modifyPopoverActions: function(oEventParameters, sSemanticObject, sSelfNavigationText) {
+
+                let aActions = [];
+                let oNavArguments = {};
+                if (!this.oCrossApplicationNavigation) {
+					this.oCrossApplicationNavigation = sap.ushell.Container.getService("CrossApplicationNavigation");
+				}
+                
+                if (sSemanticObject == "AccountingDocument") 
+                    {
+					// Special handling for AccountingDocument to remove navigation to createSinglePayment;
+					// Special handling for AccountingDocument to remove navigation to resetClearedItems
+					// (AccountingDocument and FiscalYear would be handed over instead of ClearingAccountingDocument and ClearingFiscalYear);
+					// Remove action "manage" (app Manage Jounrnal Entries) as navigation to it will be inserted at top of popover below in code
+				    let bSuppressResetClearedItemsLink = false;
+					let oSmartLink = this.byId(oEventParameters.originalId);
+                    
+                    let oURLParsing = sap.ushell.Container.getService("URLParsing");
+					let bActionManageGranted = false;
+                    
+                    for (var i = 0; i < oEventParameters.actions.length; i++) {
+						var sAction = oURLParsing.parseShellHash(oEventParameters.actions[i].getHref()).action;
+						if (sAction === "manage") {
+							bActionManageGranted = true;
+						}
+						if (sAction !== "createSinglePayment" && sAction !== "manage" &&
+						   (sAction !== "resetClearedItems" || !bSuppressResetClearedItemsLink)) {
+							aActions.push(oEventParameters.actions[i]);
+						}
+					}
+
+                    // insert links to journal entry line item and journal entry (header) at top of popover actions available
+					if (bActionManageGranted === true) {
+						oNavArguments = {
+							target: {
+								semanticObject: sSemanticObject,
+								action: "manage"
+							},
+							params: {}
+					};
+
+                    	// Semantic attributes are already set by processBeforeSmartLinkPopoverOpens, thus they are available in oEventParameters
+						// Navigation to journal entry header (don't provide line item number)
+						oNavArguments.params[sSemanticObject] = oEventParameters.semanticAttributes[sSemanticObject];
+						oNavArguments.params.CompanyCode = oEventParameters.semanticAttributes.CompanyCode;
+						oNavArguments.params.FiscalYear = oEventParameters.semanticAttributes.FiscalYear;
+
+                        						// construct new link to journal entry header
+						let sExternalHash = this.oCrossApplicationNavigation.hrefForExternal(oNavArguments,this.getOwnerComponent());
+						let sInternalHash = this.externalToInternalHash(sExternalHash);
+						let sKey = this.sPrefix + ".customLink.manageJournalEntryHeader";
+						let oLinkData = new LinkData({
+							text: this.getResourceBundle().getText("POPOVER_JE_HEADER_LINK"),
+							href: sInternalHash,
+							key: sKey
+						});
+
+                        // insert link "Manage Journal Entry" (header) at second position
+						aActions.unshift(oLinkData);
+                   }
+                   return aActions; 
+                }
+            },
+            externalToInternalHash: function(sExternalHash){
+				return decodeURIComponent(sExternalHash);
+			},
+            generateUniqSerial: function()
+            {  
+                return 'xxxx-xxxx-xxx-xxxx'.replace(/[x]/g, (c) => {  
+                    const r = Math.floor(Math.random() * 16);  
+                    return r.toString(16);  
+              });  
             }
+
         });
     });

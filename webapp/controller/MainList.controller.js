@@ -60,7 +60,8 @@ sap.ui.define([
                     },
                     log:{
                         data: []
-                    }
+                    },
+                    idSession: ""
                 });
                 this.setModel(model, "model");
             },
@@ -445,6 +446,9 @@ sap.ui.define([
                 let lengthTable = oDataItems.DetailList.length
                 let items = 0;
                 let resultsRespon = [];
+
+                const idSession = this.getSession();
+
                 for (let index = 0; index < oDataItems.DetailList.length; index++) {
                     items++;
                     try {
@@ -453,7 +457,7 @@ sap.ui.define([
                         oDataItems.DetailList[index].uuidAuxUpload = idPostUpload;
                         oDataItems.DetailList[index].Random = this.getRandom(1, 999999);
                         oDataItems.DetailList[index].DateWeb = this.getDateNow();
-
+                        oDataItems.DetailList[index].IdSession = idSession;//+@add 
                         if (lengthTable === items) {
                             oDataItems.DetailList[index].FlagFin = "X";
                         }
@@ -566,6 +570,7 @@ sap.ui.define([
                     Action: action,
                     Supplierinvoiceuploaduuid: key,
                     Dateweb: dateWeb,
+                    Sendasync : ""
                 }
 
                 if (option == "1") {
@@ -585,7 +590,9 @@ sap.ui.define([
                         dateweb: this.getDateNow()
                     };
                     if (this.getView().byId("chkSendAsync").getSelected()) {
-                        body.Sendasync = "X";
+                        body.sendasync = "X";
+                    }else{
+                        body.sendasync = "";
                     }
 
                     await delay(500);
@@ -801,7 +808,26 @@ sap.ui.define([
                         }.bind(this)
                     });
                 });
+            },
+            getSession: function()
+            {
+                let getSessionId;
+                let oModel = this.getModel("model");
+                let odataModel = oModel.getData();
+
+                if (oModel) {
+                    if (oModel.idSession == undefined || oModel.idSession == "" || oModel.idSession == null ) {
+                        const random = this.getRandom(1, 999999);
+                        const dateWeb = this.getDateNow();
+                        const serial = this.generateUniqSerial();
+                        getSessionId = dateWeb.concat("-",serial,"-",String(random));
+                        oModel.setProperty("/idSession", getSessionId);
+                    }else{
+                    getSessionId  = odataModel.idSession; 
+                }
+                return getSessionId;
             }
-            
+         }
+
         });
     });

@@ -12,8 +12,8 @@
 				        initialise="onSmartTableInitialise" useVariantManagement="false" height="100%"
                         header="{i18n>Table_Header}" demandPopin="true" entitySet="InvoiceList"
 						enableCopy="false"
-						requestAtLeastFields="Supplierinvoiceuploaduuid,CompanyCodeName,BusinessPartnerName,IdExcel,InvoiceStatusText"
-						ignoreFromPersonalisation="Supplierinvoiceuploaduuid,Delete_mc,Update_mc,to_ItemsList_oc,LastChangedAt,postActionUpload_ac,postActionOthers_ac,ActionCheckProcess,ActionContaProcess,CodeSend,Messagesend,SupplierInvoice"
+						requestAtLeastFields="Supplierinvoiceuploaduuid,CompanyCodeName,BusinessPartnerName,IdExcel,InvoiceStatusText,FiscalYear"
+						ignoreFromPersonalisation="Supplierinvoiceuploaduuid,Delete_mc,Update_mc,to_ItemsList_oc,LastChangedAt,postActionUpload_ac,postActionOthers_ac,ActionCheckProcess,ActionContaProcess,CodeSend,Messagesend,SupplierInvoice,IdSession"
 						useTablePersonalisation="true">
          
          <smarttable:customData>
@@ -23,6 +23,14 @@
            <smarttable:layoutData>
 			<FlexItemData growFactor="1" baseSize="0%"/>
 			</smarttable:layoutData>
+		<!-- Control de los objetos semanticps-->
+		<smarttable:semanticObjectController>
+					<smartlink:SemanticObjectController
+						id="fin.ap.lineitems.display.SemanticObjectController"
+						beforePopoverOpens="onBeforePopoverOpens"
+						navigationTargetsObtained="onNavTargetsObtained" navigate="onPopoverLinkPressed"
+						ignoredFields="" />
+		</smarttable:semanticObjectController>
 
          <!-- Botones Tabla-->
          <smarttable:customToolbar>
@@ -126,9 +134,10 @@
 									<Text text="{path:'DocumentDate', type:'sap.ui.model.type.Date', formatOptions:{pattern: 'dd/MM/yyyy', strictParsing: true , UTC:'true'} }"/>
 									<Text wrapping="false" text="{Currency}"/>
 									<Text wrapping="false" text="{Amount}"/>
-									<Text wrapping="false" text="{parts: [{path:'AccountingDocument'},{ path:'FiscalYear'}], formatter: '.formatter.InvoiceWithYear'}"/>
+									<!-- <Text wrapping="false" text="{parts: [{path:'AccountingDocument'},{ path:'FiscalYear'}], formatter: '.formatter.InvoiceWithYear'}"/> -->
+									<smartlink:SmartLink id="smartLinDocument" semanticObject="AccountingDocument" text="{AccountingDocument}"/>
 									<Text text="{CreatedBy}" wrapping="false"/>
-
+									
 									<!-- <Text wrapping="false" text="{CodeSend}"/> -->
 									<!-- <Text wrapping="false" text="{Messagesend}"/> -->
 									<!-- 
@@ -139,5 +148,11 @@
 				</ColumnListItem>
                </items>
 				</Table>
+			<!--
+				<smarttable:semanticObjectController>
+					<smartlink:SemanticObjectController
+							enableAvailableActionsPersonalization='\{"Name":false, "AccountingDocument":false\}'/>
+				</smarttable:semanticObjectController> -->
+
          </smarttable:SmartTable>
 </core:FragmentDefinition>          	

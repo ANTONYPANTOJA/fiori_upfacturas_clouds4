@@ -31,8 +31,13 @@ sap.ui.define([
                 });
                 this.oShellUIService.setBackNavigation(this._navBackViewMain.bind(this));
 
+                //Clear Table
+                this.clearData();
             },
-            
+            clearData: async  function()
+            {
+                await this.clearTableSingle();
+            },
             formatter:formatter,
             moment:moment,
 
@@ -413,6 +418,23 @@ sap.ui.define([
                 });
 
             },
+            createPostAction2: async function (model, path, body) {
+                return new Promise(async (resolve, reject) => {
+                    try {
+                        this.getOwnerComponent().getModel().create(path, body, {
+                            success: function (result) {
+                                resolve(result);
+                            }.bind(this),
+                            error: function (e) {
+                                reject(false);
+                            }.bind(this)
+                        });
+                    } catch (error) {
+                        reject(false);
+                    }
+                });
+
+            },
 
             callOdataUploadItems: async function (key, body) {
                 return new Promise(async (resolve, reject) => {
@@ -748,6 +770,20 @@ sap.ui.define([
                     this.enableCheck(true);
                     this.hideBusyText();
                     this.showMessageToast("msg5")
+                }
+            },
+            clearTableSingle: async function(idSession)
+            {
+                try {
+                    const parameters = {
+                        action: "DA",
+                        id: 1,
+                        dateweb: ""
+                    }
+                    let result = await this.createPostAction2("ModelActionService", "/ActionInvoice", parameters);
+                    this.onRefreshSingle();
+                } catch (error) {
+                    console.error("Error Function.- clearTableSingle",error);
                 }
             },
             onShowLogButtonPressed: async function () {

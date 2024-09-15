@@ -205,6 +205,7 @@ sap.ui.define([
                         this.clearDetailsLog();
                     }else if(origenRoute == "RouteApp"){
                         this.clearMainList();
+                        this.clearTableSingle();
                     }
                     
                 } catch (error) {

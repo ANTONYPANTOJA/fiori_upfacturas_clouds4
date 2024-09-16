@@ -1,8 +1,10 @@
 sap.ui.define([
     "sap/ui/core/format/DateFormat",
     "ns/asa/zappuploadinvoices/model/excelBase64",
+	"sap/ui/model/odata/v4/ODataUtils",
+    "sap/ui/model/odata/type/DateTimeOffset",
 ],
-    function (DateFormat, ExcelBase64) {
+    function (DateFormat, ExcelBase64,ODataUtils,DateTimeOffset) {
         "use strict";
 
         return {
@@ -76,10 +78,19 @@ sap.ui.define([
 
                 // Cleanup
                 URL.revokeObjectURL(url);
+            },
+            parseDateTime: function (sDate) {
+                if (sDate && sDate !== "") {
+                    var oDateFormat = DateFormat.getDateTimeInstance({
+                        style: "medium",
+                        UTC: true
+                    });
+                    var oDate = ODataUtils.parseDateTimeOffset(sDate);
+                    return oDateFormat.format(oDate);
+                } else {
+                    return undefined;
             }
-
-
-
+          }
         };
 
     });

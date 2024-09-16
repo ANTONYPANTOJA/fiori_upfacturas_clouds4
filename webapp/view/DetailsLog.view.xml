@@ -34,7 +34,7 @@
                 <layoutData>
                     <l:SplitterLayoutData
                         id="layoutSmall"
-                        size="38.2%"
+                        size="50.2%"
                     />
                 </layoutData>
                 <t:Table
@@ -96,12 +96,13 @@
 								</t:template>
 						</t:Column>
 
+                        <!--
                         <t:Column id="columnReference" sortProperty="Reference" filterProperty="Reference" width="8.5rem" >
 								<Label id="columnLogReferenceLabel" text="{i18n>columnReferenceText}" tooltip="{i18n>columnReferenceText}" vAlign="Middle"/>
 								<t:template>
 									<Text id="columnLogReferenceText" text="{ path: 'LogDetails>Reference'}"/>
 								</t:template>
-						</t:Column>
+						</t:Column>-->
 
                         <t:Column id="columnLogStatus" width="5rem" sortProperty="MsgType">
                             <Label id="columnLogStatusLabel" text="{i18n>columnLogStatus}" tooltip="{i18n>columnLogStatus}" vAlign="Middle"/>
@@ -116,10 +117,10 @@
 									<Text id="columnLogMessageText" text="{ path: 'LogDetails>Messagesend'}"/>
 								</t:template>
 						</t:Column>
-                        <t:Column id="columnLogDate" width="8rem" sortProperty="Timestamp">
+                        <t:Column id="columnLogDate" width="10rem" sortProperty="Timestamp" >
 								<Label id="columnLogDateLabel" text="{i18n>columnLogDate}" tooltip="{i18n>columnLogDate}"/>
 								<t:template>
-									<Text id="columnLogDateText" text="{ path: 'messageLogModel>Timestamp', formatter: '.formatter.parseDateTime'}"/>
+									<Text id="columnLogDateText" text="{ path: 'LogDetails>LastChangedAt', type: 'sap.ui.model.type.DateTime', formatOptions: { style: 'medium' ,UTC: true}}"/>
 								</t:template>
 						</t:Column>
                     </t:columns>

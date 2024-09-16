@@ -7,8 +7,9 @@ sap.ui.define([
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator",
 	"sap/ushell/ui5service/ShellUIService",
+	"ns/asa/zappuploadinvoices/model/formatter",
 ],
-function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterOperator,ShellUIService) {
+function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterOperator,ShellUIService,formatter) {
     "use strict";
     let that;
 
@@ -43,6 +44,7 @@ function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterO
 			let oRouter = this.getOwnerComponent().getRouter();
 			oRouter.getRoute("DetailLog").attachPatternMatched(this._onObjectMatched, this);
         },
+		formatter:formatter,
 
         _onObjectMatched: function (oEvent) {
             this._addMockMessages();

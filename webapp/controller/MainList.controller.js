@@ -375,14 +375,65 @@ sap.ui.define([
             callOdataUpload: async function () {
                 let bodyInit = {};
                 return new Promise(async (resolve, reject) => {
-                    let idPostUpload = await this.createPost(bodyInit);
-                    if (idPostUpload) {
-                        await this.processDetailUpload(idPostUpload);
+                    //Verificar si es Update o Create
+                    let cargaInit = this.verificarCarga();
+                    if (cargaInit) {
+                        let idPostUpload = await this.createPost(bodyInit);
+                        if (idPostUpload) {
+                            await this.processDetailUpload(idPostUpload);
+                            resolve(true)
+                        } else {
+                            resolve(false)
+                        }                        
+                    }else{
+                        await this.updateDetail(true);
                         resolve(true)
-                    } else {
-                        resolve(false)
                     }
                 });
+            },
+            updateDetail: async function()
+            {
+              try {
+                const oSmartTable = this.byId("detailList");
+                const dataTable  = this.getDataTable();
+                for (let index = 0; index < dataTable.length; index++) {
+                    const element = dataTable[index];
+                    const sPath = element.getBindingContext().sPath;
+                    const currentObject = oSmartTable.getModel().getObject(sPath);
+                    if (currentObject) {
+                        
+                    }
+                }
+
+              } catch (error) {
+                console.error("Error Function.- updateDetail",error)
+              }
+
+            },
+            getDataTable: function(){
+                let tableId    = this.byId("detailList");
+                return tableId.getTable().getItems();
+            },
+
+            verificarCarga: function(){
+                let dataReport = this.getModel("model").getData();
+                let dataTable  = this.getDataTable();
+
+                if (dataReport.idSession == "" ||  dataReport.idSession == undefined )
+                {
+                    if (dataTable.length == 0) {
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }else{
+                    if (dataTable.length == 0) {
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+
             },
             createPost: async function (body) {
                 return new Promise(async (resolve, reject) => {
@@ -463,17 +514,22 @@ sap.ui.define([
                 });
             },
 
-            processDetailUpload: async function (idPostUpload) {
+            processDetailUpload: async function (idPostUpload,update) {
                 let oDataItems = this.getModel("detailReport").getData();
                 let lengthTable = oDataItems.DetailList.length
                 let items = 0;
                 let resultsRespon = [];
-
-                const idSession = this.getSession();
-
+                let idSession;
+                
+                if (!update) {
+                    idSession = this.getSession();    
+                }  
+                
                 for (let index = 0; index < oDataItems.DetailList.length; index++) {
                     items++;
                     try {
+
+                        if (!update) {
                         oDataItems.DetailList[index].Item = index;
                         oDataItems.DetailList[index].Supplierinvoiceuploaduuid = idPostUpload;
                         oDataItems.DetailList[index].uuidAuxUpload = idPostUpload;
@@ -485,6 +541,10 @@ sap.ui.define([
                         }
                         const result = await this.callOdataUploadItems(idPostUpload, oDataItems.DetailList[index]);
                         resultsRespon.push(result);
+                        }else{
+
+                        }
+
                     } catch (error) {
                         console.error("Error Items - callOdataUpload", error);
                     }

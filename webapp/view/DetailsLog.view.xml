@@ -120,7 +120,7 @@
                         <t:Column id="columnLogDate" width="10rem" sortProperty="Timestamp" >
 								<Label id="columnLogDateLabel" text="{i18n>columnLogDate}" tooltip="{i18n>columnLogDate}"/>
 								<t:template>
-									<Text id="columnLogDateText" text="{ path: 'LogDetails>LastChangedAt', type: 'sap.ui.model.type.DateTime', formatOptions: { style: 'medium' ,UTC: true}}"/>
+									<Text id="columnLogDateText" text="{ path: 'LogDetails>LastChangedAt', type: 'sap.ui.model.type.DateTime', formatOptions: { style: 'medium' }}"/>
 								</t:template>
 						</t:Column>
                     </t:columns>

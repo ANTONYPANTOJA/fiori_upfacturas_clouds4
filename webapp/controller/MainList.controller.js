@@ -10,7 +10,7 @@ sap.ui.define([
     "ns/asa/zappuploadinvoices/model/formatter",
     "ns/asa/zappuploadinvoices/libs/moment",
 ],
-    function (Controller, MessageBox, BaseController, Guid, JSONModel, Formatter,Filter,ShellUIService,formatter,moment) {
+    function (Controller, MessageBox, BaseController, Guid, JSONModel, Formatter, Filter, ShellUIService, formatter, moment) {
         "use strict";
 
         let that;
@@ -26,20 +26,19 @@ sap.ui.define([
 
                 //Inicializar BACK del Launchpad
                 this.oShellUIService = new ShellUIService({
-                scopeObject: this.getOwnerComponent(),
-                scopeType: "component"
+                    scopeObject: this.getOwnerComponent(),
+                    scopeType: "component"
                 });
                 this.oShellUIService.setBackNavigation(this._navBackViewMain.bind(this));
 
                 //Clear Table
                 this.clearData();
             },
-            clearData: async  function()
-            {
+            clearData: async function () {
                 await this.clearTableSingle();
             },
-            formatter:formatter,
-            moment:moment,
+            formatter: formatter,
+            moment: moment,
 
             initModels: function () {
                 //Model Tabla Detalle List
@@ -63,15 +62,16 @@ sap.ui.define([
                     ckProcess: {
                         data: []
                     },
-                    log:{
+                    log: {
                         data: []
                     },
                     idSession: ""
                 });
                 this.setModel(model, "model");
+                this.enableCheck(false);
             },
-            _navBackViewMain: function(){
-                this.onPressExit("","RouteApp");
+            _navBackViewMain: function () {
+                this.onPressExit("", "RouteApp");
             },
 
             onFileChange: async function (event) {
@@ -386,75 +386,72 @@ sap.ui.define([
                             resolve(true)
                         } else {
                             resolve(false)
-                        }                        
-                    }else{
+                        }
+                    } else {
                         await this.updateDetail(true);
                         resolve(true)
                     }
                 });
             },
-            updateDetail: async function()
-            {
-              let resultsRespon = [];  
-              try {
-                const oModelData  = this.getModel("detailReport").getData();
-                const oSmartTable = this.byId("detailList");
-                const dataTable   = this.getDataTable();
+            updateDetail: async function () {
+                let resultsRespon = [];
+                try {
+                    const oModelData = this.getModel("detailReport").getData();
+                    const oSmartTable = this.byId("detailList");
+                    const dataTable = this.getDataTable();
 
-                for (let index = 0; index < dataTable.length; index++) {
-                    const element = dataTable[index];
-                    const sPath = element.getBindingContext().sPath;
-                    const currentObject = oSmartTable.getModel().getObject(sPath);
-                    if (currentObject) {
-                        if (currentObject.CodeSend == "E") 
-                    {
-                        const filterResults = oModelData.DetailList.filter(x => x.IdExcel === currentObject.IdExcel);
-                        if (filterResults.length > 0 ) {
-                            //Actualizar
-                            try {
-                                for (let index = 0; index < filterResults.length; index++) {
-                                    let item = index + 1.
-                                    let dataResult = filterResults[index];
-                                    dataResult.DateWeb = this.getDateNow();
-                                    dataResult.Item    = parseInt(item);
-                                    dataResult.Action  = "UPDT"
-                                    dataResult.Supplierinvoiceuploaduuid = currentObject.Supplierinvoiceuploaduuid;
-                                    const result = await this.callOdataUploadItems(currentObject.Supplierinvoiceuploaduuid,dataResult);
-                                    resultsRespon.push(result);
-                                } 
-                            } catch (error) {
-                                console.error("Error Function.- UpdateDetail",error) 
+                    for (let index = 0; index < dataTable.length; index++) {
+                        const element = dataTable[index];
+                        const sPath = element.getBindingContext().sPath;
+                        const currentObject = oSmartTable.getModel().getObject(sPath);
+                        if (currentObject) {
+                            if (currentObject.CodeSend == "E") {
+                                const filterResults = oModelData.DetailList.filter(x => x.IdExcel === currentObject.IdExcel);
+                                if (filterResults.length > 0) {
+                                    //Actualizar
+                                    try {
+                                        for (let index = 0; index < filterResults.length; index++) {
+                                            let item = index + 1.
+                                            let dataResult = filterResults[index];
+                                            dataResult.DateWeb = this.getDateNow();
+                                            dataResult.Item = parseInt(item);
+                                            dataResult.Action = "UPDT"
+                                            dataResult.Supplierinvoiceuploaduuid = currentObject.Supplierinvoiceuploaduuid;
+                                            const result = await this.callOdataUploadItems(currentObject.Supplierinvoiceuploaduuid, dataResult);
+                                            resultsRespon.push(result);
+                                        }
+                                    } catch (error) {
+                                        console.error("Error Function.- UpdateDetail", error)
+                                    }
+                                }
                             }
                         }
                     }
-                  }
+
+                } catch (error) {
+                    console.error("Error Function.- updateDetail", error)
                 }
 
-              } catch (error) {
-                console.error("Error Function.- updateDetail",error)
-              }
-
             },
-            getDataTable: function(){
-                let tableId    = this.byId("detailList");
+            getDataTable: function () {
+                let tableId = this.byId("detailList");
                 return tableId.getTable().getItems();
             },
 
-            verificarCarga: function(){
+            verificarCarga: function () {
                 let dataReport = this.getModel("model").getData();
-                let dataTable  = this.getDataTable();
+                let dataTable = this.getDataTable();
 
-                if (dataReport.idSession == "" ||  dataReport.idSession == undefined )
-                {
+                if (dataReport.idSession == "" || dataReport.idSession == undefined) {
                     if (dataTable.length == 0) {
                         return true;
-                    }else{
+                    } else {
                         return false;
                     }
-                }else{
+                } else {
                     if (dataTable.length == 0) {
                         return true;
-                    }else{
+                    } else {
                         return false;
                     }
                 }
@@ -539,17 +536,17 @@ sap.ui.define([
                 });
             },
 
-            processDetailUpload: async function (idPostUpload,update) {
+            processDetailUpload: async function (idPostUpload, update) {
                 let oDataItems = this.getModel("detailReport").getData();
                 let lengthTable = oDataItems.DetailList.length
                 let items = 0;
                 let resultsRespon = [];
                 let idSession;
-                
+
                 if (!update) {
-                    idSession = this.getSession();    
-                }  
-                
+                    idSession = this.getSession();
+                }
+
                 for (let index = 0; index < oDataItems.DetailList.length; index++) {
                     items++;
                     try {
@@ -580,7 +577,7 @@ sap.ui.define([
                     oViewModel.setProperty("/btnEliminar", true);
                 }
                 if (action2) {
-                    oViewModel.setProperty("/btnContab", true);
+                    //oViewModel.setProperty("/btnContab", true);
                     oViewModel.setProperty("/btnLog", true);
                 }
 
@@ -595,10 +592,13 @@ sap.ui.define([
                     if (rptaConfirm) {
                         this.showBusyText("loadmsgPo");
                         const results = await this.checkItemsOdataRap(itemsSelected, 'PO', '2');
-                        console.log({ results });
                         this.onRefreshSingle();
                         this.hideBusyText();
-                        this.showMessageToast("msg5");
+                        if (results.length > 0) {
+                            this.showMessageToast("msg5");    
+                        }else{
+                            this.showMessageToast("msgc3");
+                        }
                     }
                 } catch (error) {
                     console.log("Error Funcion .- onPostPressed ", error);
@@ -613,14 +613,14 @@ sap.ui.define([
                 const rptaConfirm = await this.confirmPopup("TitDialog2", "msg22");
                 if (rptaConfirm) {
                     this.showBusyText("loadmsgCk");
-                    this.enableCheck(false);
-
                     const results = await this.checkItemsOdataRap(itemsSelected, 'CK', '2');
                     console.log({ results });
                     this.setDataChecked(results, 'CK');
                     this.onRefreshSingle();
                     this.updateModelButtons(false, true);  //Actualizar Buttons
                     this.hideBusyText();
+                    this.enableButtonContab(true,true);
+                    this.enableCheck(true);
                     this.showMessageToast("msg5");
                 }
             },
@@ -643,6 +643,15 @@ sap.ui.define([
                         const contextObject = itemsSelects[index].getBindingContext();
                         const keyPath = this.getIdPath(contextObject.getPath());
                         const odataBody = contextObject.getObject();
+
+                        //Validar los datos al contabilizar
+                        if (action == "PO") {
+                            if (odataBody.InvoiceStatus == "3" || odataBody.InvoiceStatus == "1") 
+                            {
+                                continue;
+                            }
+                        }
+
                         let result = await this.callOdataActionRows(odataBody, action, keyPath, option);
                         resultProcess.push(result);
                     }
@@ -672,7 +681,7 @@ sap.ui.define([
                     Action: action,
                     Supplierinvoiceuploaduuid: key,
                     Dateweb: dateWeb,
-                    Sendasync : ""
+                    Sendasync: ""
                 }
 
                 if (option == "1") {
@@ -693,7 +702,7 @@ sap.ui.define([
                     };
                     if (this.getView().byId("chkSendAsync").getSelected()) {
                         body.sendasync = "X";
-                    }else{
+                    } else {
                         body.sendasync = "";
                     }
 
@@ -847,13 +856,14 @@ sap.ui.define([
                     };
                     let result = await this.createPostAction("ModelActionService", "/ActionInvoice", parameters)
                     this.onRefreshSingle();
-                    this.enableCheck(true);
+                    this.enableCheck(false);
                     this.hideBusyText();
+                    this.enableButtonContab(true,false);
                     this.showMessageToast("msg5")
+                    this.clearModel();
                 }
             },
-            clearTableSingle: async function(idSession)
-            {
+            clearTableSingle: async function (idSession) {
                 try {
                     const parameters = {
                         action: "DA",
@@ -863,10 +873,19 @@ sap.ui.define([
                     let result = await this.createPostAction2("ModelActionService", "/ActionInvoice", parameters);
                     this.onRefreshSingle();
                 } catch (error) {
-                    console.error("Error Function.- clearTableSingle",error);
+                    console.error("Error Function.- clearTableSingle", error);
                 }
             },
             onShowLogButtonPressed: async function () {
+
+                //Verificar Si se ha verificado
+                let odataCheck = this.getModel("model").getProperty("/ckProcess/data");
+                if (odataCheck.length == 0) {
+                    this.onDisplayMessageBoxPress("I", "msgc2");
+                    return
+                }
+
+
                 const itemsSelected = this.getItemsTableSelected();
                 if (!this.validCheck(itemsSelected)) return;
 
@@ -874,27 +893,26 @@ sap.ui.define([
                     this.showBusyText("mostlog");
                     await this.getLogDetail(itemsSelected);
                     this.hideBusyText();
-                    this.getRouter().navTo("DetailLog");                    
+                    this.getRouter().navTo("DetailLog");
                 } catch (error) {
-                    console.error("Error Function: onShowLogButtonPressed",error)
-                    this.onDisplayMessageBoxPress("E","msgc1");
+                    console.error("Error Function: onShowLogButtonPressed", error)
+                    this.onDisplayMessageBoxPress("E", "msgc1");
                     this.hideBusyText();
                 }
             },
             getLogDetail: async function (itemsSelects) {
-                
-                let idsLogs = [];
-                let parameters = { filters : [] , urlParameters: { "$expand": "to_ItemsList"}};
 
-                
+                let idsLogs = [];
+                let parameters = { filters: [], urlParameters: { "$expand": "to_ItemsList" } };
+
+
                 //Obtener lso Ids
                 for (let index = 0; index < itemsSelects.length; index++) {
                     const contextObject = itemsSelects[index].getBindingContext();
                     const keyPath = this.getIdPath(contextObject.getPath());
                     idsLogs.push(keyPath);
                 }
-                try 
-                {
+                try {
                     if (idsLogs.length > 0) {
                         for (let index = 0; index < idsLogs.length; index++) {
                             const element = idsLogs[index];
@@ -906,7 +924,7 @@ sap.ui.define([
                                 this.getOwnerComponent().setModel(new JSONModel(resultOdata.results), "LogDetails");
                             }
                         }
-                    }   
+                    }
                 } catch (error) {
                     throw new Error(error);
                 }
@@ -925,25 +943,33 @@ sap.ui.define([
                     });
                 });
             },
-            getSession: function()
-            {
+            getSession: function () {
                 let getSessionId;
                 let oModel = this.getModel("model");
                 let odataModel = oModel.getData();
 
                 if (oModel) {
-                    if (oModel.idSession == undefined || oModel.idSession == "" || oModel.idSession == null ) {
+                    if (oModel.idSession == undefined || oModel.idSession == "" || oModel.idSession == null) {
                         const random = this.getRandom(1, 999999);
                         const dateWeb = this.getDateNow();
                         const serial = this.generateUniqSerial();
-                        getSessionId = dateWeb.concat("-",serial,"-",String(random));
+                        getSessionId = dateWeb.concat("-", serial, "-", String(random));
                         oModel.setProperty("/idSession", getSessionId);
-                    }else{
-                    getSessionId  = odataModel.idSession; 
+                    } else {
+                        getSessionId = odataModel.idSession;
+                    }
+                    return getSessionId;
                 }
-                return getSessionId;
-            }
-         }
+            },
+            enableButtonContab: function (single, action) {
+
+                let oViewModel = that.getView().getModel("aStatus");
+                if (single) {
+                    oViewModel.setProperty("/btnContab", action);
+                    oViewModel.setProperty("/btnCheck", action);
+                    oViewModel.setProperty("/btnEliminar", action);
+                }
+            },
 
         });
     });

@@ -8,11 +8,12 @@ sap.ui.define([
 	"sap/ui/model/FilterOperator",
 	"sap/ushell/ui5service/ShellUIService",
 	"ns/asa/zappuploadinvoices/model/formatter",
+	"sap/ui/core/library",
 ],
-function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterOperator,ShellUIService,formatter) {
+function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterOperator,ShellUIService,formatter,CoreLibrary) {
     "use strict";
     let that;
-
+	const SortOrder = CoreLibrary.SortOrder;
     return BaseController.extend("ns.asa.zappuploadinvoices.controller.DetailsLog", {
         
         onInit: function () {
@@ -20,6 +21,7 @@ function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterO
             // Set global fields
             that = this;
 			this._oFilter = [];
+			this._aOrderedFieldName = [];
             this._oView = this.getView();
             this._oLogTable = this._oView.byId("messageLogTab");
 
@@ -48,7 +50,15 @@ function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterO
 
         _onObjectMatched: function (oEvent) {
             this._addMockMessages();
+			this._initSort();
         },
+		_initSort: function(){
+			try {
+				const columnIdExcel = this.getView().byId("columnIdExcel");
+				this.getView().byId("messageLogTab").sort(columnIdExcel, SortOrder.Ascending);
+			} catch (error) {
+			}
+		},
         _addMockMessages: function () {
             this._bindTable();
         },
@@ -194,7 +204,28 @@ function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterO
 		},
 		_navBackViewDetailLog: function(){
 			this.onPressExit("RouteApp","DetailLog");
-		}
+		},
+		onSort: function(oEvent){
+
+			/*
+			const oView = this.getView();
+			const oTable = oView.byId("messageLogTab");
+			const columnIdExcel = oView.byId("columnIdExcel");
+
+			let oColumn = oEvent.getParameter("column");
+			let sOrder = oEvent.getParameter("sortOrder");
+			let sIsDesc = "";
+			if (sOrder === sap.ui.table.SortOrder.Descending) {
+				sIsDesc = "X";
+			}
+
+			if (sIsDesc == "X") {
+				oTable.sort(columnIdExcel, SortOrder.Descending, true);
+			}else{
+				oTable.sort(columnIdExcel, SortOrder.Ascending, true);
+			}*/
+		},
+
 
     });
 });

@@ -86,6 +86,8 @@ sap.ui.define([
                     this.updateModelButtons(true);  //Actualizar Buttons
                     this.onRefresh();
                     this.hideBusyText();
+                    fileUploader.clear();
+                    this.showMessageToast("msg6");
                 } else {
                     MessageBox.information(this.getResourceBundle("msg2"));
                 }
@@ -393,16 +395,39 @@ sap.ui.define([
             },
             updateDetail: async function()
             {
+              let resultsRespon = [];  
               try {
+                const oModelData  = this.getModel("detailReport").getData();
                 const oSmartTable = this.byId("detailList");
-                const dataTable  = this.getDataTable();
+                const dataTable   = this.getDataTable();
+
                 for (let index = 0; index < dataTable.length; index++) {
                     const element = dataTable[index];
                     const sPath = element.getBindingContext().sPath;
                     const currentObject = oSmartTable.getModel().getObject(sPath);
                     if (currentObject) {
-                        
+                        if (currentObject.CodeSend == "E") 
+                    {
+                        const filterResults = oModelData.DetailList.filter(x => x.IdExcel === currentObject.IdExcel);
+                        if (filterResults.length > 0 ) {
+                            //Actualizar
+                            try {
+                                for (let index = 0; index < filterResults.length; index++) {
+                                    let item = index + 1.
+                                    let dataResult = filterResults[index];
+                                    dataResult.DateWeb = this.getDateNow();
+                                    dataResult.Item    = parseInt(item);
+                                    dataResult.Action  = "UPDT"
+                                    dataResult.Supplierinvoiceuploaduuid = currentObject.Supplierinvoiceuploaduuid;
+                                    const result = await this.callOdataUploadItems(currentObject.Supplierinvoiceuploaduuid,dataResult);
+                                    resultsRespon.push(result);
+                                } 
+                            } catch (error) {
+                                console.error("Error Function.- UpdateDetail",error) 
+                            }
+                        }
                     }
+                  }
                 }
 
               } catch (error) {
@@ -528,8 +553,6 @@ sap.ui.define([
                 for (let index = 0; index < oDataItems.DetailList.length; index++) {
                     items++;
                     try {
-
-                        if (!update) {
                         oDataItems.DetailList[index].Item = index;
                         oDataItems.DetailList[index].Supplierinvoiceuploaduuid = idPostUpload;
                         oDataItems.DetailList[index].uuidAuxUpload = idPostUpload;
@@ -541,9 +564,6 @@ sap.ui.define([
                         }
                         const result = await this.callOdataUploadItems(idPostUpload, oDataItems.DetailList[index]);
                         resultsRespon.push(result);
-                        }else{
-
-                        }
 
                     } catch (error) {
                         console.error("Error Items - callOdataUpload", error);

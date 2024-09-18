@@ -12,7 +12,7 @@
 				        initialise="onSmartTableInitialise" useVariantManagement="false" height="100%"
                         header="{i18n>Table_Header}" demandPopin="true" entitySet="InvoiceList"
 						enableCopy="false"
-						requestAtLeastFields="Supplierinvoiceuploaduuid,CompanyCodeName,BusinessPartnerName,IdExcel,InvoiceStatusText,FiscalYear"
+						requestAtLeastFields="Supplierinvoiceuploaduuid,CompanyCodeName,BusinessPartnerName,IdExcel,InvoiceStatusText,FiscalYear,CodeSend"
 						ignoreFromPersonalisation="Supplierinvoiceuploaduuid,Delete_mc,Update_mc,to_ItemsList_oc,LastChangedAt,postActionUpload_ac,postActionOthers_ac,ActionCheckProcess,ActionContaProcess,CodeSend,Messagesend,SupplierInvoice,IdSession"
 						useTablePersonalisation="true">
          

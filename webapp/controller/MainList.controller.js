@@ -62,6 +62,9 @@ sap.ui.define([
                     ckProcess: {
                         data: []
                     },
+                    postProcess: {
+                        data: []
+                    },
                     log: {
                         data: []
                     },
@@ -592,10 +595,12 @@ sap.ui.define([
                     if (rptaConfirm) {
                         this.showBusyText("loadmsgPo");
                         const results = await this.checkItemsOdataRap(itemsSelected, 'PO', '2');
+                        this.setDataEjec(results, 'PO');
                         this.onRefreshSingle();
                         this.hideBusyText();
                         if (results.length > 0) {
-                            this.showMessageToast("msg5");    
+                            this.showMessageToast("msg5");
+                            await this.validateContabilizar();    
                         }else{
                             this.showMessageToast("msgc3");
                         }
@@ -614,8 +619,7 @@ sap.ui.define([
                 if (rptaConfirm) {
                     this.showBusyText("loadmsgCk");
                     const results = await this.checkItemsOdataRap(itemsSelected, 'CK', '2');
-                    console.log({ results });
-                    this.setDataChecked(results, 'CK');
+                    this.setDataEjec(results, 'CK');
                     this.onRefreshSingle();
                     this.updateModelButtons(false, true);  //Actualizar Buttons
                     this.hideBusyText();
@@ -646,12 +650,16 @@ sap.ui.define([
 
                         //Validar los datos al contabilizar
                         if (action == "PO") {
-                            if (odataBody.InvoiceStatus == "3" || odataBody.InvoiceStatus == "1") 
+                            if (odataBody.InvoiceStatus == "3" || odataBody.InvoiceStatus == "1" || odataBody.ContabFin == "X"
+                                || odataBody.InvoiceStatus == "4") 
                             {
                                 continue;
                             }
+                        }else if(action == "CK"){
+                            if (odataBody.InvoiceStatus == "2"){
+                                continue;
+                            }
                         }
-
                         let result = await this.callOdataActionRows(odataBody, action, keyPath, option);
                         resultProcess.push(result);
                     }
@@ -779,7 +787,7 @@ sap.ui.define([
             enableCheck: function (action) {
                 this.getView().byId("chkSendAsync").setEnabled(action);
             },
-            setDataChecked: function (results, action) {
+            setDataEjec: function (results, action) {
 
                 const oModelData = this.getModel("model");
                 let dataModel = oModelData.getData();
@@ -789,9 +797,11 @@ sap.ui.define([
                         if (dataModel.ckProcess.data) {
                             oModelData.setProperty("/ckProcess/data", results);
                         }
+                    }else if (dataModel.postProcess && action == "PO") {
+                        oModelData.setProperty("/postProcess/data", results);
                     }
                 } catch (error) {
-                    console.log("Error FUNCTION.- setDataChecked", error)
+                    console.log("Error FUNCTION.- setDataEjec", error)
                 }
             },
             deleteDataSession: async function () {
@@ -839,10 +849,19 @@ sap.ui.define([
                 });
             },
             clearModel: function () {
-                const oDataModel = this.getModel("model");
-                oDataModel.setProperty("/ckProcess/data", []);
-                oDataModel.setProperty("/table/data", []);
-                oDataModel.setProperty("/load/message", "");
+                const oDataModel    = this.getModel("model");
+                const odetailReport = this.getModel("detailReport");
+
+                if (oDataModel) {
+                    oDataModel.setProperty("/ckProcess/data", []);
+                    oDataModel.setProperty("/postProcess/data", []);
+                    oDataModel.setProperty("/table/data", []);
+                    oDataModel.setProperty("/load/message", "");
+                    oDataModel.setProperty("idSession", undefined);                    
+                }
+                if (odetailReport) {
+                    oDataModel.setProperty("/DetailList", []);
+                }
             },
             onClearAll: async function () {
                 const rptaConfirm = await this.confirmPopup("TitDialog4", "msg22");
@@ -876,6 +895,34 @@ sap.ui.define([
                     console.error("Error Function.- clearTableSingle", error);
                 }
             },
+            validateContabilizar: async function(){
+                let lv_mensaje = "";
+                let contok = 0;
+
+                let cadena1 = this.getResourceBundle().getText("msgc4");
+                let cadena2 = this.getResourceBundle().getText("msgc5");
+
+                try {
+                const itemsSelected = this.getItemsTableSelected();
+                if (itemsSelected.length > 0) {
+                const results = await this.getLogDetail(itemsSelected);
+                if (results.length > 0) {
+                    for (let index = 0; index < results.length; index++) {
+                        const element = results[index];
+                        if (element.AccountingDocument != "" && element.AccountingDocument != undefined) {
+                            contok++;
+                        }
+                    }
+                    if (contok > 0) {
+                        lv_mensaje = cadena1.concat(" :",contok," ",cadena2);
+                        MessageBox.success(lv_mensaje);
+                    }
+                }  
+            }     
+                } catch (error) {
+                    console.error("Error Function: validateContabilizar", error)
+                }
+            },
             onShowLogButtonPressed: async function () {
 
                 //Verificar Si se ha verificado
@@ -884,7 +931,6 @@ sap.ui.define([
                     this.onDisplayMessageBoxPress("I", "msgc2");
                     return
                 }
-
 
                 const itemsSelected = this.getItemsTableSelected();
                 if (!this.validCheck(itemsSelected)) return;
@@ -902,6 +948,7 @@ sap.ui.define([
             },
             getLogDetail: async function (itemsSelects) {
 
+                let results = [];
                 let idsLogs = [];
                 let parameters = { filters: [], urlParameters: { "$expand": "to_ItemsList" } };
 
@@ -921,6 +968,7 @@ sap.ui.define([
                         const resultOdata = await this.readInvoiceList(parameters);
                         if (resultOdata.results) {
                             if (resultOdata.results.length > 0) {
+                                results = resultOdata.results;
                                 this.getOwnerComponent().setModel(new JSONModel(resultOdata.results), "LogDetails");
                             }
                         }
@@ -928,6 +976,7 @@ sap.ui.define([
                 } catch (error) {
                     throw new Error(error);
                 }
+                return results;
             },
             readInvoiceList: async function (parameters) {
                 return new Promise(async (resolve, reject) => {

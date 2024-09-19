@@ -10,10 +10,10 @@
 						enableAutoColumnWidth="true" showDetailsButton="true" beforeExport="onBeforeExport"
 					    enableAutoBinding="true" class="sapFioriListReportTable" beforeRebindTable="onBeforeRebindViewTable"
 				        initialise="onSmartTableInitialise" useVariantManagement="false" height="100%"
-                        header="{i18n>Table_Header}" demandPopin="true" entitySet="InvoiceList"
+                        header="{i18n>Table_Header}" demandPopin="true" entitySet="InvoiceListMain"
 						enableCopy="false"
-						requestAtLeastFields="Supplierinvoiceuploaduuid,CompanyCodeName,BusinessPartnerName,IdExcel,InvoiceStatusText,FiscalYear,CodeSend"
-						ignoreFromPersonalisation="Supplierinvoiceuploaduuid,Delete_mc,Update_mc,to_ItemsList_oc,LastChangedAt,postActionUpload_ac,postActionOthers_ac,ActionCheckProcess,ActionContaProcess,CodeSend,Messagesend,SupplierInvoice,IdSession"
+						requestAtLeastFields="Supplierinvoiceuploaduuid,CompanyCodeName,BusinessPartnerName,IdExcel,InvoiceStatusText,FiscalYear,CodeSend,ContabFin"
+						ignoreFromPersonalisation="Supplierinvoiceuploaduuid,Delete_mc,Update_mc,to_ItemsList_oc,LastChangedAt,postActionUpload_ac,postActionOthers_ac,ActionCheckProcess,ActionContaProcess,CodeSend,Messagesend,SupplierInvoice,IdSession,ContabFin"
 						useTablePersonalisation="true">
          
          <smarttable:customData>
@@ -50,73 +50,73 @@
 						 fixedLayout="true" selectionChange="onRowSelectionChange" itemPress="handleItemPressed">
 
 				<columns>
-					<Column hAlign="Center" tooltip="{/#InvoiceList/IdExcel/@sap:label}" visible="true" width="5rem">
-							<Label text="{/#InvoiceList/IdExcel/@sap:label}"/>
+					<Column hAlign="Center" tooltip="{/#InvoiceListMain/IdExcel/@sap:label}" visible="true" width="5rem">
+							<Label text="{/#InvoiceListMain/IdExcel/@sap:label}"/>
 								<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "IdExcel", "leadingProperty": "IdExcel", "sortProperty": "IdExcel", "filterProperty": "IdExcel",  "columnIndex": "1"\}'/>
 								</customData>
 					</Column>
 
-					<Column hAlign="Center" tooltip="{/#InvoiceList/Reference/@sap:label}" visible="true" width="9rem">
-							<Label text="{/#InvoiceList/Reference/@sap:label}"/>
+					<Column hAlign="Center" tooltip="{/#InvoiceListMain/Reference/@sap:label}" visible="true" width="9rem">
+							<Label text="{/#InvoiceListMain/Reference/@sap:label}"/>
 								<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "Reference", "leadingProperty": "Reference", "sortProperty": "Reference", "filterProperty": "Reference",  "columnIndex": "2"\}'/>
 								</customData>
 					</Column>
-					<Column hAlign="Begin" tooltip="{/#InvoiceList/InvoiceStatus/@sap:label}" visible="true" width="16rem">
-								<Label  text="{/#InvoiceList/InvoiceStatus/@sap:label}"/>
+					<Column hAlign="Begin" tooltip="{/#InvoiceListMain/InvoiceStatus/@sap:label}" visible="true" width="16rem">
+								<Label  text="{/#InvoiceListMain/InvoiceStatus/@sap:label}"/>
 								<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "InvoiceStatus", "leadingProperty": "InvoiceStatus", "sortProperty": "InvoiceStatus", "filterProperty": "InvoiceStatus", "columnIndex": "3"\}'/>
 								</customData>
 					</Column>
-					<Column hAlign="Begin" tooltip="{/#InvoiceList/CompanyCode/@sap:label}" visible="true" width="12rem">
-								<Label text="{/#InvoiceList/CompanyCode/@sap:label}"/>
+					<Column hAlign="Begin" tooltip="{/#InvoiceListMain/CompanyCode/@sap:label}" visible="true" width="12rem">
+								<Label text="{/#InvoiceListMain/CompanyCode/@sap:label}"/>
 								<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "CompanyCode", "leadingProperty": "CompanyCode", "sortProperty": "CompanyCode", "filterProperty": "CompanyCode", "columnIndex": "4"\}'/>
 								</customData>
 					</Column>
 
-					<Column hAlign="Begin" tooltip="{/#InvoiceList/InvoicingParty/@sap:label}" visible="true" width="15rem">
-								<Label text="{/#InvoiceList/InvoicingParty/@sap:label}"/>
+					<Column hAlign="Begin" tooltip="{/#InvoiceListMain/InvoicingParty/@sap:label}" visible="true" width="15rem">
+								<Label text="{/#InvoiceListMain/InvoicingParty/@sap:label}"/>
 								<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "InvoicingParty", "leadingProperty": "InvoicingParty", "sortProperty": "InvoicingParty", "filterProperty": "InvoicingParty", "columnIndex": "5"\}'/>
 								</customData>
 					</Column>
-					<Column hAlign="Center"  tooltip="{/#InvoiceList/PostingDate/@sap:label}" width="9.5rem"
+					<Column hAlign="Center"  tooltip="{/#InvoiceListMain/PostingDate/@sap:label}" width="9.5rem"
 								visible="true">
-								<Label text="{/#InvoiceList/PostingDate/@sap:label}"/>
+								<Label text="{/#InvoiceListMain/PostingDate/@sap:label}"/>
 								<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "PostingDate", "leadingProperty": "PostingDate", "sortProperty": "PostingDate", "filterProperty": "PostingDate", "columnIndex": "6", "type": "date"\}'/>
 								</customData>
 					</Column>
-							<Column hAlign="Center"  tooltip="{/#InvoiceList/DocumentDate/@sap:label}" width="7rem"
+							<Column hAlign="Center"  tooltip="{/#InvoiceListMain/DocumentDate/@sap:label}" width="7rem"
 								visible="true">
-								<Label text="{/#InvoiceList/DocumentDate/@sap:label}"/>
+								<Label text="{/#InvoiceListMain/DocumentDate/@sap:label}"/>
 								<customData>
 									<core:CustomData key="p13nData"
 										value='\{"columnKey": "DocumentDate", "leadingProperty": "DocumentDate", "sortProperty": "DocumentDate", "filterProperty": "DocumentDate", "columnIndex": "7", "type": "date"\}'/>
 								</customData>
 							</Column>
-							<Column hAlign="Center" tooltip="{/#InvoiceList/Currency/@sap:label}" visible="true" width="5rem">
-								<Label text="{/#InvoiceList/Currency/@sap:label}"/>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/Currency/@sap:label}" visible="true" width="5rem">
+								<Label text="{/#InvoiceListMain/Currency/@sap:label}"/>
 									<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "Currency", "leadingProperty": "Currency", "sortProperty": "Currency", "filterProperty": "Currency", "columnIndex": "8"\}'/>
 							 	</customData>
 							</Column>
-							<Column hAlign="Center" tooltip="{/#InvoiceList/Amount/@sap:label}" visible="true" width="10rem">
-								<Label text="{/#InvoiceList/Amount/@sap:label}"/>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/Amount/@sap:label}" visible="true" width="10rem">
+								<Label text="{/#InvoiceListMain/Amount/@sap:label}"/>
 									<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "Amount", "leadingProperty": "Amount", "sortProperty": "Amount", "filterProperty": "Amount", "columnIndex": "9"\}'/>
 							 	</customData>
 							</Column>
-							<Column hAlign="Center" tooltip="{/#InvoiceList/AccountingDocument/@sap:label}" visible="true" width="11rem">
-								<Label text="{/#InvoiceList/AccountingDocument/@sap:label}"/>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/AccountingDocument/@sap:label}" visible="true" width="11rem">
+								<Label text="{/#InvoiceListMain/AccountingDocument/@sap:label}"/>
 									<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "AccountingDocument", "leadingProperty": "AccountingDocument", "sortProperty": "AccountingDocument", "filterProperty": "AccountingDocument", "columnIndex": "10"\}'/>
 							 	</customData>
 							</Column>
-							<Column hAlign="Center" tooltip="{/#InvoiceList/CreatedBy/@sap:label}" visible="false" width="11rem">
-								<Label text="{/#InvoiceList/CreatedBy/@sap:label}"/>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/CreatedBy/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/CreatedBy/@sap:label}"/>
 									<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "CreatedBy", "leadingProperty": "CreatedBy", "sortProperty": "CreatedBy", "filterProperty": "CreatedBy", "columnIndex": "11"\}'/>
 							 	</customData>

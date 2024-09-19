@@ -225,6 +225,9 @@ function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterO
 				oTable.sort(columnIdExcel, SortOrder.Ascending, true);
 			}*/
 		},
+		onFilter: function(){
+			
+		}
 
 
     });

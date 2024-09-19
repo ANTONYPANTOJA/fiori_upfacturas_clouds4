@@ -31,7 +31,8 @@
                     rowActionCount="1"
                     rowSelectionChange="onLogRowSelect"
                     enableCustomFilter="false"
-                    sort="onSort">
+                    sort="onSort"
+                    filter="onFilter">
 
                     <t:extension>
                         <Toolbar id="messageLogTabToolbar">
@@ -77,7 +78,7 @@
                         </Toolbar>
                     </t:extension>
                     <t:columns>
-                         <t:Column id="columnIdExcel" sortProperty="IdExcel" filterProperty="IdExcel" width="5rem">
+                         <t:Column id="columnIdExcel" sortProperty="IdExcel" width="5rem" >
 								<Label id="columnLogIdLabel" text="{i18n>columnIdText}" tooltip="{i18n>columnIdText}" vAlign="Middle"/>
 								<t:template>
 									<Text id="columnLogIdText" text="{ path: 'LogDetails>IdExcel'}"/>

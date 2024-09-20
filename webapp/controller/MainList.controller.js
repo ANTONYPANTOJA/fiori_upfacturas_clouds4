@@ -85,7 +85,7 @@ sap.ui.define([
                 if (data && data.length > 0) {
                     this.showBusyText("loadmsgUp");
                     await this.setDataTable(data);  //Armar la Estructura del Excel
-                    await this.onUploadPostList();  //Almacenar los registros POST - UPLOAD
+                    let resultsProcess = await this.onUploadPostList();  //Almacenar los registros POST - UPLOAD
                     this.updateModelButtons(true);  //Actualizar Buttons
                     this.onRefresh();
                     this.hideBusyText();
@@ -378,6 +378,7 @@ sap.ui.define([
                 return await this.callOdataUpload();
             },
             callOdataUpload: async function () {
+                let results = [];
                 let bodyInit = {};
                 return new Promise(async (resolve, reject) => {
                     //Verificar si es Update o Create
@@ -385,14 +386,14 @@ sap.ui.define([
                     if (cargaInit) {
                         let idPostUpload = await this.createPost(bodyInit);
                         if (idPostUpload) {
-                            await this.processDetailUpload(idPostUpload);
-                            resolve(true)
+                            let resultsProcess = await this.processDetailUpload(idPostUpload);
+                            resolve(resultsProcess)
                         } else {
-                            resolve(false)
+                            resolve([])
                         }
                     } else {
-                        await this.updateDetail(true);
-                        resolve(true)
+                        let resultsAux = await this.updateDetail(true);
+                        resolve(resultsAux)
                     }
                 });
             },
@@ -408,7 +409,7 @@ sap.ui.define([
                         const sPath = element.getBindingContext().sPath;
                         const currentObject = oSmartTable.getModel().getObject(sPath);
                         if (currentObject) {
-                            if (currentObject.CodeSend == "E") {
+                            if (currentObject.CodeSend == "E" || currentObject.InvoiceStatus == "3" || currentObject.InvoiceStatus == "0" ) {
                                 const filterResults = oModelData.DetailList.filter(x => x.IdExcel === currentObject.IdExcel);
                                 if (filterResults.length > 0) {
                                     //Actualizar
@@ -430,11 +431,10 @@ sap.ui.define([
                             }
                         }
                     }
-
+                    return resultsRespon;
                 } catch (error) {
                     console.error("Error Function.- updateDetail", error)
                 }
-
             },
             getDataTable: function () {
                 let tableId = this.byId("detailList");
@@ -511,7 +511,6 @@ sap.ui.define([
                 });
 
             },
-
             callOdataUploadItems: async function (key, body) {
                 return new Promise(async (resolve, reject) => {
 
@@ -569,7 +568,7 @@ sap.ui.define([
                         console.error("Error Items - callOdataUpload", error);
                     }
                 }
-                console.log(resultsRespon)
+                return resultsRespon;
             },
 
             updateModelButtons: function (action1, action2) {

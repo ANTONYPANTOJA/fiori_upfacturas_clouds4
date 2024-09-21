@@ -9,8 +9,12 @@ sap.ui.define([
 	"sap/ushell/ui5service/ShellUIService",
 	"ns/asa/zappuploadinvoices/model/formatter",
 	"sap/ui/core/library",
+	"sap/ui/comp/navpopover/SemanticObjectController",
+	"sap/ui/comp/navpopover/NavigationPopoverHandler",
 ],
-function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterOperator,ShellUIService,formatter,CoreLibrary) {
+function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterOperator,ShellUIService,formatter,CoreLibrary,
+		  SemanticObjectController,NavigationPopoverHandler)
+ {
     "use strict";
     let that;
 	const SortOrder = CoreLibrary.SortOrder;
@@ -227,8 +231,22 @@ function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterO
 		},
 		onFilter: function(){
 			
+		},
+		onLinkPress: function(oEvent){
+
+			this.onNavTargetsObtained(oEvent);
+			
+			/*
+			let object = oEvent.getSource();
+			if (object) {
+				let oLinkHandler = new NavigationPopoverHandler({
+					semanticObject: 'AccountingDocument',
+					fieldName: '',
+					control: oEvent.getSource(),
+					enableAvailableActionsPersonalization: false
+				});
+				oLinkHandler.openPopover();
+			}*/
 		}
-
-
     });
 });

@@ -33,6 +33,7 @@ function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterO
             this._MessageManager.registerObject(this._oView.byId("messageHandlingPage"), true);
             this._oView.setModel(this._MessageManager.getMessageModel(), "message");
             //Estilos
+			
 			this._oView.byId("sbiError-button").addStyleClass("sapMMsgViewBtnError");
 			this._oView.byId("sbiWarning-button").addStyleClass("sapMMsgViewBtnWarning");
 			this._oView.byId("sbiSuccess-button").addStyleClass("sapMMsgViewBtnSuccess");
@@ -53,8 +54,8 @@ function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterO
 		formatter:formatter,
 
         _onObjectMatched: function (oEvent) {
-            this._addMockMessages();
-			this._initSort();
+            //this._addMockMessages();
+			//this._initSort();
         },
 		_initSort: function(){
 			try {

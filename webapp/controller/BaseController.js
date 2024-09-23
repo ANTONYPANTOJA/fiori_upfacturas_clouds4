@@ -310,12 +310,13 @@ sap.ui.define([
 						oNavArguments.params.FiscalYear = oEventParameters.semanticAttributes.FiscalYear;
 
                         //Obtener los datos de la Fila Seleccionada +@INSERT
-                        let odataRowSmart =  this.getOwnerComponent().getModel("rowSmartLink").getData();
+                        let odataRowSmart =  this.getOwnerComponent().getModel("rowSmartLink");
                         if (odataRowSmart) {
+                            let dataRowSmart = odataRowSmart.getData();
                             if (!oNavArguments.params.AccountingDocument) {
-                                oNavArguments.params.AccountingDocument = odataRowSmart.AccountingDocument; 
-                                oNavArguments.params.CompanyCode        = odataRowSmart.CompanyCode;
-                                oNavArguments.params.FiscalYear         = odataRowSmart.FiscalYear; 
+                                oNavArguments.params.AccountingDocument = dataRowSmart.AccountingDocument; 
+                                oNavArguments.params.CompanyCode        = dataRowSmart.CompanyCode;
+                                oNavArguments.params.FiscalYear         = dataRowSmart.FiscalYear; 
                             }
                         }
 

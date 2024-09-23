@@ -6,7 +6,7 @@
 						  xmlns:t="sap.ui.table">
 
 
-<smarttable:SmartTable tableType="ResponsiveTable" entitySet="InvoiceListMain" useVariantManagement="false"
+<smarttable:SmartTable tableType="ResponsiveTable" entitySet="InvoiceList" useVariantManagement="false"
 						useTablePersonalisation="false" showRowCount="false" enableExport="false" enableAutoColumnWidth="true"
 						requestAtLeastFields="Supplierinvoiceuploaduuid,CompanyCodeName,FiscalYear,CodeSend,LastChangedAt" enableCopy="false">
 
@@ -18,7 +18,7 @@
 						navigationTargetsObtained="onNavTargetsObtained" navigate="onPopoverLinkPressed"
 						ignoredFields="" />
 		</smarttable:semanticObjectController>
-		<t:Table id="messageLogTab" rows="{/InvoiceListMain}">
+		<t:Table id="messageLogTab">
                     <t:extension>
                         <Toolbar id="messageLogTabToolbar">
                             <Title
@@ -66,41 +66,39 @@
                          <t:Column id="columnIdExcel" sortProperty="IdExcel" width="5rem" hAlign="Center">
 								<Label id="columnLogIdLabel" text="{i18n>columnIdText}" tooltip="{i18n>columnIdText}" vAlign="Middle"/>
 								<t:template>
-									<Text id="columnLogIdText" text="{IdExcel}"/>
-									<!-- <Text id="columnLogIdText" text="{ path: 'LogDetails>IdExcel'}"/> -->
+									<!-- <Text id="columnLogIdText" text="{IdExcel}"/> -->
+									 <Text id="columnLogIdText" text="{ path: 'LogDetails>IdExcel'}"/> 
 								</t:template>
 						</t:Column>
 
                         <t:Column id="columnLogStatus" width="5rem" hAlign="Center">
                             <Label id="columnLogStatusLabel" text="{i18n>columnLogStatus}" tooltip="{i18n>columnLogStatus}" vAlign="Middle"/>
                             <t:template>
-							<ObjectStatus id="columnLogStatusObjStatus" icon="{ path: 'CodeSend', formatter: '.getLogMessageIcon'}" state="{ path: 'CodeSend', formatter: '.getStatusState'}"/>
-							<!--					  
-									<ObjectStatus id="columnLogStatusObjStatus" icon="{ path: 'LogDetails>CodeSend', formatter: '.getLogMessageIcon'}"
-										          state="{ path: 'LogDetails>CodeSend', formatter: '.getStatusState'}"/> -->
+							<!-- <ObjectStatus id="columnLogStatusObjStatus" icon="{ path: 'CodeSend', formatter: '.getLogMessageIcon'}" state="{ path: 'CodeSend', formatter: '.getStatusState'}"/> -->				  
+								 <ObjectStatus id="columnLogStatusObjStatus" icon="{ path: 'LogDetails>CodeSend', formatter: '.getLogMessageIcon'}" state="{ path: 'LogDetails>CodeSend', formatter: '.getStatusState'}"/> 
 							</t:template>
                         </t:Column>
                         <t:Column id="columnLogMessage" >
 								<Label id="columnLogMessageLabel" text="{i18n>columnLogText}" tooltip="{i18n>columnLogText}"/>
 								<t:template>
-									<Text id="columnLogMessageText" text="{Messagesend}"/>
-									<!-- <Text id="columnLogMessageText" text="{ path: 'LogDetails>Messagesend'}"/> -->
+									<!-- <Text id="columnLogMessageText" text="{Messagesend}"/>-->
+									<Text id="columnLogMessageText" text="{ path: 'LogDetails>Messagesend'}"/>
 								</t:template>
 						</t:Column>
 
                          <t:Column id="columAccountingDocument" width="12rem" hAlign="Center">
                             	<Label id="columnAccountingDocument" text="{i18n>AccountingDocument}" tooltip="{i18n>AccountingDocument}"/>
 								<t:template>
-								  <smartlink:SmartLink id="smartLinDocumentLog" semanticObject="AccountingDocument" text="{AccountingDocument}"/>
-								  <!--<smartlink:SmartLink id="smartLinDocumentLog" semanticObject="AccountingDocument" text="{LogDetails>AccountingDocument}"/> -->
+								  <!-- <smartlink:SmartLink id="smartLinDocumentLog" semanticObject="AccountingDocument" text="{AccountingDocument}"/> -->
+								  <smartlink:SmartLink id="smartLinDocumentLog" semanticObject="AccountingDocument" text="{LogDetails>AccountingDocument}" press="onLinkPress" />
 								</t:template>
                          </t:Column>
 
                         <t:Column id="columnLogDate" width="14rem" hAlign="Center">
 								<Label id="columnLogDateLabel" text="{i18n>columnLogDate}" tooltip="{i18n>columnLogDate}"/>
 								<t:template>
-									<Text id="columnLogDateText" text="{ path: 'LastChangedAt', type: 'sap.ui.model.type.DateTime', formatOptions: { style: 'medium' }}"/>
-									<!-- <Text id="columnLogDateText" text="{ path: 'LogDetails>LastChangedAt', type: 'sap.ui.model.type.DateTime', formatOptions: { style: 'medium' }}"/> -->
+									<!-- <Text id="columnLogDateText" text="{ path: 'LastChangedAt', type: 'sap.ui.model.type.DateTime', formatOptions: { style: 'medium' }}"/>-->
+									<Text id="columnLogDateText" text="{ path: 'LogDetails>LastChangedAt', type: 'sap.ui.model.type.DateTime', formatOptions: { style: 'medium' }}"/>
 								</t:template>
 						</t:Column>
                     </t:columns>					

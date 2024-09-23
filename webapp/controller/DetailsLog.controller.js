@@ -11,9 +11,10 @@ sap.ui.define([
 	"sap/ui/core/library",
 	"sap/ui/comp/navpopover/SemanticObjectController",
 	"sap/ui/comp/navpopover/NavigationPopoverHandler",
+	"sap/ui/model/json/JSONModel",
 ],
 function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterOperator,ShellUIService,formatter,CoreLibrary,
-		  SemanticObjectController,NavigationPopoverHandler)
+		  SemanticObjectController,NavigationPopoverHandler,JSONModel)
  {
     "use strict";
     let that;
@@ -54,9 +55,25 @@ function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterO
 		formatter:formatter,
 
         _onObjectMatched: function (oEvent) {
-            //this._addMockMessages();
-			//this._initSort();
+              this._addMockMessages();
+			  this._initSort();
+			//this.readBindElement();
         },
+		readBindElement: function(){
+			//Cadena /LogInvoiceMain(sessionInput='1212')/Set
+			let odata =  this.getOwnerComponent().getModel("LogDetails").getData();
+
+			try {
+				let oView = this.getView();
+				if (odata.length > 0) {
+					let idsession = odata[0].IdSession;
+					let path = "/LogInvoiceMain(sessionInput='" + idsession + "')/Set"; 
+					oView.bindElement(path);
+				}
+			} catch (error) {
+				console.error("Error Function readBindElement",error);
+			}
+		},
 		_initSort: function(){
 			try {
 				const columnIdExcel = this.getView().byId("columnIdExcel");
@@ -235,19 +252,28 @@ function (Controller,BaseController,Messaging,Message,MessageType,Filter,FilterO
 		},
 		onLinkPress: function(oEvent){
 
-			this.onNavTargetsObtained(oEvent);
-			
-			/*
-			let object = oEvent.getSource();
-			if (object) {
-				let oLinkHandler = new NavigationPopoverHandler({
-					semanticObject: 'AccountingDocument',
-					fieldName: '',
-					control: oEvent.getSource(),
-					enableAvailableActionsPersonalization: false
-				});
-				oLinkHandler.openPopover();
-			}*/
+			this.clearModelSingleRowSmart();
+
+			let oData = {};
+			let oSource  = oEvent.getSource();
+			let oParent  = oSource.getParent();
+			let oContext = oParent.getBindingContext("LogDetails");
+			if (oContext) {
+				let objectOdata = oContext.getObject();
+				if (objectOdata) {
+					oData.CompanyCode  		 = objectOdata.CompanyCode;
+					oData.FiscalYear   		 = objectOdata.FiscalYear;
+					oData.AccountingDocument = objectOdata.AccountingDocument;
+					this.getOwnerComponent().setModel(new JSONModel(oData), "rowSmartLink"); 
+				}
+			}
+		},
+		clearModelSingleRowSmart: function(){
+			const modelRowSmartLink = this.getOwnerComponent().getModel("rowSmartLink");
+			if (modelRowSmartLink) {
+				modelRowSmartLink.setData({});
+				modelRowSmartLink.refresh();
+			}
 		}
     });
 });

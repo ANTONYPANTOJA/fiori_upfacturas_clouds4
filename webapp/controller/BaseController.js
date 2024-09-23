@@ -231,6 +231,9 @@ sap.ui.define([
                         modelDetailLog.refresh();
                         modelDetailLog.destroy();
                     }
+                  
+                    this.clearModelSingleRowSmart();
+
                 } catch (error) {
                     console.error("Error Function: clearDetailsLog ",error) 
                 }
@@ -306,7 +309,17 @@ sap.ui.define([
 						oNavArguments.params.CompanyCode = oEventParameters.semanticAttributes.CompanyCode;
 						oNavArguments.params.FiscalYear = oEventParameters.semanticAttributes.FiscalYear;
 
-                        						// construct new link to journal entry header
+                        //Obtener los datos de la Fila Seleccionada +@INSERT
+                        let odataRowSmart =  this.getOwnerComponent().getModel("rowSmartLink").getData();
+                        if (odataRowSmart) {
+                            if (!oNavArguments.params.AccountingDocument) {
+                                oNavArguments.params.AccountingDocument = odataRowSmart.AccountingDocument; 
+                                oNavArguments.params.CompanyCode        = odataRowSmart.CompanyCode;
+                                oNavArguments.params.FiscalYear         = odataRowSmart.FiscalYear; 
+                            }
+                        }
+
+                        // construct new link to journal entry header
 						let sExternalHash = this.oCrossApplicationNavigation.hrefForExternal(oNavArguments,this.getOwnerComponent());
 						let sInternalHash = this.externalToInternalHash(sExternalHash);
 						let sKey = this.sPrefix + ".customLink.manageJournalEntryHeader";

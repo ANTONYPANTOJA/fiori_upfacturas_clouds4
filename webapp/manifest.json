@@ -34,6 +34,7 @@
                     "semanticObject": "Invoices",
                     "action": "Upload",
                     "title": "{{flpTitle}}",
+                    "icon": "sap-icon://customer-financial-fact-sheet",
                     "signature": {
                         "parameters": {},
                         "additionalParameters": "allowed"

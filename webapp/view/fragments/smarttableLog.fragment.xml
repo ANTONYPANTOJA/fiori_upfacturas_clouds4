@@ -90,8 +90,9 @@
                             	<Label id="columnAccountingDocument" text="{i18n>AccountingDocument}" tooltip="{i18n>AccountingDocument}"/>
 								<t:template>
 								  <!-- <smartlink:SmartLink id="smartLinDocumentLog" semanticObject="AccountingDocument" text="{AccountingDocument}"/> -->
-								  <smartlink:SmartLink id="smartLinDocumentLog" semanticObject="AccountingDocument" text="{LogDetails>AccountingDocument}" press="onLinkPress" />
-								</t:template>
+								  <!-- <smartlink:SmartLink id="smartLinDocumentLog" semanticObject="AccountingDocument" text="{LogDetails>AccountingDocument}" press="onLinkPress" /> -->
+                                  <Link text="{LogDetails>AccountingDocument}" textAlign="Center" press="onLinkPressAction" target="_blank"></Link>
+                                </t:template>
                          </t:Column>
 
                         <t:Column id="columnLogDate" width="14rem" hAlign="Center">

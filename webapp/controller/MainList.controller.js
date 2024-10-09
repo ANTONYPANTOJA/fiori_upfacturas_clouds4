@@ -589,20 +589,25 @@ sap.ui.define([
                 const itemsSelected = this.getItemsTableSelected();
                 if (!this.validCheck(itemsSelected)) return;
 
+                async function delay(ms) {
+                    return new Promise(resolve => setTimeout(resolve, ms));
+                }
+
                 try {
                     const rptaConfirm = await this.confirmPopup("TitDialog3", "msg22");
                     if (rptaConfirm) {
                         this.showBusyText("loadmsgPo");
                         const results = await this.checkItemsOdataRap(itemsSelected, 'PO', '2');
                         this.setDataEjec(results, 'PO');
-                        this.onRefreshSingle();
                         this.hideBusyText();
                         if (results.length > 0) {
-                            this.showMessageToast("msg5");
+                            await delay(2000);
                             await this.validateContabilizar();    
                         }else{
                             this.showMessageToast("msgc3");
                         }
+                        this.onRefreshSingle();
+                        this.showMessageToast("msg5");
                     }
                 } catch (error) {
                     console.log("Error Funcion .- onPostPressed ", error);
@@ -927,24 +932,72 @@ sap.ui.define([
                 //Verificar Si se ha verificado
                 let odataCheck = this.getModel("model").getProperty("/ckProcess/data");
                 if (odataCheck.length == 0) {
-                    this.onDisplayMessageBoxPress("I", "msgc2");
+                    this.onDisplayMessageBoxPress("I", "msgc6");
                     return
                 }
 
-                const itemsSelected = this.getItemsTableSelected();
-                if (!this.validCheck(itemsSelected)) return;
+
+                //const itemsSelected = this.getItemsTableSelected();
+                //if (!this.validCheck(itemsSelected)) return;
 
                 try {
-                    this.showBusyText("mostlog");
-                    await this.getLogDetail(itemsSelected);
-                    this.hideBusyText();
-                    this.getRouter().navTo("DetailLog");
+                    //this.showBusyText("mostlog");
+                    //await this.getLogDetail(itemsSelected);
+                    const results = await this.getLogDetail2();
+                    if (results.length > 0) {
+                        this.hideBusyText();
+                        this.getRouter().navTo("DetailLog");
+                    }else{
+                        this.onDisplayMessageBoxPress("I", "msgc6");
+                        this.hideBusyText();
+                    }
                 } catch (error) {
                     console.error("Error Function: onShowLogButtonPressed", error)
                     this.onDisplayMessageBoxPress("E", "msgc1");
                     this.hideBusyText();
                 }
             },
+            getLogDetail2: async function () {
+                let results = [];
+                let idsLogs = [];
+                let parameters = { filters: [], urlParameters: { "$expand": "to_ItemsList" } };
+
+                this.showBusyText("mostlog");
+
+                const odataCheck = this.getModel("model").getProperty("/ckProcess/data");
+                const odataPost  = this.getModel("model").getProperty("/postProcess/data");
+                
+                //Obtener lso Ids
+                for (let index = 0; index < odataCheck.length; index++) {
+                    const element = odataCheck[index]
+                    idsLogs.push(element.supplierinvoiceuploaduuid);
+                }
+
+                for (let index = 0; index < odataPost.length; index++) {
+                    const element = odataPost[index]
+                    idsLogs.push(element.supplierinvoiceuploaduuid);
+                }
+                
+                try {
+                    if (idsLogs.length > 0) {
+                        for (let index = 0; index < idsLogs.length; index++) {
+                            const element = idsLogs[index];
+                            parameters.filters.push(new Filter("Supplierinvoiceuploaduuid", "EQ", element))
+                        }
+                        const resultOdata = await this.readInvoiceList(parameters);
+                        if (resultOdata.results) {
+                            if (resultOdata.results.length > 0) {
+                                results = resultOdata.results;
+                                this.getOwnerComponent().setModel(new JSONModel(resultOdata.results), "LogDetails");
+                            }
+                        }
+                    }
+                } catch (error) {
+                    throw new Error(error);
+                }
+                return results;
+            },
+
             getLogDetail: async function (itemsSelects) {
 
                 let results = [];

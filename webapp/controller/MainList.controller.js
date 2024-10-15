@@ -630,6 +630,7 @@ sap.ui.define([
                     this.enableButtonContab(true, true);
                     this.enableCheck(true);
                     this.showMessageToast("msg5");
+                    this.onRefreshSingle(); //+add
                 }
             },
             validCheck: function (itemsSelected) {

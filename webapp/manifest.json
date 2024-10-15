@@ -20,12 +20,23 @@
                 "uri": "/sap/opu/odata/sap/ZUI_RAP_INVOICELIST_SBOD2/",
                 "type": "OData",
                 "settings": {
+                    "annotations": [
+                        "mainService_Annotation"
+                    ],
+                    "localUri": "localService/metadata.xml",
                     "odataVersion": "2.0"
                 }
             },
             "DetailReport": {
                 "uri": "model/json/templateReportList.json",
                 "type": "JSON"
+            },
+            "mainService_Annotation": {
+                "uri": "/destinations/DATEC_S4_CLOUD_DEV/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Annotations(TechnicalName='ZUI_RAP_INVOICELIST_SBOD2_VAN',Version='0001')/$value/",
+                "type": "ODataAnnotation",
+                "settings": {
+                    "localUri": "localService/mainService_Annotation.xml"
+                }
             }
         },
         "crossNavigation": {
@@ -101,11 +112,11 @@
             }
         },
         "resources": {
-            "js": [{
-                "uri": "libs/xlsxfullmin.js"
-            }
+            "js": [
+                {
+                    "uri": "libs/xlsxfullmin.js"
+                }
             ],
-
             "css": [
                 {
                     "uri": "css/style.css"
@@ -123,8 +134,8 @@
                 "clearControlAggregation": false,
                 "transition": "slide",
                 "bypassed": {
-					"target": "notFound"
-				}
+                    "target": "notFound"
+                }
             },
             "routes": [
                 {
@@ -148,14 +159,14 @@
                     "viewId": "MainList",
                     "viewName": "MainList"
                 },
-                "LogDetails":{
+                "LogDetails": {
                     "viewType": "XML",
                     "transition": "slide",
                     "viewName": "DetailsLog",
                     "viewId": "DetailsLog",
                     "viewLevel": 2
                 },
-                "notFound":{
+                "notFound": {
                     "viewType": "XML",
                     "transition": "show",
                     "viewName": "NotFound",

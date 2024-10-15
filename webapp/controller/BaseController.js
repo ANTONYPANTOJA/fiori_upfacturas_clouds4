@@ -357,7 +357,33 @@ sap.ui.define([
                     const r = Math.floor(Math.random() * 16);  
                     return r.toString(16);  
               });  
+            },
+            messageShowUpload: function(idMsg)
+            {
+                let oboundle = this.getResourceBundle();
+                let id;
+                let contIds = 0;
+                let oDataItems = this.getModel("detailReport").getData();
+                if (oDataItems.DetailList) {
+                    const data = oDataItems.DetailList;
+                    for (let index = 0; index < data.length; index++) {
+                        const element = data[index];
+                        if (contIds === 0) {
+                            id = element.IdExcel;
+                            contIds++;
+                        }else{
+                            if (id != element.IdExcel) {
+                                contIds++;
+                            }
+                            id = element.IdExcel;
+                        }
+                    }
+                    if (contIds > 1) {
+                        MessageToast.show(oboundle.getText("msg7",[contIds]));
+                    }else{
+                        MessageToast.show(oboundle.getText("msg8",[contIds]));
+                    }
+                }
             }
-
         });
     });

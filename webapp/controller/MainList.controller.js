@@ -90,7 +90,7 @@ sap.ui.define([
                     this.onRefresh();
                     this.hideBusyText();
                     fileUploader.clear();
-                    this.showMessageToast("msg6");
+                    this.messageShowUpload();
                 } else {
                     MessageBox.information(this.getResourceBundle("msg2"));
                 }

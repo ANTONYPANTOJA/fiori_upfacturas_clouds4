@@ -39,10 +39,11 @@
 							<Button id="btnCheck" tooltip="{i18n>Check}" text="{i18n>Check}" press="onCheckPressed" type="Ghost" enabled="{aStatus>/btnCheck}" icon="sap-icon://accounting-document-verification"/>
 							<Button id="btnPost" tooltip="{i18n>Post}" text="{i18n>Post}" press="onPostPressed" type="Ghost" enabled="{aStatus>/btnContab}" icon="sap-icon://paper-plane" />
 							<Button id="btnDelete" tooltip="{i18n>Delete}" type="Ghost" text="{i18n>Delete}" press="onDeletePress" enabled="{aStatus>/btnEliminar}" icon="sap-icon://delete" />
+							<Button id="btnClearAll" icon="sap-icon://document" tooltip="{i18n>BtnClearAll}" press="onClearAll" type="Ghost" text="{i18n>Limpiar}"/>
 							<Button id="btnEdit" tooltip="{i18n>Edit}" type="Ghost" text="{i18n>Edit}" press="onEditPress" visible="false" enabled="{aStatus>/btnFijar}"/>
 							<Button id="btnShowLog" tooltip="{i18n>ShowLog}" type="Ghost" text="{i18n>ShowLog}" press="onShowLogButtonPressed" enabled="{aStatus>/btnLog}" icon="sap-icon://message-popup"/>
 							<Button id="btnRefresh" icon="sap-icon://synchronize" tooltip="{i18n>BtnRefresh}" press="onRefresh"/>
-							<Button id="btnClearAll" icon="sap-icon://document" tooltip="{i18n>BtnClearAll}" press="onClearAll"/>
+							
 						</Toolbar>
 		</smarttable:customToolbar>
 
@@ -123,7 +124,7 @@
 							</Column>
 				</columns>
                <items>
-               	<ColumnListItem type="Navigation" highlight="{parts: [{path:'InvoiceStatus'},{ path:'CodeSend'}], formatter:'formatter.DraftStatusStateFormat'}">
+               	<ColumnListItem type="Navigation" highlight="{parts: [{path:'InvoiceStatus'},{ path:'CodeSend'}], formatter:'formatter.DraftStatusStateFormat'}" press="onNavigation">
 								<cells>
 									<Text wrapping="false" text="{IdExcel}"/>
 									<Text wrapping="false" text="{Reference}"/>

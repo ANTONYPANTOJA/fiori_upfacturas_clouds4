@@ -238,6 +238,18 @@ sap.ui.define([
                     console.error("Error Function: clearDetailsLog ",error) 
                 }
             },
+            clearSingleLogDetail: function(){
+                try {
+                    const modelDetailLog = this.getOwnerComponent().getModel("LogDetails");
+                    if (modelDetailLog) {
+                        modelDetailLog.setData([]);
+                        modelDetailLog.updateBindings(true);
+                        modelDetailLog.refresh();
+                    }
+                } catch (error) {
+                    console.error("Error Function: clearSingleLogDetail ",error) 
+                }
+            },
             clearMainList: function(){
                 try {
                     this.deleteDataSession();

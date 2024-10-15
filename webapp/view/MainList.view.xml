@@ -27,27 +27,6 @@
                         class="sapUiSmallMarginTop"
                     >
                         <Text
-                            text="{i18n>plantilla}"
-                            visible="true"
-                            class="sapUiTinyMarginEnd sapUiTinyMarginTop sapUiMediumMarginBegin"
-                        />
-                        <Button
-                            class="sapUiTinyMarginBegin"
-                            type="Ghost"
-                            tooltip="{i18n>DownloadTemplate}"
-                            text="{i18n>DownloadTemplateText}"
-                            icon="sap-icon://document"
-                            press="onDownloadPress"
-                        />
-                    </FlexBox>
-
-                    <FlexBox
-                        visible="true"
-                        height="2rem"
-                        justifyContent="Start"
-                        class="sapUiSmallMarginTop"
-                    >
-                        <Text
                             text="{i18n>origen}"
                             visible="true"
                             class="sapUiTinyMarginEnd sapUiTinyMarginTop sapUiMediumMarginBegin"
@@ -71,6 +50,15 @@
                             maximumFileSize="100"
                             fileSizeExceed="onFileSizeExceed"
                         />
+                        <Button
+                            class="sapUiTinyMarginBegin"
+                            type="Ghost"
+                            tooltip="{i18n>DownloadTemplate}"
+                            text="{i18n>DownloadTemplateText}"
+                            icon="sap-icon://document"
+                            press="onDownloadPress"
+                        />
+
                         <CheckBox id="chkSendAsync" text="{i18n>chkSendAsync}" valueState="None" />
                     </FlexBox>
                 </Panel>

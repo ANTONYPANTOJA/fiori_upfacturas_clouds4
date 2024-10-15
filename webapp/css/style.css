@@ -3,6 +3,10 @@
 .pageMain{
     margin-left: 1rem;
 }
+.sapFioriListReportTable{
+    padding-right: 1rem;
+    margin-right: 1rem;
+}
 /**/
 .btnError{
     color: red;

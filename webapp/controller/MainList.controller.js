@@ -409,7 +409,7 @@ sap.ui.define([
                         const sPath = element.getBindingContext().sPath;
                         const currentObject = oSmartTable.getModel().getObject(sPath);
                         if (currentObject) {
-                            if (currentObject.CodeSend == "E" || currentObject.InvoiceStatus == "3" || currentObject.InvoiceStatus == "0" ) {
+                            if (currentObject.CodeSend == "E" || currentObject.InvoiceStatus == "3" || currentObject.InvoiceStatus == "0") {
                                 const filterResults = oModelData.DetailList.filter(x => x.IdExcel === currentObject.IdExcel);
                                 if (filterResults.length > 0) {
                                     //Actualizar
@@ -602,8 +602,8 @@ sap.ui.define([
                         this.hideBusyText();
                         if (results.length > 0) {
                             await delay(2000);
-                            await this.validateContabilizar();    
-                        }else{
+                            await this.validateContabilizar();
+                        } else {
                             this.showMessageToast("msgc3");
                         }
                         this.onRefreshSingle();
@@ -627,7 +627,7 @@ sap.ui.define([
                     this.onRefreshSingle();
                     this.updateModelButtons(false, true);  //Actualizar Buttons
                     this.hideBusyText();
-                    this.enableButtonContab(true,true);
+                    this.enableButtonContab(true, true);
                     this.enableCheck(true);
                     this.showMessageToast("msg5");
                 }
@@ -655,12 +655,11 @@ sap.ui.define([
                         //Validar los datos al contabilizar
                         if (action == "PO") {
                             if (odataBody.InvoiceStatus == "3" || odataBody.InvoiceStatus == "1" || odataBody.ContabFin == "X"
-                                || odataBody.InvoiceStatus == "4") 
-                            {
+                                || odataBody.InvoiceStatus == "4") {
                                 continue;
                             }
-                        }else if(action == "CK"){
-                            if (odataBody.InvoiceStatus == "2"){
+                        } else if (action == "CK") {
+                            if (odataBody.InvoiceStatus == "2") {
                                 continue;
                             }
                         }
@@ -801,7 +800,7 @@ sap.ui.define([
                         if (dataModel.ckProcess.data) {
                             oModelData.setProperty("/ckProcess/data", results);
                         }
-                    }else if (dataModel.postProcess && action == "PO") {
+                    } else if (dataModel.postProcess && action == "PO") {
                         oModelData.setProperty("/postProcess/data", results);
                     }
                 } catch (error) {
@@ -853,7 +852,7 @@ sap.ui.define([
                 });
             },
             clearModel: function () {
-                const oDataModel    = this.getModel("model");
+                const oDataModel = this.getModel("model");
                 const odetailReport = this.getModel("detailReport");
 
                 if (oDataModel) {
@@ -861,7 +860,7 @@ sap.ui.define([
                     oDataModel.setProperty("/postProcess/data", []);
                     oDataModel.setProperty("/table/data", []);
                     oDataModel.setProperty("/load/message", "");
-                    oDataModel.setProperty("idSession", undefined);                    
+                    oDataModel.setProperty("idSession", undefined);
                 }
                 if (odetailReport) {
                     oDataModel.setProperty("/DetailList", []);
@@ -881,7 +880,7 @@ sap.ui.define([
                     this.onRefreshSingle();
                     this.enableCheck(false);
                     this.hideBusyText();
-                    this.enableButtonContab(true,false);
+                    this.enableButtonContab(true, false);
                     this.showMessageToast("msg5")
                     this.clearModel();
                 }
@@ -899,7 +898,7 @@ sap.ui.define([
                     console.error("Error Function.- clearTableSingle", error);
                 }
             },
-            validateContabilizar: async function(){
+            validateContabilizar: async function () {
                 let lv_mensaje = "";
                 let contok = 0;
 
@@ -907,22 +906,22 @@ sap.ui.define([
                 let cadena2 = this.getResourceBundle().getText("msgc5");
 
                 try {
-                const itemsSelected = this.getItemsTableSelected();
-                if (itemsSelected.length > 0) {
-                const results = await this.getLogDetail(itemsSelected);
-                if (results.length > 0) {
-                    for (let index = 0; index < results.length; index++) {
-                        const element = results[index];
-                        if (element.AccountingDocument != "" && element.AccountingDocument != undefined) {
-                            contok++;
+                    const itemsSelected = this.getItemsTableSelected();
+                    if (itemsSelected.length > 0) {
+                        const results = await this.getLogDetail(itemsSelected);
+                        if (results.length > 0) {
+                            for (let index = 0; index < results.length; index++) {
+                                const element = results[index];
+                                if (element.AccountingDocument != "" && element.AccountingDocument != undefined) {
+                                    contok++;
+                                }
+                            }
+                            if (contok > 0) {
+                                lv_mensaje = cadena1.concat(" :", contok, " ", cadena2);
+                                MessageBox.success(lv_mensaje);
+                            }
                         }
                     }
-                    if (contok > 0) {
-                        lv_mensaje = cadena1.concat(" :",contok," ",cadena2);
-                        MessageBox.success(lv_mensaje);
-                    }
-                }  
-            }     
                 } catch (error) {
                     console.error("Error Function: validateContabilizar", error)
                 }
@@ -947,7 +946,7 @@ sap.ui.define([
                     if (results.length > 0) {
                         this.hideBusyText();
                         this.getRouter().navTo("DetailLog");
-                    }else{
+                    } else {
                         this.onDisplayMessageBoxPress("I", "msgc6");
                         this.hideBusyText();
                     }
@@ -957,16 +956,19 @@ sap.ui.define([
                     this.hideBusyText();
                 }
             },
-            getLogDetail2: async function () {
+            getLogDetail2: async function (idLogSingle) {
                 let results = [];
                 let idsLogs = [];
                 let parameters = { filters: [], urlParameters: { "$expand": "to_ItemsList" } };
 
+                if (idLogSingle) {
+                    idsLogs = idLogSingle;
+                }else{
                 this.showBusyText("mostlog");
 
                 const odataCheck = this.getModel("model").getProperty("/ckProcess/data");
-                const odataPost  = this.getModel("model").getProperty("/postProcess/data");
-                
+                const odataPost = this.getModel("model").getProperty("/postProcess/data");
+
                 //Obtener lso Ids
                 for (let index = 0; index < odataCheck.length; index++) {
                     const element = odataCheck[index]
@@ -977,7 +979,7 @@ sap.ui.define([
                     const element = odataPost[index]
                     idsLogs.push(element.supplierinvoiceuploaduuid);
                 }
-                
+                }
                 try {
                     if (idsLogs.length > 0) {
                         for (let index = 0; index < idsLogs.length; index++) {
@@ -1071,6 +1073,25 @@ sap.ui.define([
                     oViewModel.setProperty("/btnEliminar", action);
                 }
             },
+            onNavigation: async function (oEvent) {
+                let idsLogs = [];
+                try {
+                    const oBindingContext = oEvent.getSource().getBindingContext();
+                    if (oBindingContext) {
+                        const objectData = oBindingContext.getObject();
+                        if (objectData) {
+                            this.clearSingleLogDetail();
+                            idsLogs.push(objectData.Supplierinvoiceuploaduuid);
+                            const results = await this.getLogDetail2(idsLogs);
+                            if (results.length > 0) {
+                                this.getRouter().navTo("DetailLog");     
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error Function onNavigation", error)
+                }
+            }
 
         });
     });

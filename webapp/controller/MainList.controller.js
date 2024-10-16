@@ -62,6 +62,9 @@ sap.ui.define([
                     ckProcess: {
                         data: []
                     },
+                    ckProcessOk: {
+                        data: []
+                    },
                     postProcess: {
                         data: []
                     },
@@ -602,12 +605,13 @@ sap.ui.define([
                         this.hideBusyText();
                         if (results.length > 0) {
                             await delay(2000);
-                            await this.validateContabilizar();
+                            //await this.validateContabilizar();
+                            this.showMessageContab();
                         } else {
                             this.showMessageToast("msgc3");
                         }
-                        this.onRefreshSingle();
-                        this.showMessageToast("msg5");
+                        //this.onRefreshSingle();
+                        //this.showMessageToast("msg5");
                     }
                 } catch (error) {
                     console.log("Error Funcion .- onPostPressed ", error);
@@ -698,7 +702,7 @@ sap.ui.define([
                 if (option == "1") {
                     /**POST - CALL FUNCTION */
                     path = "/postActionUpload";
-                    await delay(500);
+                    await delay(10);
                     return await this.callFunctionOdata(path, parameters);
 
                 } else if (option == "2") {
@@ -717,7 +721,7 @@ sap.ui.define([
                         body.sendasync = "";
                     }
 
-                    await delay(500);
+                    await delay(100);
                     return await this.createPostAction("ModelActionService", path, body);
                 }
             },
@@ -750,17 +754,20 @@ sap.ui.define([
                 this.getView().getModel().refresh(true);
             },
             onDeletePress: async function () {
+                let length = 0;
                 const itemsSelected = this.getItemsTableSelected();
                 if (!this.validCheck(itemsSelected)) return;
 
                 try {
+                    length = itemsSelected.length;
+
                     const rptaConfirm = await this.confirmPopup("TitDialog1", "msg11");
                     if (rptaConfirm) {
                         this.showBusyText("loadmsgDl");
                         await this.checkItemsOdataRap(itemsSelected, 'DL', '1');
                         this.onRefreshSingle();
                         this.hideBusyText();
-                        this.showMessageToast("msg5")
+                        this.showMessageDelete(length);
                     }
                 } catch (error) {
                     console.log("Error Funcion .- onDeletePress ", error);
@@ -860,7 +867,7 @@ sap.ui.define([
                     oDataModel.setProperty("/postProcess/data", []);
                     oDataModel.setProperty("/table/data", []);
                     oDataModel.setProperty("/load/message", "");
-                    oDataModel.setProperty("idSession", undefined);
+                    oDataModel.setProperty("/idSession", undefined);
                 }
                 if (odetailReport) {
                     oDataModel.setProperty("/DetailList", []);
@@ -1106,6 +1113,12 @@ sap.ui.define([
 
                 let parameters = { filters: [], urlParameters: undefined };
 
+                const modelMain = this.getView().getModel("model");
+                let odataCkOk = modelMain.getProperty("/ckProcessOk/data");
+                if (!odataCkOk) {
+                    odataCkOk = [];
+                }
+
                 const itemsSelected = this.getItemsTableSelected();
                 if (itemsSelected.length > 0) {
 
@@ -1137,6 +1150,17 @@ sap.ui.define([
                                                         contError++;
                                                     }
                                                     idRptas.push(odataBody.Supplierinvoiceuploaduuid);
+                                                    //Almacenar lso datos Verificados con OK
+                                                    if (results.CodeSend == 'S') {
+                                                        if (odataCkOk.length > 0) { //+add
+                                                            const filterCkOk = odataCkOk.filter((rpta) => rpta.Supplierinvoiceuploaduuid == odataBody.Supplierinvoiceuploaduuid);
+                                                            if (filterCkOk.length == 0) {
+                                                                odataCkOk.push(odataBody);
+                                                            }
+                                                        } else {
+                                                            odataCkOk.push(odataBody);
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -1149,6 +1173,10 @@ sap.ui.define([
                         if (itemRpta == n) {
                             break;
                         }
+                    }
+
+                    if (odataCkOk.length > 0) {
+                        modelMain.setProperty("/ckProcessOk/data", odataCkOk);
                     }
 
                     sap.ui.core.BusyIndicator.hide();
@@ -1172,5 +1200,59 @@ sap.ui.define([
                     }
                 }
             },
+            showMessageDelete: function (contDelete) {
+                const oboundle = this.getResourceBundle();
+                let title = oboundle.getText("Delete");
+                let mensaje = "";
+
+                if (contDelete > 0) {
+                    mensaje = oboundle.getText("msg14", [contDelete]);
+                } else {
+                    mensaje = oboundle.getText("msg13", [contDelete]);
+                }
+
+                this.onSuccessMessageDialogPress(title, mensaje);
+            },
+            showMessageContab: function () {
+
+                let contOks = 0;
+                let mensaje = "";
+
+                const oboundle = this.getResourceBundle();
+                let title = oboundle.getText("Post");
+
+                const itemsSelected = this.getItemsTableSelected();
+                const datosCheck = this.getView().getModel("model").getData();
+                const itemsCheck = [];
+
+                if (datosCheck) {
+                    if (datosCheck.ckProcessOk.data) {
+                        itemsCheck = datosCheck.ckProcessOk.data;
+                    }
+                }
+
+                if (itemsSelected.length > 0){
+                    for (let index = 0; index < itemsSelected.length; index++) {
+                        const contextObject = itemsSelected[index].getBindingContext();
+                        const odataBody = contextObject.getObject();
+                        if (odataBody) {
+                            const filterCkOk = itemsCheck.filter((rpta) => rpta.Supplierinvoiceuploaduuid == odataBody.Supplierinvoiceuploaduuid);
+                            if (filterCkOk.length > 0) {
+                                contOks++;
+                            }
+                        }
+                    }
+                }
+
+                if (contOks > 0) {
+                    if (contOks > 1) {
+                        mensaje = oboundle.getText("msg16", [contOks]);
+                    } else {
+                        mensaje = oboundle.getText("msg15", [contOks]);
+                    }
+                    this.onSuccessMessageDialogPress(title, mensaje);
+                }
+
+            }
         });
     });

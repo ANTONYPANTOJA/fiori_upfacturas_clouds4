@@ -86,6 +86,7 @@ sap.ui.define([
 
                 const data = await this._readFile(file);
                 if (data && data.length > 0) {
+                    this.clearModelIntern();
                     this.showBusyText("loadmsgUp");
                     await this.setDataTable(data);  //Armar la Estructura del Excel
                     let resultsProcess = await this.onUploadPostList();  //Almacenar los registros POST - UPLOAD
@@ -864,6 +865,7 @@ sap.ui.define([
 
                 if (oDataModel) {
                     oDataModel.setProperty("/ckProcess/data", []);
+                    oDataModel.setProperty("/ckProcessOk/data", []);
                     oDataModel.setProperty("/postProcess/data", []);
                     oDataModel.setProperty("/table/data", []);
                     oDataModel.setProperty("/load/message", "");
@@ -1223,7 +1225,7 @@ sap.ui.define([
 
                 const itemsSelected = this.getItemsTableSelected();
                 const datosCheck = this.getView().getModel("model").getData();
-                const itemsCheck = [];
+                let itemsCheck = [];
 
                 if (datosCheck) {
                     if (datosCheck.ckProcessOk.data) {
@@ -1253,6 +1255,15 @@ sap.ui.define([
                     this.onSuccessMessageDialogPress(title, mensaje);
                 }
 
-            }
+            },
+            clearModelIntern: function(){
+                const modelDetailLog = this.getOwnerComponent().getModel("LogDetails");
+                if (modelDetailLog) {
+                    modelDetailLog.setData([]);
+                    modelDetailLog.updateBindings(true);
+                    modelDetailLog.refresh();
+                }
+            },
+            
         });
     });

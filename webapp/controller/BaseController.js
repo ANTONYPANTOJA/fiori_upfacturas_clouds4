@@ -8,8 +8,9 @@ sap.ui.define([
     /* "ns/asa/zappuploadinvoices/libs/moment",*/
     "sap/ui/core/routing/History",
     "sap/ui/comp/navpopover/LinkData",
+    "sap/m/Dialog"
 ],
-    function (Controller, NavigationHandler, MessageBox, MessageToast, XLSX, JSZIP,History,LinkData) {
+    function (Controller, NavigationHandler, MessageBox, MessageToast, XLSX, JSZIP,History,LinkData,Dialog) {
         "use strict";
 
         return Controller.extend("ns.asa.zappuploadinvoices.controller.BaseController", {
@@ -384,6 +385,50 @@ sap.ui.define([
                         MessageToast.show(oboundle.getText("msg8",[contIds]));
                     }
                 }
+            },
+            onSuccessMessageDialogPress: function (textVerif,textMessage) {
+                
+                this.oSuccessMessageDialog = undefined;
+
+                if (!this.oSuccessMessageDialog) {
+                    this.oSuccessMessageDialog = new Dialog({
+                        type: sap.m.DialogType.Message,
+                        title: textVerif,
+                        state: sap.ui.core.ValueState.Success,
+                        content: new sap.m.Text({ text: textMessage }),
+                        beginButton: new sap.m.Button({
+                            type: sap.m.ButtonType.Emphasized,
+                            text: "OK",
+                            press: function () {
+                                this.onRefresh();
+                                this.oSuccessMessageDialog.close();
+                            }.bind(this)
+                        })
+                    });
+                }
+                this.oSuccessMessageDialog.open();
+            },
+            onErrorMessageDialogPress: function (textVerif,textMessage) {
+                this.oErrorMessageDialog = undefined;
+
+                if (!this.oErrorMessageDialog) {
+                    this.oErrorMessageDialog = new Dialog({
+                        type: sap.m.DialogType.Message,
+                        title: textVerif,
+                        state: sap.ui.core.ValueState.Error,
+                        content: new sap.m.Text({ text: textMessage }),
+                        beginButton: new sap.m.Button({
+                            type: sap.m.ButtonType.Emphasized,
+                            text: "OK",
+                            press: function () {
+                                this.onRefresh();
+                                this.oErrorMessageDialog.close();
+                            }.bind(this)
+                        })
+                    });
+                }
+                this.oErrorMessageDialog.open();                
             }
+            
         });
     });

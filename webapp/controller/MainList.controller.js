@@ -624,13 +624,12 @@ sap.ui.define([
                     this.showBusyText("loadmsgCk");
                     const results = await this.checkItemsOdataRap(itemsSelected, 'CK', '2');
                     this.setDataEjec(results, 'CK');
-                    this.onRefreshSingle();
                     this.updateModelButtons(false, true);  //Actualizar Buttons
-                    this.hideBusyText();
                     this.enableButtonContab(true, true);
                     this.enableCheck(true);
-                    this.showMessageToast("msg5");
-                    this.onRefreshSingle(); //+add
+                    this.hideBusyText();
+                    //Obtener Respuestas
+                    this.showMessageCheck();
                 }
             },
             validCheck: function (itemsSelected) {
@@ -964,22 +963,22 @@ sap.ui.define([
 
                 if (idLogSingle) {
                     idsLogs = idLogSingle;
-                }else{
-                this.showBusyText("mostlog");
+                } else {
+                    this.showBusyText("mostlog");
 
-                const odataCheck = this.getModel("model").getProperty("/ckProcess/data");
-                const odataPost = this.getModel("model").getProperty("/postProcess/data");
+                    const odataCheck = this.getModel("model").getProperty("/ckProcess/data");
+                    const odataPost = this.getModel("model").getProperty("/postProcess/data");
 
-                //Obtener lso Ids
-                for (let index = 0; index < odataCheck.length; index++) {
-                    const element = odataCheck[index]
-                    idsLogs.push(element.supplierinvoiceuploaduuid);
-                }
+                    //Obtener lso Ids
+                    for (let index = 0; index < odataCheck.length; index++) {
+                        const element = odataCheck[index]
+                        idsLogs.push(element.supplierinvoiceuploaduuid);
+                    }
 
-                for (let index = 0; index < odataPost.length; index++) {
-                    const element = odataPost[index]
-                    idsLogs.push(element.supplierinvoiceuploaduuid);
-                }
+                    for (let index = 0; index < odataPost.length; index++) {
+                        const element = odataPost[index]
+                        idsLogs.push(element.supplierinvoiceuploaduuid);
+                    }
                 }
                 try {
                     if (idsLogs.length > 0) {
@@ -1085,14 +1084,92 @@ sap.ui.define([
                             idsLogs.push(objectData.Supplierinvoiceuploaduuid);
                             const results = await this.getLogDetail2(idsLogs);
                             if (results.length > 0) {
-                                this.getRouter().navTo("DetailLog");     
+                                this.getRouter().navTo("DetailLog");
                             }
                         }
                     }
                 } catch (error) {
                     console.error("Error Function onNavigation", error)
                 }
-            }
+            },
+            showMessageCheck: async function () {
+                let contOK = 0;
+                let contError = 0;
+                let mensaje = "";
+                let title = "";
+                let idRptas = [];
 
+                const oboundle = this.getResourceBundle();
+                title = oboundle.getText("loadmsgCk");
+
+                let parameters = { filters: [], urlParameters: undefined };
+
+                const itemsSelected = this.getItemsTableSelected();
+                if (itemsSelected.length > 0) {
+                    this.showBusyText("loadRpta");
+
+                    let itemRpta = 0;
+                    const n = itemsSelected.length;
+
+                    //Obtener las respuestas
+                    while (itemRpta < n) {
+
+                        for (let index = 0; index < itemsSelected.length; index++) {
+                            parameters.filters = [];
+                            const contextObject = itemsSelected[index].getBindingContext();
+                            const odataBody = contextObject.getObject();
+
+                            if (odataBody) {
+                                const filterProcess = idRptas.filter((rpta) => rpta == odataBody.Supplierinvoiceuploaduuid);
+                                if (filterProcess.length === 0) {
+                                    parameters.filters.push(new Filter("Supplierinvoiceuploaduuid", "EQ", odataBody.Supplierinvoiceuploaduuid));
+                                    try {
+                                        const resultOdata = await this.readInvoiceList(parameters);
+                                        if (resultOdata.results) {
+                                            if (resultOdata.results.length > 0) {
+                                                const results = resultOdata.results[0];
+                                                if (results.CodeSend != '' && results.CodeSend != undefined) {
+                                                    itemRpta++;
+                                                    if (results.CodeSend == 'S') {
+                                                        contOK++;
+                                                    } else if (results.CodeSend == 'E') {
+                                                        contError++;
+                                                    }
+                                                    idRptas.push(odataBody.Supplierinvoiceuploaduuid);
+                                                }
+                                            }
+                                        }
+                                    } catch (error) {
+                                        console.error("Erro Function: showMessageCheck", error);
+                                    }
+                                }
+                            }
+                        }
+                        if (itemRpta == n) {
+                            break;
+                        }
+                    }
+                    this.showMessageCheck();
+
+                    if (contOK > 0) {
+                        if (contOK > 1) {
+                            mensaje = oboundle.getText("msg10", [contOK]);
+                        } else {
+                            mensaje = oboundle.getText("msg9", [contOK]);
+                        }
+                        await this.onSuccessMessageDialogPress(title, mensaje);
+                    }
+                    if (contError > 0) {
+                        if (contError > 1) {
+                            mensaje = oboundle.getText("msg12", [contError]);
+                        } else {
+                            mensaje = oboundle.getText("msg11", [contError]);
+                        }
+                        await this.onErrorMessageDialogPress(title, mensaje);
+                    }
+                }
+
+                this.onRefresh();
+            },
         });
     });

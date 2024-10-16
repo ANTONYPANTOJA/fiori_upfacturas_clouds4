@@ -1099,6 +1099,8 @@ sap.ui.define([
                 let title = "";
                 let idRptas = [];
 
+                sap.ui.core.BusyIndicator.show(0);
+
                 const oboundle = this.getResourceBundle();
                 title = oboundle.getText("loadmsgCk");
 
@@ -1106,7 +1108,6 @@ sap.ui.define([
 
                 const itemsSelected = this.getItemsTableSelected();
                 if (itemsSelected.length > 0) {
-                    this.showBusyText("loadRpta");
 
                     let itemRpta = 0;
                     const n = itemsSelected.length;
@@ -1149,7 +1150,8 @@ sap.ui.define([
                             break;
                         }
                     }
-                    this.showMessageCheck();
+
+                    sap.ui.core.BusyIndicator.hide();
 
                     if (contOK > 0) {
                         if (contOK > 1) {
@@ -1159,6 +1161,7 @@ sap.ui.define([
                         }
                         await this.onSuccessMessageDialogPress(title, mensaje);
                     }
+
                     if (contError > 0) {
                         if (contError > 1) {
                             mensaje = oboundle.getText("msg12", [contError]);
@@ -1168,8 +1171,6 @@ sap.ui.define([
                         await this.onErrorMessageDialogPress(title, mensaje);
                     }
                 }
-
-                this.onRefresh();
             },
         });
     });

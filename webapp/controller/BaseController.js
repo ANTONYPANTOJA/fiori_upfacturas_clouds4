@@ -429,6 +429,5 @@ sap.ui.define([
                 }
                 this.oErrorMessageDialog.open();                
             }
-            
         });
     });

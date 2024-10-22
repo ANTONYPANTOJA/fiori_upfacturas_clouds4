@@ -944,21 +944,30 @@ sap.ui.define([
                     return
                 }
 
-
-                //const itemsSelected = this.getItemsTableSelected();
-                //if (!this.validCheck(itemsSelected)) return;
-
                 try {
-                    //this.showBusyText("mostlog");
-                    //await this.getLogDetail(itemsSelected);
+                const itemsSelected = this.getItemsTableSelected();
+                if (itemsSelected.length > 0) {
+                    this.showBusyText("mostlog");
+                    const results = await this.getLogDetail(itemsSelected);
+                    if (results.length > 0) {
+                        this.hideBusyText();
+                        this.getRouter().navTo("DetailLog"); 
+                    }else{
+                        this.hideBusyText();
+                        this.onDisplayMessageBoxPress("I", "msgc6");
+                    }
+                }else{
+                    this.showBusyText("mostlog");
                     const results = await this.getLogDetail2();
                     if (results.length > 0) {
                         this.hideBusyText();
                         this.getRouter().navTo("DetailLog");
                     } else {
-                        this.onDisplayMessageBoxPress("I", "msgc6");
                         this.hideBusyText();
+                        this.onDisplayMessageBoxPress("I", "msgc6");
                     }
+                }
+
                 } catch (error) {
                     console.error("Error Function: onShowLogButtonPressed", error)
                     this.onDisplayMessageBoxPress("E", "msgc1");
@@ -1264,6 +1273,12 @@ sap.ui.define([
                     modelDetailLog.refresh();
                 }
             },
-            
+            onBeforeRebindViewTable: function(oEvent)
+            {
+                var oBindingParams = oEvent.getParameter( "bindingParams" );
+                if (!oBindingParams.sorter.length){
+                     oBindingParams.sorter.push(new sap.ui.model.Sorter("IdExcel",false))
+                }
+            }
         });
     });

@@ -86,6 +86,54 @@
             <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/ReferPago">
                 <Annotation Term="UI.HiddenFilter"/>
             </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/Dias">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/Nombre1">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/Nombre2">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/Nitci">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/Poblacion">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/TxtPosProv">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/Bloq">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/Vp">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/BancoPropio">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/IdCuenta">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/CtaAlternativa">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/MotivoPago">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/ClaveRef1">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/ClaveRef2">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/ClaveRef3">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType/LugarComercial">
+                <Annotation Term="UI.HiddenFilter"/>
+            </Annotations>
             <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListMainType">
                 <Annotation Term="UI.Identification">
                     <Collection>

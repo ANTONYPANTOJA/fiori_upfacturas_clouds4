@@ -121,6 +121,22 @@
                 <Property Name="Asignacion" Type="Edm.String" MaxLength="18" sap:label="Asignación" sap:quickinfo="Assignment Number"/>
                 <Property Name="TxtHeader" Type="Edm.String" MaxLength="25" sap:label="Texto de cabecera" sap:quickinfo="Document Header Text"/>
                 <Property Name="ReferPago" Type="Edm.String" MaxLength="40" sap:label="Referencia de pago"/>
+                <Property Name="Dias" Type="Edm.Int32" sap:label="Dias" sap:quickinfo="4 Byte Signed Integer"/>
+                <Property Name="Nombre1" Type="Edm.String" sap:label="Nombre 1"/>
+                <Property Name="Nombre2" Type="Edm.String" sap:label="Nombre 2"/>
+                <Property Name="Nitci" Type="Edm.String" MaxLength="60" sap:label="NIT/CI"/>
+                <Property Name="Poblacion" Type="Edm.String" MaxLength="100" sap:label="Población"/>
+                <Property Name="TxtPosProv" Type="Edm.String" MaxLength="50" sap:label="Texto posición proveedor" sap:quickinfo="Item Text"/>
+                <Property Name="Bloq" Type="Edm.String" MaxLength="3" sap:label="Bloq."/>
+                <Property Name="Vp" Type="Edm.String" MaxLength="5" sap:label="VP"/>
+                <Property Name="BancoPropio" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="Banco propio" sap:quickinfo="Short Key for a House Bank"/>
+                <Property Name="IdCuenta" Type="Edm.String" MaxLength="30" sap:label="ID de cuenta"/>
+                <Property Name="CtaAlternativa" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="Cuenta alternativa" sap:quickinfo="G/L Account Number"/>
+                <Property Name="MotivoPago" Type="Edm.String" MaxLength="20" sap:label="Motivo de pago"/>
+                <Property Name="ClaveRef1" Type="Edm.String" MaxLength="50" sap:label="Cl.referencia 1"/>
+                <Property Name="ClaveRef2" Type="Edm.String" MaxLength="50" sap:label="Cl.referencia 2"/>
+                <Property Name="ClaveRef3" Type="Edm.String" MaxLength="50" sap:label="Cl.referencia 3"/>
+                <Property Name="LugarComercial" Type="Edm.String" sap:label="Lugar comercial"/>
                 <NavigationProperty Name="to_CompanyCode" Relationship="cds_zui_rap_invoicelist_sd.assoc_0936AB16221AD3D671E70AE184C507F7" FromRole="FromRole_assoc_0936AB16221AD3D671E70AE184C507F7" ToRole="ToRole_assoc_0936AB16221AD3D671E70AE184C507F7"/>
             </EntityType>
             <EntityType Name="LogInvoiceMainType" sap:label="Log Invoice" sap:content-version="1">
@@ -192,6 +208,22 @@
                 <Property Name="Asignacion" Type="Edm.String" MaxLength="18" sap:label="Assignment" sap:quickinfo="Assignment Number"/>
                 <Property Name="TxtHeader" Type="Edm.String" MaxLength="25" sap:label="Document Header Text"/>
                 <Property Name="ReferPago" Type="Edm.String" MaxLength="40"/>
+                <Property Name="Dias" Type="Edm.Int32" sap:label="INT4" sap:quickinfo="4 Byte Signed Integer"/>
+                <Property Name="Nombre1" Type="Edm.String"/>
+                <Property Name="Nombre2" Type="Edm.String"/>
+                <Property Name="Nitci" Type="Edm.String" MaxLength="60"/>
+                <Property Name="Poblacion" Type="Edm.String" MaxLength="100"/>
+                <Property Name="TxtPosProv" Type="Edm.String" MaxLength="50" sap:label="Text" sap:quickinfo="Item Text"/>
+                <Property Name="Bloq" Type="Edm.String" MaxLength="3"/>
+                <Property Name="Vp" Type="Edm.String" MaxLength="5"/>
+                <Property Name="BancoPropio" Type="Edm.String" MaxLength="5" sap:display-format="UpperCase" sap:label="House Bank" sap:quickinfo="Short Key for a House Bank"/>
+                <Property Name="IdCuenta" Type="Edm.String" MaxLength="30"/>
+                <Property Name="CtaAlternativa" Type="Edm.String" MaxLength="10" sap:display-format="UpperCase" sap:label="G/L Account" sap:quickinfo="G/L Account Number"/>
+                <Property Name="MotivoPago" Type="Edm.String" MaxLength="20"/>
+                <Property Name="ClaveRef1" Type="Edm.String" MaxLength="50"/>
+                <Property Name="ClaveRef2" Type="Edm.String" MaxLength="50"/>
+                <Property Name="ClaveRef3" Type="Edm.String" MaxLength="50"/>
+                <Property Name="LugarComercial" Type="Edm.String"/>
                 <NavigationProperty Name="to_CompanyCode" Relationship="cds_zui_rap_invoicelist_sd.assoc_E969418A4C1AC6AA20C512BAF04A0CF9" FromRole="FromRole_assoc_E969418A4C1AC6AA20C512BAF04A0CF9" ToRole="ToRole_assoc_E969418A4C1AC6AA20C512BAF04A0CF9"/>
                 <NavigationProperty Name="to_ItemsList" Relationship="cds_zui_rap_invoicelist_sd.assoc_DC52A49C1254DC159BCAB94E9A59E2D7" FromRole="FromRole_assoc_DC52A49C1254DC159BCAB94E9A59E2D7" ToRole="ToRole_assoc_DC52A49C1254DC159BCAB94E9A59E2D7"/>
             </EntityType>
@@ -808,6 +840,18 @@
                                     <PropertyValue Property="Property" PropertyPath="Messagesend"/>
                                     <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
                                 </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="Nombre1"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="Nombre2"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="LugarComercial"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+                                </Record>
                             </Collection>
                         </PropertyValue>
                     </Record>
@@ -854,6 +898,9 @@
                                 <PropertyPath>Update_mc</PropertyPath>
                                 <PropertyPath>to_ItemsList_oc</PropertyPath>
                                 <PropertyPath>Messagesend</PropertyPath>
+                                <PropertyPath>Nombre1</PropertyPath>
+                                <PropertyPath>Nombre2</PropertyPath>
+                                <PropertyPath>LugarComercial</PropertyPath>
                             </Collection>
                         </PropertyValue>
                     </Record>
@@ -881,6 +928,18 @@
                             <Collection>
                                 <Record>
                                     <PropertyValue Property="Property" PropertyPath="Messagesend"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="Nombre1"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="Nombre2"/>
+                                    <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="LugarComercial"/>
                                     <PropertyValue Property="AllowedExpressions" String="SearchExpression"/>
                                 </Record>
                             </Collection>
@@ -913,6 +972,9 @@
                         <PropertyValue Property="NonSortableProperties">
                             <Collection>
                                 <PropertyPath>Messagesend</PropertyPath>
+                                <PropertyPath>Nombre1</PropertyPath>
+                                <PropertyPath>Nombre2</PropertyPath>
+                                <PropertyPath>LugarComercial</PropertyPath>
                             </Collection>
                         </PropertyValue>
                     </Record>
@@ -1075,6 +1137,21 @@
             <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/Asignacion" xmlns="http://docs.oasis-open.org/odata/ns/edm">
                 <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
             </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/BancoPropio" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/Bloq" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/ClaveRef1" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/ClaveRef2" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/ClaveRef3" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+            </Annotations>
             <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/ClsDoc" xmlns="http://docs.oasis-open.org/odata/ns/edm">
                 <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
             </Annotations>
@@ -1087,7 +1164,13 @@
             <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/CreatedBy" xmlns="http://docs.oasis-open.org/odata/ns/edm">
                 <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
             </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/CtaAlternativa" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+            </Annotations>
             <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/Currency" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/Dias" xmlns="http://docs.oasis-open.org/odata/ns/edm">
                 <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
             </Annotations>
             <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/DocumentDate" xmlns="http://docs.oasis-open.org/odata/ns/edm">
@@ -1097,6 +1180,9 @@
                 <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
             </Annotations>
             <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/FiscalYear" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/IdCuenta" xmlns="http://docs.oasis-open.org/odata/ns/edm">
                 <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
             </Annotations>
             <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/IdExcel" xmlns="http://docs.oasis-open.org/odata/ns/edm">
@@ -1120,7 +1206,25 @@
             <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/LastChangedAt" xmlns="http://docs.oasis-open.org/odata/ns/edm">
                 <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
             </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/LugarComercial" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+            </Annotations>
             <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/Messagesend" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/MotivoPago" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/Nitci" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/Nombre1" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/Nombre2" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/Poblacion" xmlns="http://docs.oasis-open.org/odata/ns/edm">
                 <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
             </Annotations>
             <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/PostingDate" xmlns="http://docs.oasis-open.org/odata/ns/edm">
@@ -1142,6 +1246,12 @@
                 <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
             </Annotations>
             <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/TxtHeader" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/TxtPosProv" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+                <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
+            </Annotations>
+            <Annotations Target="cds_zui_rap_invoicelist_sd.InvoiceListType/Vp" xmlns="http://docs.oasis-open.org/odata/ns/edm">
                 <Annotation Term="Common.FieldControl" EnumMember="Common.FieldControlType/Optional"/>
             </Annotations>
             <Annotations Target="cds_zui_rap_invoicelist_sd.ItemsListType/Action" xmlns="http://docs.oasis-open.org/odata/ns/edm">

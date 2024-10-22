@@ -11,3 +11,10 @@
 .btnError{
     color: red;
 }
+
+.stickyToolbar {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 101;
+}

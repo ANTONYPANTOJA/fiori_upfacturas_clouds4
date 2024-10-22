@@ -945,28 +945,28 @@ sap.ui.define([
                 }
 
                 try {
-                const itemsSelected = this.getItemsTableSelected();
-                if (itemsSelected.length > 0) {
-                    this.showBusyText("mostlog");
-                    const results = await this.getLogDetail(itemsSelected);
-                    if (results.length > 0) {
-                        this.hideBusyText();
-                        this.getRouter().navTo("DetailLog"); 
-                    }else{
-                        this.hideBusyText();
-                        this.onDisplayMessageBoxPress("I", "msgc6");
-                    }
-                }else{
-                    this.showBusyText("mostlog");
-                    const results = await this.getLogDetail2();
-                    if (results.length > 0) {
-                        this.hideBusyText();
-                        this.getRouter().navTo("DetailLog");
+                    const itemsSelected = this.getItemsTableSelected();
+                    if (itemsSelected.length > 0) {
+                        this.showBusyText("mostlog");
+                        const results = await this.getLogDetail(itemsSelected);
+                        if (results.length > 0) {
+                            this.hideBusyText();
+                            this.getRouter().navTo("DetailLog");
+                        } else {
+                            this.hideBusyText();
+                            this.onDisplayMessageBoxPress("I", "msgc6");
+                        }
                     } else {
-                        this.hideBusyText();
-                        this.onDisplayMessageBoxPress("I", "msgc6");
+                        this.showBusyText("mostlog");
+                        const results = await this.getLogDetail2();
+                        if (results.length > 0) {
+                            this.hideBusyText();
+                            this.getRouter().navTo("DetailLog");
+                        } else {
+                            this.hideBusyText();
+                            this.onDisplayMessageBoxPress("I", "msgc6");
+                        }
                     }
-                }
 
                 } catch (error) {
                     console.error("Error Function: onShowLogButtonPressed", error)
@@ -1242,7 +1242,7 @@ sap.ui.define([
                     }
                 }
 
-                if (itemsSelected.length > 0){
+                if (itemsSelected.length > 0) {
                     for (let index = 0; index < itemsSelected.length; index++) {
                         const contextObject = itemsSelected[index].getBindingContext();
                         const odataBody = contextObject.getObject();
@@ -1265,7 +1265,7 @@ sap.ui.define([
                 }
 
             },
-            clearModelIntern: function(){
+            clearModelIntern: function () {
                 const modelDetailLog = this.getOwnerComponent().getModel("LogDetails");
                 if (modelDetailLog) {
                     modelDetailLog.setData([]);
@@ -1273,12 +1273,24 @@ sap.ui.define([
                     modelDetailLog.refresh();
                 }
             },
-            onBeforeRebindViewTable: function(oEvent)
-            {
-                var oBindingParams = oEvent.getParameter( "bindingParams" );
-                if (!oBindingParams.sorter.length){
-                     oBindingParams.sorter.push(new sap.ui.model.Sorter("IdExcel",false))
+            onBeforeRebindViewTable: function (oEvent) {
+                var oBindingParams = oEvent.getParameter("bindingParams");
+                if (!oBindingParams.sorter.length) {
+                    oBindingParams.sorter.push(new sap.ui.model.Sorter("IdExcel", false))
                 }
-            }
+            },
+
+            // This function must be bound to the view's afterRendering event
+            onAfterRendering: function () {
+                // Stick the toolbar and header of the smart table to top. 
+                var oSmartTable = this.byId("detailList");
+                oSmartTable.onAfterRendering = function () {
+                    var oToolbar = this.byId("stickyToolbar"),
+                        oParent = oToolbar.$().parent();
+                    if (oParent) {
+                        oParent.addClass("stickyToolbar");
+                    }
+                }.bind(this);
+            },
         });
     });

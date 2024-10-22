@@ -34,7 +34,8 @@
 
          <!-- Botones Tabla-->
          <smarttable:customToolbar>
-						<Toolbar design="Transparent">
+		 	<OverflowToolbar id="stickyToolbar" design="Solid" class="stickyToolbar">
+						<!-- <Toolbar design="Transparent"> -->
 							<ToolbarSpacer></ToolbarSpacer>
 							<Button id="btnCheck" tooltip="{i18n>Check}" text="{i18n>Check}" press="onCheckPressed" type="Ghost" enabled="{aStatus>/btnCheck}" icon="sap-icon://accounting-document-verification"/>
 							<Button id="btnPost" tooltip="{i18n>Post}" text="{i18n>Post}" press="onPostPressed" type="Ghost" enabled="{aStatus>/btnContab}" icon="sap-icon://paper-plane" />
@@ -44,7 +45,8 @@
 							<Button id="btnShowLog" tooltip="{i18n>ShowLog}" type="Ghost" text="{i18n>ShowLog}" press="onShowLogButtonPressed" enabled="{aStatus>/btnLog}" icon="sap-icon://message-popup"/>
 							<Button id="btnRefresh" icon="sap-icon://synchronize" tooltip="{i18n>BtnRefresh}" press="onRefresh"/>
 							
-						</Toolbar>
+						<!-- </Toolbar> -->
+			</OverflowToolbar>
 		</smarttable:customToolbar>
 
             <Table id="tablefact" growing="true" growingScrollToLoad="true" growingThreshold="100" mode="MultiSelect"
@@ -168,7 +170,103 @@
 									<customData>
 									<core:CustomData key="p13nData" value='\{"columnKey": "ReferPago", "leadingProperty": "ReferPago", "sortProperty": "ReferPago", "filterProperty": "ReferPago", "columnIndex": "18"\}'/>
 							 	</customData>
-							</Column>																																										
+							</Column>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/Dias/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/Dias/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "Dias", "leadingProperty": "Dias", "sortProperty": "Dias", "filterProperty": "Dias", "columnIndex": "19"\}'/>
+							 	</customData>
+							</Column>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/Nombre1/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/Nombre1/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "Nombre1", "leadingProperty": "Nombre1", "sortProperty": "Nombre1", "filterProperty": "Nombre1", "columnIndex": "20"\}'/>
+							 	</customData>
+							</Column>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/Nombre2/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/Nombre2/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "Nombre2", "leadingProperty": "Nombre2", "sortProperty": "Nombre2", "filterProperty": "Nombre2", "columnIndex": "21"\}'/>
+							 	</customData>
+							</Column>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/Nitci/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/Nitci/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "Nitci", "leadingProperty": "Nitci", "sortProperty": "Nitci", "filterProperty": "Nitci", "columnIndex": "22"\}'/>
+							 	</customData>
+							</Column>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/Poblacion/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/Poblacion/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "Poblacion", "leadingProperty": "Poblacion", "sortProperty": "Poblacion", "filterProperty": "Poblacion", "columnIndex": "23"\}'/>
+							 	</customData>
+							</Column>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/TxtPosProv/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/TxtPosProv/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "TxtPosProv", "leadingProperty": "TxtPosProv", "sortProperty": "TxtPosProv", "filterProperty": "TxtPosProv", "columnIndex": "24"\}'/>
+							 	</customData>
+							</Column>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/Bloq/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/Bloq/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "Bloq", "leadingProperty": "Bloq", "sortProperty": "Bloq", "filterProperty": "Bloq", "columnIndex": "25"\}'/>
+							 	</customData>
+							</Column>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/Vp/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/Vp/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "Vp", "leadingProperty": "Vp", "sortProperty": "Vp", "filterProperty": "Vp", "columnIndex": "26"\}'/>
+							 	</customData>
+							</Column>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/BancoPropio/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/BancoPropio/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "BancoPropio", "leadingProperty": "BancoPropio", "sortProperty": "BancoPropio", "filterProperty": "BancoPropio", "columnIndex": "27"\}'/>
+							 	</customData>
+							</Column>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/IdCuenta/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/IdCuenta/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "IdCuenta", "leadingProperty": "IdCuenta", "sortProperty": "IdCuenta", "filterProperty": "IdCuenta", "columnIndex": "28"\}'/>
+							 	</customData>
+							</Column>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/CtaAlternativa/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/CtaAlternativa/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "CtaAlternativa", "leadingProperty": "CtaAlternativa", "sortProperty": "CtaAlternativa", "filterProperty": "CtaAlternativa", "columnIndex": "29"\}'/>
+							 	</customData>
+							</Column>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/MotivoPago/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/MotivoPago/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "MotivoPago", "leadingProperty": "MotivoPago", "sortProperty": "MotivoPago", "filterProperty": "MotivoPago", "columnIndex": "30"\}'/>
+							 	</customData>
+							</Column>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/ClaveRef1/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/ClaveRef1/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "ClaveRef1", "leadingProperty": "ClaveRef1", "sortProperty": "ClaveRef1", "filterProperty": "ClaveRef1", "columnIndex": "31"\}'/>
+							 	</customData>
+							</Column>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/ClaveRef2/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/ClaveRef2/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "ClaveRef2", "leadingProperty": "ClaveRef2", "sortProperty": "ClaveRef2", "filterProperty": "ClaveRef2", "columnIndex": "32"\}'/>
+							 	</customData>
+							</Column>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/ClaveRef3/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/ClaveRef3/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "ClaveRef3", "leadingProperty": "ClaveRef3", "sortProperty": "ClaveRef3", "filterProperty": "ClaveRef3", "columnIndex": "33"\}'/>
+							 	</customData>
+							</Column>
+							<Column hAlign="Center" tooltip="{/#InvoiceListMain/LugarComercial/@sap:label}" visible="false" width="11rem">
+								<Label text="{/#InvoiceListMain/LugarComercial/@sap:label}"/>
+									<customData>
+									<core:CustomData key="p13nData" value='\{"columnKey": "LugarComercial", "leadingProperty": "LugarComercial", "sortProperty": "LugarComercial", "filterProperty": "LugarComercial", "columnIndex": "34"\}'/>
+							 	</customData>
+							</Column>																																																																																																																																											
 				</columns>
                <items>
                	<ColumnListItem type="Navigation" highlight="{parts: [{path:'InvoiceStatus'},{ path:'CodeSend'}], formatter:'formatter.DraftStatusStateFormat'}" press="onNavigation">
@@ -178,12 +276,12 @@
 									<Text wrapping="false" text="{parts: [{path:'InvoiceStatus'},{ path:'InvoiceStatusText'}], formatter: 'formatter.KeyTextFormat' }"/>
 									<Text wrapping="false" text="{parts: [{path:'CompanyCode'},{ path:'CompanyCodeName'}], formatter: 'formatter.KeyTextFormat' }"/> 
 									<Text wrapping="false" text="{parts: [{path:'InvoicingParty'},{ path:'BusinessPartnerName'}], formatter: '.formatter.KeyTextFormat' }"/>
-									<Text text="{path:'PostingDate', type:'sap.ui.model.type.Date', formatOptions:{pattern: 'dd/MM/yyyy', strictParsing: true , UTC:'true'} }"/>
-									<Text text="{path:'DocumentDate', type:'sap.ui.model.type.Date', formatOptions:{pattern: 'dd/MM/yyyy', strictParsing: true , UTC:'true'} }"/>
-									<Text text="{path:'FechaBase', type:'sap.ui.model.type.Date', formatOptions:{pattern: 'dd/MM/yyyy', strictParsing: true , UTC:'true'} }"/>
+									<Text text="{path:'PostingDate', type:'sap.ui.model.type.Date', formatOptions:{pattern: 'dd/MM/yyyy', strictParsing: true , UTC:'true'} }" wrapping="false"/>
+									<Text text="{path:'DocumentDate', type:'sap.ui.model.type.Date', formatOptions:{pattern: 'dd/MM/yyyy', strictParsing: true , UTC:'true'} }" wrapping="false"/>
+									<Text text="{path:'FechaBase', type:'sap.ui.model.type.Date', formatOptions:{pattern: 'dd/MM/yyyy', strictParsing: true , UTC:'true'} }" wrapping="false"/>
 
 									<Text wrapping="false" text="{Currency}"/>
-									<Text wrapping="false" text="{Amount}"/>
+									<Text wrapping="false" text="{Amount}" />
 									<!-- <Text wrapping="false" text="{parts: [{path:'AccountingDocument'},{ path:'FiscalYear'}], formatter: '.formatter.InvoiceWithYear'}"/> -->
 									<!-- <smartlink:SmartLink id="smartLinDocument" semanticObject="AccountingDocument" text="{AccountingDocument}"/>-->
 									<Text text="{CreatedBy}" wrapping="false"/>
@@ -195,6 +293,23 @@
 									<Text text="{Asignacion}" wrapping="false"/>
 									<Text text="{TxtHeader}" wrapping="false"/>
 									<Text text="{ReferPago}" wrapping="false"/>
+
+									<Text text="{Dias}" wrapping="false"/>
+									<Text text="{Nombre1}" wrapping="false"/>
+									<Text text="{Nombre2}" wrapping="false"/>
+									<Text text="{Nitci}" wrapping="false"/>
+									<Text text="{Poblacion}" wrapping="false"/>
+									<Text text="{TxtPosProv}" wrapping="false"/>
+									<Text text="{Bloq}" wrapping="false"/>
+									<Text text="{Vp}" wrapping="false"/>
+									<Text text="{BancoPropio}" wrapping="false"/>
+									<Text text="{IdCuenta}" wrapping="false"/>
+									<Text text="{CtaAlternativa}" wrapping="false"/>
+									<Text text="{MotivoPago}" wrapping="false"/>
+									<Text text="{ClaveRef1}" wrapping="false"/>
+									<Text text="{ClaveRef2}" wrapping="false"/>
+									<Text text="{ClaveRef3}" wrapping="false"/>
+									<Text text="{LugarComercial}" wrapping="false"/>
 								</cells>
 				</ColumnListItem>
                </items>

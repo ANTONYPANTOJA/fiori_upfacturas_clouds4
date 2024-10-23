@@ -20,22 +20,13 @@
 			<core:CustomData key="dateFormatSettings" value='\{"UTC":true,"style":"short"\}'/>
 			</smarttable:customData>
 
-           <smarttable:layoutData>
-			<FlexItemData growFactor="1" baseSize="0%"/>
-			</smarttable:layoutData>
-		<!-- Control de los objetos semanticps-->
-		<smarttable:semanticObjectController>
-					<smartlink:SemanticObjectController
-						id="fin.ap.lineitems.display.SemanticObjectController"
-						beforePopoverOpens="onBeforePopoverOpens"
-						navigationTargetsObtained="onNavTargetsObtained" navigate="onPopoverLinkPressed"
-						ignoredFields="" />
-		</smarttable:semanticObjectController>
-
+			 <smarttable:layoutData>
+				<FlexItemData growFactor="1"/>
+			 </smarttable:layoutData>
          <!-- Botones Tabla-->
          <smarttable:customToolbar>
-		 	<OverflowToolbar id="stickyToolbar" design="Solid" class="stickyToolbar">
-						<!-- <Toolbar design="Transparent"> -->
+		 	<!-- <OverflowToolbar id="stickyToolbar" design="Solid" class="stickyToolbar"> -->
+						<Toolbar design="Transparent">
 							<ToolbarSpacer></ToolbarSpacer>
 							<Button id="btnCheck" tooltip="{i18n>Check}" text="{i18n>Check}" press="onCheckPressed" type="Ghost" enabled="{aStatus>/btnCheck}" icon="sap-icon://accounting-document-verification"/>
 							<Button id="btnPost" tooltip="{i18n>Post}" text="{i18n>Post}" press="onPostPressed" type="Ghost" enabled="{aStatus>/btnContab}" icon="sap-icon://paper-plane" />
@@ -44,9 +35,8 @@
 							<Button id="btnEdit" tooltip="{i18n>Edit}" type="Ghost" text="{i18n>Edit}" press="onEditPress" visible="false" enabled="{aStatus>/btnFijar}"/>
 							<Button id="btnShowLog" tooltip="{i18n>ShowLog}" type="Ghost" text="{i18n>ShowLog}" press="onShowLogButtonPressed" enabled="{aStatus>/btnLog}" icon="sap-icon://message-popup"/>
 							<Button id="btnRefresh" icon="sap-icon://synchronize" tooltip="{i18n>BtnRefresh}" press="onRefresh"/>
-							
-						<!-- </Toolbar> -->
-			</OverflowToolbar>
+						</Toolbar>
+			<!-- </OverflowToolbar>  -->
 		</smarttable:customToolbar>
 
             <Table id="tablefact" growing="true" growingScrollToLoad="true" growingThreshold="100" mode="MultiSelect"

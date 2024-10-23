@@ -33,6 +33,12 @@ sap.ui.define([
 
                 //Clear Table
                 this.clearData();
+
+                //Inicializar stilos
+                //this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
+                this._oWorklistSmartTable = this.byId("detailList");
+			    this._oWorklistSmartTable.addStyleClass("sapUiMediumMarginBeginEnd");
+
             },
             clearData: async function () {
                 await this.clearTableSingle();
@@ -1205,7 +1211,7 @@ sap.ui.define([
                         if (contError > 1) {
                             mensaje = oboundle.getText("msg12", [contError]);
                         } else {
-                            mensaje = oboundle.getText("msg11", [contError]);
+                            mensaje = oboundle.getText("msg111", [contError]);
                         }
                         await this.onErrorMessageDialogPress(title, mensaje);
                     }
@@ -1282,6 +1288,7 @@ sap.ui.define([
 
             // This function must be bound to the view's afterRendering event
             onAfterRendering: function () {
+             /*
                 // Stick the toolbar and header of the smart table to top. 
                 var oSmartTable = this.byId("detailList");
                 oSmartTable.onAfterRendering = function () {
@@ -1290,7 +1297,8 @@ sap.ui.define([
                     if (oParent) {
                         oParent.addClass("stickyToolbar");
                     }
-                }.bind(this);
+                }.bind(this);*/
+                
             },
         });
     });

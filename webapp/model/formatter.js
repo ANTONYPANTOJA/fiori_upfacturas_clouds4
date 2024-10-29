@@ -55,7 +55,7 @@ sap.ui.define([
 
                 const base64String = ExcelBase64.DraftStatusStateFormat();
                 let mimeType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-                let fileName = 'Plantilla.xlsx';
+                let fileName = 'Carga masiva de facturas de proveedor.xlsx';
 
                 // Remove data URL scheme if present
                 const base64Data = base64String.replace(/^data:.+;base64,/, '');

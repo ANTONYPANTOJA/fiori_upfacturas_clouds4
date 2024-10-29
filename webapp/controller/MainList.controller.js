@@ -94,15 +94,20 @@ sap.ui.define([
                 if (data && data.length > 0) {
                     this.clearModelIntern();
                     this.showBusyText("loadmsgUp");
-                    await this.setDataTable(data);  //Armar la Estructura del Excel
-                    let resultsProcess = await this.onUploadPostList();  //Almacenar los registros POST - UPLOAD
-                    this.updateModelButtons(true);  //Actualizar Buttons
-                    this.onRefresh();
-                    this.hideBusyText();
-                    fileUploader.clear();
-                    this.messageShowUpload();
+                    const resultEjec = await this.setDataTable(data);  //Armar la Estructura del Excel
+                    if (resultEjec) {
+                        let resultsProcess = await this.onUploadPostList();  //Almacenar los registros POST - UPLOAD
+                        this.updateModelButtons(true);  //Actualizar Buttons
+                        this.onRefresh();
+                        this.hideBusyText();
+                        fileUploader.clear();
+                        this.messageShowUpload();                        
+                    }else{
+                        this.hideBusyText();
+                    }
+
                 } else {
-                    MessageBox.information(this.getResourceBundle("msg2"));
+                    MessageBox.error(this.getResourceBundle().getText("msg2"));
                 }
             },
 
@@ -115,7 +120,7 @@ sap.ui.define([
                         type: 'binary'
                     });
                     workbook.SheetNames.forEach(function (sheetName) {
-                        if (sheetName === "Plantilla" || sheetName === "Template") {
+                        if (sheetName === "Plantilla" || sheetName === "Template" || sheetName === "plantilla" ) {
                             excelData = XLSX.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
                         }
                     });
@@ -141,17 +146,22 @@ sap.ui.define([
                 return await readerImport.then(resolveImport, rejectImport);
             },
             setDataTable: async function (data) {
+                let run = true;
+
                 let oModelExcel = this.getModel("detailReport");
                 if (data.length > 0) {
                     let oCamposValidados = await this.validarCamposExcel(data);
-                    if (oCamposValidados.length === 0 || oCamposValidados == undefined) {
-                        MessageBox.error(this.getResourceBundle().getText("msg6"));
+                    if (oCamposValidados.DetailList.length === 0 || oCamposValidados.DetailList == undefined) {
+                        MessageBox.error(this.getResourceBundle().getText("msg66"));
+                        run = false;
                     } else {
                         oModelExcel.setData(oCamposValidados);
                     }
                 } else {
                     MessageBox.error(this.getResourceBundle().getText("msg1"));
+                    run = false;
                 }
+                return run;
             },
             validarCamposExcel: async function (data) {
                 let aReturn = [];
@@ -182,7 +192,8 @@ sap.ui.define([
                     //Datos
                     if (i >= 2) {
                         if (columNames.length != 49) {
-                            return aReturn;
+                            break;
+                            //return aReturn;
                         }
 
                         for (const [key, value] of Object.entries(oData)) {

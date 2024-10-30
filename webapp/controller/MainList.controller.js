@@ -1233,7 +1233,7 @@ sap.ui.define([
                 let title = oboundle.getText("Delete");
                 let mensaje = "";
 
-                if (contDelete > 0) {
+                if (contDelete > 1) {
                     mensaje = oboundle.getText("msg14", [contDelete]);
                 } else {
                     mensaje = oboundle.getText("msg13", [contDelete]);

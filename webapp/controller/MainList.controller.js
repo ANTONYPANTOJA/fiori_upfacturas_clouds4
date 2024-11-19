@@ -677,7 +677,7 @@ sap.ui.define([
                         //Validar los datos al contabilizar
                         if (action == "PO") {
                             if (odataBody.InvoiceStatus == "3" || odataBody.InvoiceStatus == "1" || odataBody.ContabFin == "X"
-                                || odataBody.InvoiceStatus == "4") {
+                                || odataBody.InvoiceStatus == "4" || odataBody.InvoiceStatus == "0" ) {
                                 continue;
                             }
                         } else if (action == "CK") {

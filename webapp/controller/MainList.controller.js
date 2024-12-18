@@ -267,7 +267,7 @@ sap.ui.define([
                                     oDataModelAdd.TxtHeader = String(value);
                                     break;
                                 case "__EMPTY_13":
-                                    oDataModelAdd.ReferPago = String(value);
+                                    oDataModelAdd.ReferPago = String(value).substring(0,40);
                                     break;
                                 case "__EMPTY_14":
                                     dateValue = this.getJsDateFromExcel(value);
@@ -295,7 +295,7 @@ sap.ui.define([
                                     oDataModelAdd.Poblacion = value;
                                     break;
                                 case "__EMPTY_20":
-                                    oDataModelAdd.TxtPosProv = String(value);
+                                    oDataModelAdd.TxtPosProv = String(value).substring(0,50);
                                     break;
                                 case "__EMPTY_21":
                                     oDataModelAdd.Bloq = value;
@@ -334,7 +334,7 @@ sap.ui.define([
                                     oDataModelAdd.CtaPos = String(value);
                                     break;
                                 case "__EMPTY_33":
-                                    oDataModelAdd.TxtCtaMayorPos = String(value);
+                                    oDataModelAdd.TxtCtaMayorPos = String(value).substring(0,50);
                                     break;
                                 case "__EMPTY_34":
                                     oDataModelAdd.IndicadorDhPos = value;

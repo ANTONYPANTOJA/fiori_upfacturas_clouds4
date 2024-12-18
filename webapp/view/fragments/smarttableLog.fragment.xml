@@ -18,7 +18,7 @@
 						navigationTargetsObtained="onNavTargetsObtained" navigate="onPopoverLinkPressed"
 						ignoredFields="" />
 		</smarttable:semanticObjectController>
-		<t:Table id="messageLogTab">
+		<t:Table id="messageLogTab" enableSelectAll="true" selectionMode="MultiToggle">
                     <t:extension>
                         <Toolbar id="messageLogTabToolbar">
                             <Title

@@ -58,8 +58,7 @@
                             icon="sap-icon://document"
                             press="onDownloadPress"
                         />
-
-                        <CheckBox id="chkSendAsync" text="{i18n>chkSendAsync}" valueState="None" />
+                        <CheckBox id="chkSendAsync" text="{i18n>chkSendAsync}" valueState="None" visible="false"/>
                     </FlexBox>
                 </Panel>
                 <VBox

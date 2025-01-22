@@ -52,7 +52,14 @@ sap.ui.define([
                 const MISSING_LEAP_YEAR_DAY = SECONDS_IN_DAY * 1000;
                 const MAGIC_NUMBER_OF_DAYS = (25567 + 2);
                 if (!Number(excelDate)) {
-                    return false;
+                    //Si viene con el formato 21/01/2025
+                    const arrayDeCadenas = excelDate.split("/");
+                    if (arrayDeCadenas.length >= 3 ) {
+                        const fecha = arrayDeCadenas[2] + "-" + arrayDeCadenas[1] + "-" + arrayDeCadenas[0]; 
+                        return this.getDateMoment(fecha); 
+                    }else{
+                        return false;
+                    }
                 }
 
                 const delta = excelDate - MAGIC_NUMBER_OF_DAYS;
@@ -175,6 +182,11 @@ sap.ui.define([
             getDateNow: function () {
                 const date = moment();
                 return date.format();
+            },
+            getDateMoment(fechaString){
+                const  date = new moment(fechaString);
+                return date._d;
+
             },
             showMessageToast: function (idMsg) {
                 let oboundle = this.getResourceBundle();
